@@ -1,4 +1,4 @@
-.env
+sys/.env
 sys/writable
 sys/test
 sys/system
