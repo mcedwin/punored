@@ -1,0 +1,47 @@
+.navbar.navbar-light .navbar-nav .nav-item .nav-link {
+  padding: 0.3rem 0.7rem 0.3rem 0.7rem;
+  margin-right: 0.3rem;
+  border-radius: 0.2rem;
+  color: rgba(0,0,0,0.7);
+}
+.navbar.navbar-light .navbar-nav .nav-item .nav-link:hover {
+  color: #000;
+  background-color: rgba(0,0,0,0.05);
+}
+.navbar.navbar-light .navbar-nav .nav-item .nav-link.active {
+  color: #000;
+  background-color: rgba(0,0,0,0.05);
+}
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1200px;
+  }
+}
+.btn-toggle-nav a {
+  display: block;
+  padding: 0.1875rem 0.5rem 0.1875rem 1.45rem;
+  margin-top: 0.125rem;
+  margin-left: 0rem;
+  text-decoration: none;
+}
+.btn-toggle-nav a.ico {
+  padding-left: 0.25rem;
+}
+.btn-toggle-nav a:hover,
+.btn-toggle-nav a:focus {
+  background-color: #d2f4ea;
+}
+.ms-n5 {
+  margin-left: -40px;
+}
+input.inputfile {
+  position: absolute;
+  top: -1000px;
+}
+.wrapper {
+  margin-top: 50px;
+}
+.miembros img {
+  width: 48px;
+  height: 48px;
+}
