@@ -13,7 +13,6 @@
                         <hr>
                         <div class="form-row">
                             <?php
-                            $fields->usua_ubig_id->type = 'select';
                             $fields->usua_password->required = true;
                             $fields->usua_password->type = 'password';
                             echo myinput($fields->usua_nombres, '12');

@@ -9,7 +9,6 @@
                     <form method="post" action="<?php echo base_url("Entrada/guardar/" . $id); ?>" id="form" class="form-validate" enctype="multipart/form-data" novalidate>
                         <div class="form-row">
                             <?php
-                            $fields->entr_ubig_id->type = 'select';
                             $fields->entr_cate_id->type = 'select';
                             echo myinput($fields->entr_titulo, '12');
                             echo myinput($fields->entr_cate_id, '12', '', '', $fields->categorias);
