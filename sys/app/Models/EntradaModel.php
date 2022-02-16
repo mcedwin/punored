@@ -13,12 +13,12 @@ class EntradaModel extends Model
     $this->fields = array(
       'entr_titulo' => array('label' => 'Titulo'),
       'entr_descripcion' => array('label' => 'Descripción'),
-      'entr_ubig_id' => array('label' => 'Ubicación', 'required' => false),
+      #'entr_ubig_id' => array('label' => 'Ubicación', 'required' => false),
       'entr_url' => array('label' => 'Pagina web de referencia', 'required' => false),
-      'entr_empl_remu_id' => array('label' => 'Remuneración'),
+      #'entr_empl_remu_id' => array('label' => 'Remuneración'),
       'entr_foto' => array('label' => 'Imagen','required' => false),
-      'entr_empl_cont_id' => array('label' => 'Contrato'),
-      'entr_empl_hora_id' => array('label' => 'Horario', 'required' => false),
+      #'entr_empl_cont_id' => array('label' => 'Contrato'),
+      #'entr_empl_hora_id' => array('label' => 'Horario', 'required' => false),
       'entr_cate_id' => array('label' => 'Categoria'),
     );
     $dfields = $this->db->getFieldData('entrada');

@@ -24,10 +24,8 @@ require realpath($pathsConfig) ?: $pathsConfig;
 $paths = new Config\Paths();
 
 // Location of the framework bootstrap file.
-$bootstrap = rtrim($paths->systemDirectory, '\\/ ') . DIRECTORY_SEPARATOR . 'bootstrap.php';
-
-
-$app       = require realpath($bootstrap) ?: $bootstrap;
+$bootstrap  = rtrim($paths->systemDirectory, '\\/ ') . DIRECTORY_SEPARATOR . 'bootstrap.php';
+$app        = require realpath($bootstrap) ?: $bootstrap;
 
 /*
  *---------------------------------------------------------------

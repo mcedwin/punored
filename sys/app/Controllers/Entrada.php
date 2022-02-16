@@ -181,14 +181,14 @@ class Entrada extends BaseController
 		$data['entr_fechareg'] = date('Y-m-d H:i:s');
 		unset($data['usua_foto']);
 
-		list($mirela, $mirela_ids) = $this->getposts('empleo_idioma', 'mirela', 'idio_id', 'idio_tipo_id');
+		#list($mirela, $mirela_ids) = $this->getposts('empleo_idioma', 'mirela', 'idio_id', 'idio_tipo_id');
 
 		if (empty($id)) {
 			$data['entr_usua_id'] = $this->mc_user->id;
 			$this->db->insert('entrada', $data);
 			$id = $this->db->insert_id();
 
-			$this->insertsubs($mirela, $id, 'empleo_idioma', 'idio_entr_id', 'idio_id');
+			#$this->insertsubs($mirela, $id, 'empleo_idioma', 'idio_entr_id', 'idio_id');
 			$path = 'img_' . $id . '.small.jpg';
 			if ($this->guardar_imagen('uploads/entrada', $path)) {
 				$this->db->update('entrada', array('entr_foto'=>$path), "entr_id='{$id}' AND entr_usua_id={$this->mc_user->id}");
@@ -201,7 +201,7 @@ class Entrada extends BaseController
 				$data = $data + array('entr_foto' => $path);
 			}
 			$this->db->update('entrada', $data, "entr_id='{$id}' AND entr_usua_id={$this->mc_user->id}");
-			$this->updatesubs($mirela, $id, 'empleo_idioma', 'idio_entr_id', 'idio_id', $mirela_ids);
+			#$this->updatesubs($mirela, $id, 'empleo_idioma', 'idio_entr_id', 'idio_id', $mirela_ids);
 		}
 
 
