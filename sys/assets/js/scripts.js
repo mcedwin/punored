@@ -11,7 +11,7 @@ $(function() {
     $.gs_loader.append($('<div>', {
         'class': 'ui-widget-overlay',
         'style': 'z-index:9998'
-    })).append = ($('<div>').html('<img src="' + $("#baseurl").val() + 'assets/img/cubo-loader.gif"/>').css({
+    })).append = ($('<div>').html('<img src="' + base_url + '/sys/assets/img/cubo-loader.gif"/>').css({
         'position': 'fixed',
         'font': 'bold 12px Verdana, Arial, Helvetica, sans-serif',
         'left': '50%',
@@ -206,7 +206,7 @@ jQuery.getScriptA = function(resources, callback) {
             $contenedor = config.content.appendTo($('body'));
         else
             $contenedor = $('<div class="modal fade" tabindex="-1">').appendTo($('body'));
-            
+
         var set_dialog = function() {
             var ftmp = config.close;
             config.close = function() {
