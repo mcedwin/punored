@@ -42,6 +42,7 @@ class BaseController extends Controller
     public $csss = [];
     public $jss = [];
     public $frontVersion = 1;
+    public $user;
 
     /**
      * Constructor.

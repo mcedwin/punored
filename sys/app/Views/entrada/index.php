@@ -16,7 +16,7 @@
         </button>
     </div>
 </div>
-<?php for ($i = 1; $i <= 15; $i++) : ?>
+<?php for ($i = 1; $i <= 5; $i++) : ?>
     <article>
         <div class="row">
             <div class="col-md-3">
@@ -33,7 +33,7 @@
         </div>
         <div>
 
-            <i class="icon-user"></i> by <a href="#">John</a>
+            <i class="icon-user"></i> by <a href="#">John<?php echo $i ?></a>
             | <i class="icon-calendar"></i> Sept 16th, 2012
             | <i class="icon-comment"></i> <a href="#">3 Comments</a>
             | <i class="icon-share"></i> <a href="#">39 Shares</a>
@@ -47,3 +47,18 @@
 
     <hr>
 <?php endfor; ?>
+<nav aria-label="...">
+  <ul class="pagination justify-content-center">
+    <li class="page-item disabled">
+      <a class="page-link">Previous</a>
+    </li>
+    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+    <li class="page-item" aria-current="page">
+      <a class="page-link" href="#">2</a>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item">
+      <a class="page-link" href="#">Next</a>
+    </li>
+  </ul>
+</nav>

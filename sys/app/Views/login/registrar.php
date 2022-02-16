@@ -21,7 +21,7 @@
                             ?>
                             <div class="col-md-12">
                                 <p>
-                                    Se le enviara un correo para confirmar su registro
+                                    Se le enviará un correo para confirmar su registro
                                 </p>
                             </div>
                             <div class="col-md-12">

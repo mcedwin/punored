@@ -27,7 +27,7 @@ class Login extends BaseController
     }
 
 
-    public function proc_registrar()
+    public function proc_registrar() ##running
     {
         $nombres  = ($this->request->getPost("usua_nombres"));
         $email  = ($this->request->getPost("usua_email"));
@@ -47,45 +47,45 @@ class Login extends BaseController
             'usua_tipo_id' => '1',
             'usua_password' => md5($password),
             'usua_password2' => $password2,
-            'usua_activo' => '0'
+            'usua_activo' => '0' ##fixx
         );
         $this->db->table('usuario')->insert($datos);
-        //$this->sendpregistro($nombres, $email, $password2);
+        //$this->sendpregistro($nombres, $email, $password2); ##fixx
         $this->dieMsg();
     }
 
-    function ingresar()
+    public function ingresar() ##running
     {
-        $this->load->helper('Cookie');
-        $usuario  = $this->security->xss_clean($this->request->getPost("email"));
-        $password = $this->security->xss_clean($this->request->getPost("password"));
-        $ip = $this->input->ip_address();
-
+        #$this->load->helper('Cookie');
+        $usuario  = $this->request->getPost("email");
+        $password = $this->request->getPost("password");
+        $ip = $this->request->getIPAddress();
+        #traducir codigo
         $sql = "SELECT usua_id as id,usua_email as email,usua_tipo_id as type FROM usuario WHERE usua_activo=1 AND usua_email='{$usuario}' AND usua_password=md5('{$password}') LIMIT 1";
-
         $result = $this->db->query($sql);
-        if ($result->num_rows() > 0) {
-            $row = $result->row();
+        $session = session(); ###
+        if ($result->getNumRows()) {
+            $row = $result->getRow();
             $sesdata = array(
                 'id'  => $row->id,
                 'user'  => $row->email,
                 'type'     => $row->type,
                 'auth'     => true
             );
-            $this->session->set_userdata($sesdata);
+            $session->set($sesdata);
             $sql = "UPDATE usuario SET usua_lastip='{$ip}' WHERE usua_id='{$row->id}'";
             $this->db->query($sql);
         } else {
             $this->dieMsg(false, "Error al ingresar sus datos ó no a confirmado su cuenta");
         }
-        $this->dieMsg(true, '', base_url('Portada/egresado'));
+        $this->dieMsg(true, '', base_url('Home/index'));
     }
 
     function proc_cambiar($password2)
     {
-        $email = $this->security->xss_clean($this->request->getPost("email"));
-        $password = $this->security->xss_clean($this->request->getPost("password"));
-        $ip = $this->input->ip_address();
+        $email = $this->request->getPost("email");
+        $password = $this->request->getPost("password");
+        $ip = $this->request->getIPAddress();
 
         $sql = "SELECT usua_id as id,usua_email as email,usua_tipo_id as type FROM usuario WHERE 
         usua_email='{$email}' AND !(usua_password2 IS NULL) AND !(usua_password2='') 
@@ -119,19 +119,19 @@ class Login extends BaseController
         $this->showFooter();
     }
 
-    function confirmar($email, $password2)
+    function confirmar($email, $password2) ##codeigniter3
     {
         $email = urldecode($email);
         $this->db->query("UPDATE usuario SET usua_password2=NULL, usua_activo=1 WHERE usua_email='{$email}' AND usua_password2='{$password2}'");
         redirect("Login");
     }
 
-    function recuperar()
+    function recuperar() ##codeigniter3
     {
         $this->ShowContent('recuperar');
     }
 
-    public function proc_recuperar()
+    public function proc_recuperar() ##codeigniter3
     {
         $email = $this->request->getPost('email');
         $row = $this->db->query("SELECT * FROM usuario WHERE usua_email='{$email}'")->row();
@@ -156,7 +156,7 @@ class Login extends BaseController
             $mail_message .= '<br>Gracias';
             $mail_message .= '<br>Egresado.pe';
 
-            require FCPATH . 'assets/PHPMailer/src/Exception.php';
+            require FCPATH . 'assets/PHPMailer/src/Exception.php'; ## assets primero
             require FCPATH . 'assets/PHPMailer/src/PHPMailer.php';
             require FCPATH . 'assets/PHPMailer/src/SMTP.php';
             $mail = new PHPMailer\PHPMailer\PHPMailer(false);
@@ -168,8 +168,8 @@ class Login extends BaseController
             $mail->Port = 587;
             $mail->SMTPAuth = true;
             $mail->CharSet = "UTF-8";
-            $mail->Username = "edwin@gruposistemas.com";
-            $mail->Password = "locoloco";
+            $mail->Username = "edwin@gruposistemas.com"; ##cambiar a env
+            $mail->Password = "locoloco"; ##cambiar a env
             $mail->setFrom('edwin@gruposistemas.com', 'Egresado');
             $mail->IsHTML(true);
             $mail->addAddress($row->usua_email);
