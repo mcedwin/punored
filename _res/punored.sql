@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `encuesta_detalle` (
   `deta_encu_id` int(11) DEFAULT NULL,
   `deta_alternativa` varchar(150) DEFAULT NULL,
   `deta_puntos` int(11) DEFAULT NULL,
-  PRIMARY KEY (`deta_id`),
+  PRIMARY KEY (`deta_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -183,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `incidencia` (
   `inci_espublico` bit(1) DEFAULT NULL,
   `inci_cate_id` int(11) DEFAULT NULL,
   `inci_usua_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`inci_id`),
+  PRIMARY KEY (`inci_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -245,7 +245,7 @@ CREATE TABLE IF NOT EXISTS `usuario_encuesta` (
   `rela_usua_id` int(11) DEFAULT NULL,
   `rela_encu_id` int(11) DEFAULT NULL,
   `rela_fechareg` datetime DEFAULT NULL,
-  PRIMARY KEY (`rela_id`),
+  PRIMARY KEY (`rela_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -263,7 +263,7 @@ CREATE TABLE IF NOT EXISTS `usuario_entrada` (
   `rela_nmenos` int(11) NOT NULL DEFAULT '0',
   `rela_like` bit(1) NOT NULL DEFAULT b'0',
   `rela_fechareg` datetime DEFAULT NULL,
-  PRIMARY KEY (`rela_id`) USING BTREE,
+  PRIMARY KEY (`rela_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
