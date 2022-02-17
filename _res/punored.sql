@@ -40,9 +40,7 @@ CREATE TABLE IF NOT EXISTS `anuncio` (
   `anun_fechapub` datetime DEFAULT NULL,
   `anun_fechaven` datetime DEFAULT NULL,
   `anun_espublico` bit(1) DEFAULT NULL,
-  PRIMARY KEY (`anun_id`),
-  KEY `fk_anuncio_usuario1_idx` (`anun_usua_id`),
-  KEY `fk_anuncio_anuncio_categoria1_idx` (`anun_cate_id`)
+  PRIMARY KEY (`anun_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -75,8 +73,7 @@ CREATE TABLE IF NOT EXISTS `directorio` (
   `dire_logo` varchar(45) DEFAULT NULL,
   `dire_imagen` varchar(45) DEFAULT NULL,
   `dire_cate_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`dire_id`),
-  KEY `fk_directorio_directorio_categoria1_idx` (`dire_cate_id`)
+  PRIMARY KEY (`dire_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -121,7 +118,6 @@ CREATE TABLE IF NOT EXISTS `encuesta_detalle` (
   `deta_alternativa` varchar(150) DEFAULT NULL,
   `deta_puntos` int(11) DEFAULT NULL,
   PRIMARY KEY (`deta_id`),
-  KEY `fk_encuesta_detalle_encuesta1_idx` (`deta_encu_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -145,10 +141,7 @@ CREATE TABLE IF NOT EXISTS `entrada` (
   `entr_pmas` int(11) NOT NULL DEFAULT '0',
   `entr_pmenos` int(11) NOT NULL DEFAULT '0',
   `entr_cate_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`entr_id`) USING BTREE,
-  KEY `fk_empleo_usuario1_idx` (`entr_usua_id`) USING BTREE,
-  KEY `fk_entrada_habilidad_area1_idx` (`entr_area_id`) USING BTREE,
-  KEY `fk_entrada_entrada_categoria1_idx` (`entr_cate_id`) USING BTREE
+  PRIMARY KEY (`entr_id`) USING BTREE
 ) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
@@ -191,8 +184,6 @@ CREATE TABLE IF NOT EXISTS `incidencia` (
   `inci_cate_id` int(11) DEFAULT NULL,
   `inci_usua_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`inci_id`),
-  KEY `fk_incidencia_usuario1_idx` (`inci_usua_id`),
-  KEY `fk_incidencia_incidencia_tegoria1_idx` (`inci_cate_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -227,9 +218,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `usua_activo` bit(1) NOT NULL DEFAULT b'1',
   `usua_tipo_id` int(11) DEFAULT NULL,
   `usua_lastip` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`usua_id`) USING BTREE,
-  UNIQUE KEY `unico_mail_egresado` (`usua_email`) USING BTREE,
-  KEY `fk_usuario_usuario_tipo1_idx` (`usua_tipo_id`) USING BTREE
+  PRIMARY KEY (`usua_id`) USING BTREE
 ) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 --
@@ -257,8 +246,6 @@ CREATE TABLE IF NOT EXISTS `usuario_encuesta` (
   `rela_encu_id` int(11) DEFAULT NULL,
   `rela_fechareg` datetime DEFAULT NULL,
   PRIMARY KEY (`rela_id`),
-  KEY `fk_usuario_encuesta_encuesta1_idx` (`rela_encu_id`),
-  KEY `fk_usuario_encuesta_usuario1_idx` (`rela_usua_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -277,8 +264,6 @@ CREATE TABLE IF NOT EXISTS `usuario_entrada` (
   `rela_like` bit(1) NOT NULL DEFAULT b'0',
   `rela_fechareg` datetime DEFAULT NULL,
   PRIMARY KEY (`rela_id`) USING BTREE,
-  KEY `fk_usuario_entrada_entrada1_idx` (`rela_entr_id`) USING BTREE,
-  KEY `fk_usuario_entrada_usuario1_idx` (`rela_usua_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
