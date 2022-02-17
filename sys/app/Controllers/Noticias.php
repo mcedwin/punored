@@ -73,22 +73,21 @@ class Noticias extends BaseController
 		unset($data['usua_foto']);
 
 		if (empty($id)) {
-			$data['entr_usua_id'] = $this->mc_user->id;
+			$data['entr_usua_id'] = $this->user->id;
 			$this->db->insert('entrada', $data);
 			$id = $this->db->insert_id();
 
-			#$this->insertsubs($mirela, $id, 'empleo_idioma', 'idio_entr_id', 'idio_id');
-			$path = 'img_' . $id . '.small.jpg';
+			/*$path = 'img_' . $id . '.small.jpg';
 			if ($this->guardar_imagen('uploads/entrada', $path)) {
-				$this->db->update('entrada', array('entr_foto'=>$path), "entr_id='{$id}' AND entr_usua_id={$this->mc_user->id}");
-			}
+				$this->db->update('entrada', array('entr_foto'=>$path), "entr_id='{$id}' AND entr_usua_id={$this->user->id}");
+			}*/
 
 		} else {
-			$path = 'img_' . $id . '.small.jpg';
+			/*$path = 'img_' . $id . '.small.jpg';
 			if ($this->guardar_imagen('uploads/entrada', $path)) {
 				$data = $data + array('entr_foto' => $path);
-			}
-			$this->db->update('entrada', $data, "entr_id='{$id}' AND entr_usua_id={$this->mc_user->id}");
+			}*/
+			$this->db->update('entrada', $data, "entr_id='{$id}' AND entr_usua_id={$this->user->id}");
 			#$this->updatesubs($mirela, $id, 'empleo_idioma', 'idio_entr_id', 'idio_id', $mirela_ids);
 		}
 
@@ -98,7 +97,7 @@ class Noticias extends BaseController
 	public function eliminar($id)
 	{
 		$this->dieAjax();
-		$this->db->query("DELETE FROM entrada WHERE entr_id='{$id}' AND entr_usua_id='{$this->mc_user->id}'");
+		$this->db->query("DELETE FROM entrada WHERE entr_id='{$id}' AND entr_usua_id='{$this->user->id}'");
 		$this->dieMsg();
 	}
 }
