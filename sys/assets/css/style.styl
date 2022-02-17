@@ -66,3 +66,97 @@ input.inputfile {
     top: 0;
     right: 12px;
 }
+
+.side-miembros
+  .row
+    margin 0 -2px
+  .col-2
+    padding 2px
+
+.poll-area label{
+  display: block;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  padding: 8px 10px;
+  border: 2px solid #e6e6e6;
+}
+.poll-area label:hover{
+  border-color: #ddd;
+}
+label.selected{
+  border-color: #6665ee!important;
+}
+label .rowi{
+  display: flex;
+  pointer-events: none;
+  justify-content: space-between;
+}
+label .rowi .column{
+  display: flex;
+  align-items: center;
+}
+label .rowi .circle{
+  height: 19px;
+  width: 19px;
+  display: block;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  margin-right: 10px;
+  position: relative;
+}
+label.selected .rowi .circle{
+  border-color: #6665ee;
+}
+label .rowi .circle::after{
+  content: "";
+  height: 11px;
+  width: 11px;
+  background: #6665ee;
+  border-radius: inherit;
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  display: none;
+}
+.poll-area label:hover .rowi .circle::after{
+  display: block;
+  background: #e6e6e6;
+}
+label.selected .rowi .circle::after{
+  display: block;
+  background: #6665ee!important;
+}
+label .rowi span{
+  font-size: 16px;
+  font-weight: 500;
+}
+label .rowi .percent{
+ font-size 12px
+ line-height 16px
+}
+label .progress{
+  height: 7px;
+  width: 100%;
+  position: relative;
+  background: #f0f0f0;
+  margin: 8px 0 3px 0;
+  border-radius: 30px;
+ 
+  pointer-events: none;
+}
+label .progress:after{
+  position: absolute;
+  content: "";
+  height: 100%;
+  background: #ccc;
+  width: calc(1% * var(--w));
+  border-radius: inherit;
+  transition: all 0.2s ease;
+}
+label.selected .progress::after{
+  background: #6665ee;
+}
+input[type="radio"],
+input[type="checkbox"]{
+  display: none;
+}
