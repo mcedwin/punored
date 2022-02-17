@@ -24,7 +24,7 @@
             </ul>
             <form class="d-block w-100 mx-4">
                 <div class="input-group">
-                    <input class="form-control border-end-0 border" type="search" value="search">
+                    <input class="form-control border-end-0 border" type="search" value="Buscar">
                     <button class="btn btn-outline-secondary border bg-light text-secondary" type="button">
                         <i class="fa fa-search"></i>
                     </button>
@@ -33,10 +33,10 @@
             <?php if (empty(session()->get('user_id'))) : ?>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a href="<?php echo base_url('login'); ?>" class="nav-link">Ingresar</a>
+                        <a href="<?php echo base_url('Login'); ?>" class="nav-link">Ingresar</a>
                     </li>
                     <li class="nav-item">
-                        <a href="<?php echo base_url('login/registrar'); ?>" class="nav-link">Registrate</a>
+                        <a href="<?php echo base_url('Miembros/registrar'); ?>" class="nav-link">Registrate</a>
                     </li>
                 </ul>
             <?php else :  ?>
@@ -46,8 +46,8 @@
                         <?php echo session()->get('user_name')  ?>
                     </button>
                     <div class="dropdown-menu  dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="<?php echo base_url('Test/perfil'); ?>">Perfil</a>
-                        <a class="dropdown-item" href="<?php echo base_url('login/logout'); ?>">Salir</a>
+                        <a class="dropdown-item" href="<?php echo base_url('Miembros/perfil'); ?>">Perfil</a>
+                        <a class="dropdown-item" href="<?php echo base_url('Login/logout'); ?>">Salir</a>
                     </div>
                 </div>
             <?php endif; ?>
@@ -66,10 +66,10 @@
                                 Contenidos
                             </span>
                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                <li><a href="<?php echo base_url('Entrada/index'); ?>" class="link-dark rounded ico"><i class="fas fa-rss"></i> Noticias</a></li>
-                                <li><a href="<?php echo base_url('Entrada/anuncios'); ?>" class="link-dark rounded ico"><i class="far fa-list-alt"></i> Trabajo</a></li>
-                                <li><a href="<?php echo base_url('Entrada/directorio'); ?>" class="link-dark rounded ico"><i class="far fa-building"></i> Directorio</a></li>
-                                <li><a href="<?php echo base_url('Entrada/crear'); ?>" class="link-dark rounded ico"><i class="far fa-plus-square"></i> Publicar</a></li>
+                                <li><a href="<?php echo base_url('Noticias'); ?>" class="link-dark rounded ico"><i class="fas fa-rss"></i> Noticias</a></li>
+                                <li><a href="<?php echo base_url('Anuncios'); ?>" class="link-dark rounded ico"><i class="far fa-list-alt"></i> Anuncios</a></li>
+                                <li><a href="<?php echo base_url('Directorio'); ?>" class="link-dark rounded ico"><i class="far fa-building"></i> Directorio</a></li>
+                                <li><a href="<?php echo base_url('Portada/crear'); ?>" class="link-dark rounded ico"><i class="far fa-plus-square"></i> Publicar</a></li>
                             </ul>
                         </li>
                         <li class="border-top my-3"></li>
@@ -78,8 +78,8 @@
                                 Aplicaciones
                             </span>
                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                <li><a href="<?php echo base_url('Home/encuestas'); ?>" class="link-dark rounded ico"><i class="far fa-chart-bar"></i> Encuestas</a></li>
-                                <li><a href="<?php echo base_url('Home/incidencias'); ?>" class="link-dark rounded ico"><i class="fas fa-map-marker-alt"></i> Incidencias</a></li>
+                                <li><a href="<?php echo base_url('Encuestas'); ?>" class="link-dark rounded ico"><i class="far fa-chart-bar"></i> Encuestas</a></li>
+                                <li><a href="<?php echo base_url('Mapa'); ?>" class="link-dark rounded ico"><i class="fas fa-map-marker-alt"></i> Mapa</a></li>
                             </ul>
                         </li>
 
@@ -89,8 +89,8 @@
                                 Colaboradores
                             </span>
                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                <li><a href="<?php echo base_url('Home/miembros'); ?>" class="link-dark rounded ico"><i class="fas fa-users"></i> Todos</a></li>
-                                <li><a href="<?php echo base_url('Login/registrar'); ?>" class="link-dark rounded ico"><i class="fas fa-user-plus"></i> Registrarse</a></li>
+                                <li><a href="<?php echo base_url('Miembros'); ?>" class="link-dark rounded ico"><i class="fas fa-users"></i> Todos</a></li>
+                                <li><a href="<?php echo base_url('Miembros/registrar'); ?>" class="link-dark rounded ico"><i class="fas fa-user-plus"></i> Registrarse</a></li>
                             </ul>
                         </li>
                     </ul>

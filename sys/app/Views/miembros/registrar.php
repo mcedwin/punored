@@ -7,7 +7,7 @@
                 </div>
                 <div class="card-body">
 
-                    <form action="<?php echo base_url('Login/proc_registrar') ?>" class="needs-validation mr-2" id="frm-login" method="post" novalidate>
+                    <form action="<?php echo base_url('Miembros/proc_registrar') ?>" class="needs-validation mr-2" id="frm-login" method="post" novalidate>
                         <a href="<?php echo base_url("Oauth/facebook") ?>" class="rs btn btn-outline-secondary btn-block"><i class="fab fa-facebook-f"></i> Continuar con facebook</a>
                         <a href="<?php echo base_url("Oauth/google") ?>" class="rs btn btn-outline-secondary btn-block"><i class="fab fa-google"></i> Continuar con google</a>
                         <hr>

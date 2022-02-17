@@ -109,7 +109,7 @@ class BaseController extends Controller
 
         //if ($this->user->id) {
             $datos['menu'] = [
-                ['url' => 'Test/mis_tests', 'base' => 'mis_tests', 'name' => 'Acerca', 'ico' => 'fas fa-file-alt'],
+                ['url' => 'Portada/acerca', 'base' => 'acerca', 'name' => 'Acerca'],
             ];
        // }
 
