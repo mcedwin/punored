@@ -7,6 +7,7 @@ use App\Models\PersonaModel;
 class Persona extends BaseController
 {
   var $model;
+
   public function __construct()
   {
     $this->model = new PersonaModel();
@@ -32,6 +33,10 @@ class Persona extends BaseController
       'fields' => $this->model->get()
     ];
     
+    $this->addJs(array(
+			'js/persona/form.js'
+		));
+
     $this->showHeader();
     $this->ShowContent('form', $datos);
     $this->showFooter();
@@ -39,11 +44,15 @@ class Persona extends BaseController
 
   public function guardar($id = '')
   {
+    $this->dieAjax();
+
     $data = [
       'pers_nombre' => $this->request->getPost('pers_nombre'),
       'pers_email' => $this->request->getPost('pers_email'),
       'pers_password' =>$this->request->getPost('pers_password')
     ];
+
+    $data = $this->validar($this->model->getFields());
 
     // $this->form_validation->set_rules('pers_nombre', 'Nombre de usuario', 'required');
     // $this->form_validation->set_rules('pers_email', 'Email', 'required|is_unique[user.email]');
@@ -58,8 +67,10 @@ class Persona extends BaseController
 
       $this->model->saveData($data);
       // $this->session->set_flashdata('success', 'Se guardo los datos correctamente');
-      return redirect()->to(base_url('Persona'));
+     // return redirect()->to(base_url('Persona'));
     // }
+
+    $this->dieMsg(true,'',base_url('Persona'));
 
   }
 

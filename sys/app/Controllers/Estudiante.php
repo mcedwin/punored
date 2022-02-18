@@ -16,7 +16,6 @@ class Estudiante extends BaseController
 		$this->addJs(array(
 			"lib/tinymce/tinymce.min.js",
 			"lib/tinymce/jquery.tinymce.min.js",
-
 			'js/entrada/publicar.js'
 		));
 
