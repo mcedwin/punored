@@ -6,6 +6,7 @@
         <th>nombre</th>
         <th>email</th>
         <th>password</th>
+        <th>options</th>
       </tr>
     </thead>
     <tbody>
@@ -15,6 +16,10 @@
           <td><?php echo $person['pers_nombre'] ?? "" ?></td>
           <td><?php echo $person['pers_email'] ?? "" ?></td>
           <td><?php echo $person['pers_password'] ?? "" ?></td>
+          <td>
+            <a href="<?php echo "" ?>" class="btn btn-sm btn-success">Editar</a>
+            <a href="<?php echo "" ?>" class="btn btn-sm btn-danger">Eliminar</a>
+          </td>
         </tr>
       <?php endforeach ?>
     </tbody>
