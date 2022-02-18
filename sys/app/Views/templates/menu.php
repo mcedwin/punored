@@ -69,6 +69,7 @@
                                 <li><a href="<?php echo base_url('Noticias'); ?>" class="link-dark rounded ico"><i class="fas fa-rss"></i> Noticias</a></li>
                                 <li><a href="<?php echo base_url('Anuncios'); ?>" class="link-dark rounded ico"><i class="far fa-list-alt"></i> Anuncios</a></li>
                                 <li><a href="<?php echo base_url('Directorio'); ?>" class="link-dark rounded ico"><i class="far fa-building"></i> Directorio</a></li>
+                                <li><a href="<?php echo base_url('Estudiante'); ?>" class="link-dark rounded ico"><i class="fas fa-user-graduate"></i> Estudiante</a></li>
                                 <li><a href="<?php echo base_url('Portada/crear'); ?>" class="link-dark rounded ico"><i class="far fa-plus-square"></i> Publicar</a></li>
                             </ul>
                         </li>
