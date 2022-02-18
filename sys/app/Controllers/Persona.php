@@ -40,9 +40,9 @@ class Persona extends BaseController
   public function guardar($id = '')
   {
     $data = [
-      'pers_nombre' => $this->input->post('pers_nombre'),
-      'pers_email' => $this->input->post('pers_email'),
-      'pers_password' =>$this->input->post('pers_password')
+      'pers_nombre' => $this->request->getPost('pers_nombre'),
+      'pers_email' => $this->request->getPost('pers_email'),
+      'pers_password' =>$this->request->getPost('pers_password')
     ];
 
     // $this->form_validation->set_rules('pers_nombre', 'Nombre de usuario', 'required');
@@ -58,8 +58,7 @@ class Persona extends BaseController
 
       $this->model->saveData($data);
       // $this->session->set_flashdata('success', 'Se guardo los datos correctamente');
-
-      redirect(base_url('Persona'));
+      return redirect()->to(base_url('Persona'));
     // }
 
   }

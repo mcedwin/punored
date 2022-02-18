@@ -62,12 +62,7 @@ class PersonaModel extends Model
 
   function saveData($data)
   {
-    $sql = 'INSERT INTO persona(pers_nombre,pers_email, pers_password) VALUES';
-    $sql .= $data['pers_nombre'];
-    $sql .= $data['pers_email'];
-    $sql .= $data['pers_password'];
-    $sql .= 'FROM persona';
-    $query = $this->db->query($sql);
+    $this->db->table('persona')->insert($data);
   }
 
   function get($id = 0)
