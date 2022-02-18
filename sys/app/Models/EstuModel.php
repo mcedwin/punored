@@ -6,6 +6,7 @@ use CodeIgniter\Model;
 
 class EstuModel extends Model
 {
+    var $db;
     var $fields;
   public function __construct()
   {
@@ -34,28 +35,33 @@ class EstuModel extends Model
   {
     return $this->fields;
   }
-
-  function get($id = '')
+  public function getEstudiantes($fields = [''])
   {
-    $this->fields['estudiante'] = $this->db->query("SELECT est_id as id,est_nombre as text FROM estudiante WHERE est_id !=1")->getResult();
+    $sql = 'SELECT ';
+    ///Select all fields
+    foreach ($fields as $field) $sql .= " $field,";
+    $sql[strlen($sql) - 1] = " ";
+    $sql .= ' FROM estudiante ';
+
+    $query = $this->db->query($sql);
+    $results = $query->getResultArray();
+    return $results;
+  }
+  function get($id = 0)
+  {
     if (!empty($id)) {
-      $row = $this->db->query("SELECT * FROM estudiante WHERE est_id='{$id}'")->row();
+      $row = $this->db->query("SELECT * FROM estudiante WHERE est_id = $id")->getRow();
       foreach ($row as $k => $value) {
         if (!isset($this->fields[$k])) continue;
-        $this->fields[$k]->value =  $value;
+        $this->fields[$k]->value = $value;
       }
     }
     return (object)$this->fields;
   }
-  function Savedata($data)
+  function saveData($data)
   {
-    $sql = 'INSERT INTO estudiante(est_nombre, est_apellido, est_edad) VALUES';
-    $sql .= $data['est_nombre'];
-    $sql .= $data['est_apellido'];
-    $sql .= $data['est_edad'];
-    $sql .= 'FROM estudiante';
-
     $this->db->table('estudiante')->insert($data);
   }
+  
 
 }

@@ -11,7 +11,7 @@
     <tbody>
       <?php foreach ($estudiantes as $est) : ?>
         <tr>
-          <td><?php echo $est['est_id'] ?? "" ?></td>
+          <td><?php echo $est['est_id'] ?? "" ?> </td>
           <td><?php echo $est['est_nombre'] ?? "" ?></td>
           <td><?php echo $est['est_apellido'] ?? "" ?></td>
           <td><?php echo $est['est_edad'] ?? "" ?></td>
