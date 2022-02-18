@@ -10,11 +10,12 @@ class EstuModel extends Model
   public function __construct()
   {
     parent::__construct();
+    $this->db = \Config\Database::connect();
+
     $this->fields = array(  
-      'est_nombre' => array('label' => 'Nombre', 'required' => True),
-      'est_apellido' => array('label' => 'Apellido', 'required' => True),
-      'est_edad' => array('label' => 'Edad','required' => True),
-      
+      'est_nombre' => array('label' => 'Nombre'),
+      'est_apellido' => array('label' => 'Apellido'),
+      'est_edad' => array('label' => 'Edad')
     );
     $dfields = $this->db->getFieldData('estudiante');
 
@@ -46,6 +47,15 @@ class EstuModel extends Model
     }
     return (object)$this->fields;
   }
-  
+  function Savedata($data)
+  {
+    $sql = 'INSERT INTO estudiante(est_nombre, est_apellido, est_edad) VALUES';
+    $sql .= $data['est_nombre'];
+    $sql .= $data['est_apellido'];
+    $sql .= $data['est_edad'];
+    $sql .= 'FROM estudiante';
+
+    $this->db->table('estudiante')->insert($data);
+  }
 
 }
