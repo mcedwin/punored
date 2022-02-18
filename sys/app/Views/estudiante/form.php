@@ -6,7 +6,7 @@
                 </div>
                 <div class="card-body">
 
-                    <form method="post" action="<?php echo base_url("Estudiante/guardar/" . $id); ?>" id="form" class="form-validate" enctype="multipart/form-data" novalidate>
+                    <form method="post" action="<?php echo base_url("Estudiante/guardar/" . $id); ?>" id="form_registrar" class="form-validate" enctype="multipart/form-data" novalidate>
                         <div class="form-row">
                             <?php
                             echo myinput($fields->est_nombre, '12');

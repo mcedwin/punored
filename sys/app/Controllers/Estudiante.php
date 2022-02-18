@@ -13,8 +13,9 @@ class Estudiante extends BaseController
     public function index()
 	{   
         $this->showHeader();
-        $datos = $this->model->get();
-		$this->ShowContent('index', ['estudiantes'=>$datos]);
+        $fields = ['*'];
+        $data = $this->model->getEstudiantes($fields);
+		$this->ShowContent('index', ['estudiantes'=>$data]);
 		$this->showFooter();
 	}
     public function crear(){
@@ -22,6 +23,10 @@ class Estudiante extends BaseController
 		$datos['id'] = '0';
 		$datos['titulo'] = 'Registrar Estudiante';
 		$datos['fields'] = $this->model->get();
+        
+        $this->addJs(array(
+            'js/estudiante/form.js'
+        ));
     
 		$this->showHeader();
 		$this->ShowContent('form', $datos);
@@ -29,13 +34,28 @@ class Estudiante extends BaseController
     }
     public function guardar($id = '')
 	{
+        $this->dieAjax();
+
         $data = [
-            'est_nombre' => $this->input->getPost('est_nombre'),
-            'est_apellido' => $this->input->getPost('est_apellido'),
-            'est_edad' => $this->input->getPost('est_edad')
+            'est_nombre' => $this->request->getPost('est_nombre'),
+            'est_apellido' => $this->request->getPost('est_apellido'),
+            'est_edad' => $this->request->getPost('est_edad')
         ];
+        $data = $this->validar($this->model->getFields());
 
         $this->model->Savedata($data);
+        $this->dieMsg(true, '', base_url('Estudiante'));
 	}
+
+    public function editar($id)
+    {
+        
+        $this->model->Update($id, $data);
+    }
+
+    public function eliminar($id)
+    {
+        $this->model->Delete($id);
+    }
     
 }

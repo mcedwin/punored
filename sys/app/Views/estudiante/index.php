@@ -6,6 +6,7 @@
         <th>Nombre</th>
         <th>Apellido</th>
         <th>Edad</th>
+        <th>Opciones</th>
       </tr>
     </thead>
     <tbody>
