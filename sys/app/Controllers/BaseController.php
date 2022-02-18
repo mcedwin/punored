@@ -68,7 +68,6 @@ class BaseController extends Controller
     }
 
 
-    //codeigniter 3
     public function validar($fields)
     {
         $data = array();
