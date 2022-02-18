@@ -5,7 +5,7 @@
         <?php echo $titulo ?>
       </div>
       <div class="card-body">
-        <form method="post" action="<?php echo base_url("Persona/guardar/$id") ?>" id="form" class="form-validate" novalidate>
+        <form method="post" action="<?php echo base_url("Persona/guardar/$id") ?>" id="form" class="form-validate" >
           <div class="form-row">
             <?php
             // $fields->pers_nombre->value = set_value('pers_username') ?? '';
