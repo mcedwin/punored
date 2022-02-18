@@ -53,10 +53,10 @@ class Noticias extends BaseController
 			'js/entrada/publicar.js'
 		));
 
-		$this->load->model('Model_entrada');
+		$model = new EntradaModel();
 		$datos['id'] = $id;
 		$datos['titulo'] = 'Editar noticia';
-		$datos['fields'] = $this->Model_entrada->get($id);
+		$datos['fields'] = $model->get($id);
 		$datos['fields']->entr_foto->value = base_url('uploads/noticias') . (empty($datos['fields']->entr_foto->value) ? '/sinlogo.png' : '/' . $datos['fields']->entr_foto->value);
 		//$datos['fields']->entr_descripcion->value = 
 
@@ -87,8 +87,7 @@ class Noticias extends BaseController
 			if ($this->guardar_imagen('uploads/entrada', $path)) {
 				$data = $data + array('entr_foto' => $path);
 			}*/
-			$this->db->update('entrada', $data, "entr_id='{$id}' AND entr_usua_id={$this->user->id}");
-			#$this->updatesubs($mirela, $id, 'empleo_idioma', 'idio_entr_id', 'idio_id', $mirela_ids);
+			$this->db->table('entrada')->update($data, "entr_id='{$id}' AND entr_usua_id={$this->user->id}");
 		}
 
 		$this->dieMsg(true);
