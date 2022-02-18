@@ -2,8 +2,6 @@
 
 namespace App\Controllers;
 
-
-
 class Login extends BaseController
 {
     function index()
@@ -15,17 +13,15 @@ class Login extends BaseController
     }
 
     
-
     public function ingresar() ##running
     {
-        #$this->load->helper('Cookie');
         $usuario  = $this->request->getPost("email");
         $password = $this->request->getPost("password");
         $ip = $this->request->getIPAddress();
-        #traducir codigo
+
         $sql = "SELECT usua_id as id,usua_email as email,usua_tipo_id as type FROM usuario WHERE usua_activo=1 AND usua_email='{$usuario}' AND usua_password=md5('{$password}') LIMIT 1";
         $result = $this->db->query($sql);
-        $session = session(); ###
+        $session = session(); 
         if ($result->getNumRows()) {
             $row = $result->getRow();
             $sesdata = array(
@@ -42,8 +38,6 @@ class Login extends BaseController
         }
         $this->dieMsg(true, '', base_url('Home/index'));
     }
-
-    
 
     function salir()
     {

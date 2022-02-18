@@ -21,6 +21,7 @@ class EntradaModel extends Model
       #'entr_empl_hora_id' => array('label' => 'Horario', 'required' => false),
       'entr_cate_id' => array('label' => 'Categoria'),
     );
+
     $dfields = $this->db->getFieldData('entrada');
 
     foreach ($dfields as $reg) {
@@ -71,16 +72,16 @@ class EntradaModel extends Model
 
 
     if (!empty($id)) {
-      $row = $this->db->query("SELECT * FROM entrada WHERE entr_id='{$id}'")->row();
+      $row = $this->db->query("SELECT * FROM entrada WHERE entr_id='{$id}'")->getRow();
       foreach ($row as $k => $value) {
         if (!isset($this->fields[$k])) continue;
         $this->fields[$k]->value =  $value;
       }
       if (!empty($this->fields['entr_ubig_id']->value)) $this->fields['ubigeo'] = $this->db->query("SELECT ubig_id as id,CONCAT(ubig_departamento,' / ',ubig_provincia,' / ',ubig_distrito) as text FROM ubigeo WHERE ubig_id=" . $this->fields['entr_ubig_id']->value . "")->row();
       $this->fields['habilidades'] = $this->db->query("SELECT rela_id as rid, rela_habi_id as hid, habi_nombre as text
-      FROM entrada_habilidad JOIN habilidad ON rela_habi_id=habi_id AND rela_entr_id='{$id}' ORDER BY rela_id ASC")->result();
+      FROM entrada_habilidad JOIN habilidad ON rela_habi_id=habi_id AND rela_entr_id='{$id}' ORDER BY rela_id ASC")->getResult();
       $this->fields['idiomas'] = $this->db->query("SELECT idio_id as rid, idio_tipo_id as hid, idio_nivel as niv
-      FROM empleo_idioma WHERE idio_entr_id='{$id}' ORDER BY idio_id ASC")->result();
+      FROM empleo_idioma WHERE idio_entr_id='{$id}' ORDER BY idio_id ASC")->getResult();
     }
     return (object)$this->fields;
   }
