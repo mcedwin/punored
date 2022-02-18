@@ -57,7 +57,7 @@ class Noticias extends BaseController
 		$datos['id'] = $id;
 		$datos['titulo'] = 'Editar noticia';
 		$datos['fields'] = $this->Model_entrada->get($id);
-		$datos['fields']->entr_foto->value = base_url('uploads/entrada') . (empty($datos['fields']->entr_foto->value) ? '/sinlogo.png' : '/' . $datos['fields']->entr_foto->value);
+		$datos['fields']->entr_foto->value = base_url('uploads/noticias') . (empty($datos['fields']->entr_foto->value) ? '/sinlogo.png' : '/' . $datos['fields']->entr_foto->value);
 		//$datos['fields']->entr_descripcion->value = 
 
 		$this->showHeader();
@@ -74,7 +74,7 @@ class Noticias extends BaseController
 
 		if (empty($id)) {
 			$data['entr_usua_id'] = $this->user->id;
-			$this->db->insert('entrada', $data);
+			$this->db->table('entrada')->insert($data);
 			$id = $this->db->insert_id();
 
 			/*$path = 'img_' . $id . '.small.jpg';
