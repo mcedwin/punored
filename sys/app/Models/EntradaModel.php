@@ -45,43 +45,12 @@ class EntradaModel extends Model
 
     $this->fields['categorias'] = $this->db->query("SELECT cate_id as id,cate_nombre as text FROM entrada_categoria WHERE cate_id!=3")->getResult();
   
-
-
-    $this->fields['rela_id'] = (object)array(
-      'name' => 'mirela[idio_id][]',
-      'label' => '',
-      'required' => false,
-      'value' => '',
-      'type' => 'hidden',
-    );
-
-    $this->fields['rela_idioma'] = (object)array(
-      'name' => 'mirela[idio_tipo_id][]',
-      'label' => '',
-      'required' => true,
-      'value' => '',
-      'type' => 'select',
-    );
-    $this->fields['rela_nivel'] = (object)array(
-      'name' => 'mirela[idio_nivel][]',
-      'label' => '',
-      'required' => true,
-      'value' => '',
-      'type' => 'select',
-    );
-
-
     if (!empty($id)) {
       $row = $this->db->query("SELECT * FROM entrada WHERE entr_id='{$id}'")->getRow();
       foreach ($row as $k => $value) {
         if (!isset($this->fields[$k])) continue;
         $this->fields[$k]->value =  $value;
       }
-      if (!empty($this->fields['entr_ubig_id']->value)) $this->fields['ubigeo'] = $this->db->query("SELECT ubig_id as id,CONCAT(ubig_departamento,' / ',ubig_provincia,' / ',ubig_distrito) as text FROM ubigeo WHERE ubig_id=" . $this->fields['entr_ubig_id']->value . "")->row();
-      $this->fields['habilidades'] = $this->db->query("SELECT rela_id as rid, rela_habi_id as hid, habi_nombre as text
-      FROM entrada_habilidad JOIN habilidad ON rela_habi_id=habi_id AND rela_entr_id='{$id}' ORDER BY rela_id ASC")->getResult();
-      $this->fields['idiomas'] = $this->db->query("SELECT idio_id as rid, idio_tipo_id as hid, idio_nivel as niv
-      FROM empleo_idioma WHERE idio_entr_id='{$id}' ORDER BY idio_id ASC")->getResult();
     }
     return (object)$this->fields;
   }
