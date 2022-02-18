@@ -20,5 +20,14 @@
                 </div>
             </div>
         </div>
-
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    Indicaciones
+                </div>
+                <div class="card-body">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi consectetur reiciendis sit nihil aut sint aspernatur illum autem deserunt repellendus labore voluptatum quisquam, impedit necessitatibus voluptate harum qui minima et.
+                </div>
+            </div>
+        </div>
     </div>

@@ -44,7 +44,7 @@ class Persona extends BaseController
 
   public function guardar($id = '')
   {
-    //$this->dieAjax();
+    $this->dieAjax();
 
     $data = [
       'pers_nombre' => $this->request->getPost('pers_nombre'),
