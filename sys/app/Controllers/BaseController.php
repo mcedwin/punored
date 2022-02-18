@@ -67,6 +67,84 @@ class BaseController extends Controller
         // E.g.: $this->session = \Config\Services::session();
     }
 
+
+    //codeigniter 3
+    public function validar($fields)
+    {
+        $data = array();
+        foreach ($this->input->post() as $key => $val) {
+            if (!isset($fields[$key])) continue;
+            if ($fields[$key]->required == true) {
+                if ($fields[$key]->type != 'bit' && strlen($val) <= 0) $this->dieMsg(false, "Campo requerido : " . $fields[$key]->label);
+            }
+            if (in_array($fields[$key]->type, array('text', 'varchar', 'url', 'email', 'fore', 'decimal', 'int', 'enum'))) {
+                $data[$key] = $this->input->post($key);
+                if ($fields[$key]->type == 'int' && empty($val)) $data[$key] = null;
+            } else if ($fields[$key]->type == 'date') {
+                $data[$key] = dateToMysql($val);
+            } else if ($fields[$key]->type == 'bit') {
+                $data[$key] = $this->input->post($key) == '1' ? 1 : 0;
+            }
+        }
+        return $data;
+    }
+
+    //codeigniter 3
+    public function guardar_imagen($folder, $name)
+    {
+        $config['upload_path']          = FCPATH . $folder;
+        $config['allowed_types']        = 'jpg|png|jfif';
+        $config['max_size']             = 100000;
+        $this->load->library('upload', $config);
+        $this->upload->initialize($config); ///esto esta medio raro
+        $this->session->set_userdata('uniqueid', uniqid());
+
+        if ($this->upload->do_upload('foto')) {
+            $this->load->helper('Formulario');
+            $this->resize_user('./' . $folder, $this->upload->data('full_path'), $name);
+            unlink($this->upload->data('full_path'));
+            return true;
+        } else {
+            if (empty($_FILES['foto']['name'])) {
+                return false;
+            }
+            $this->output->set_status_header(500, 'Error : Posiblemente el tipo de archivo no sea permitido.' . $this->upload->display_errors());
+            return false;
+        }
+    }
+
+    function resize_user($folder, $full_path, $fname)
+    {
+        $result = true;
+        $this->load->library('image_lib');
+        $counter = 0;
+        $sizes = array(
+            'Pequeño' => (object) array(
+                'ancho' => 64,
+                'alto' => 64,
+                'sufijo' => 'thumb',
+            ),
+            'Mediano' => (object) array(
+                'ancho' => 250,
+                'alto' => 350,
+                'sufijo' => 'small',
+            ),
+        );
+        foreach ($sizes as $size) {
+            $counter++;
+            $config['image_library'] = 'gd2';
+            $config['source_image'] = $full_path;
+            $config['maintain_ratio'] = TRUE;
+            $config['width']         = $size->ancho;
+            $config['height']       = $size->alto;
+            $config['new_image'] = $folder . '/' . str_replace('small', $size->sufijo, $fname);
+            $this->image_lib->clear();
+            $this->image_lib->initialize($config);
+            $this->image_lib->resize();
+        }
+        return $result;
+    }
+
     public function dieAjax()
     {
         if (
