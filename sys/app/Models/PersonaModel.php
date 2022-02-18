@@ -32,6 +32,12 @@ class PersonaModel extends Model
     }
   }
 
+  function getFields($type = 'all')
+  {
+    return $this->fields;
+  }
+
+
   public function getTables()
   {
     return $this->tables = $this->db->listTables();
@@ -50,7 +56,7 @@ class PersonaModel extends Model
     $results = $query->getResultArray();
     return $results;
   }
-
+/*
   function getPerson($id = 0)
   {
     $sql = "SELECT pers_nombre, pers_email FROM persona WHERE pers_id = '{$id}'";
@@ -59,15 +65,11 @@ class PersonaModel extends Model
     $result = $query->getResultArray()[0];
     return $result;
   }
+  */
 
   function saveData($data)
   {
-    $sql = 'INSERT INTO persona(pers_nombre,pers_email, pers_password) VALUES';
-    $sql .= $data['pers_nombre'];
-    $sql .= $data['pers_email'];
-    $sql .= $data['pers_password'];
-    $sql .= 'FROM persona';
-    $query = $this->db->query($sql);
+    $this->db->table('persona')->insert($data);
   }
 
   function get($id = 0)

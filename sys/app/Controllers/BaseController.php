@@ -68,22 +68,21 @@ class BaseController extends Controller
     }
 
 
-    //codeigniter 3
     public function validar($fields)
     {
         $data = array();
-        foreach ($this->input->post() as $key => $val) {
+        foreach ($this->request->getPost() as $key => $val) {
             if (!isset($fields[$key])) continue;
             if ($fields[$key]->required == true) {
                 if ($fields[$key]->type != 'bit' && strlen($val) <= 0) $this->dieMsg(false, "Campo requerido : " . $fields[$key]->label);
             }
             if (in_array($fields[$key]->type, array('text', 'varchar', 'url', 'email', 'fore', 'decimal', 'int', 'enum'))) {
-                $data[$key] = $this->input->post($key);
+                $data[$key] = $this->request->getPost($key);
                 if ($fields[$key]->type == 'int' && empty($val)) $data[$key] = null;
             } else if ($fields[$key]->type == 'date') {
                 $data[$key] = dateToMysql($val);
             } else if ($fields[$key]->type == 'bit') {
-                $data[$key] = $this->input->post($key) == '1' ? 1 : 0;
+                $data[$key] = $this->request->getPost($key) == '1' ? 1 : 0;
             }
         }
         return $data;
