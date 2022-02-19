@@ -6,35 +6,35 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-4 col-xs-6">
+                    <div class="col-sm-4 col-xs-6 d-flex flex-column">
                         <a href="#">
                             <img src="https://www.lapatria.pe/web/wp-content/uploads/2022/01/Western-310x174.jpg" width="310" height="174" class="img-fluid"> </a>
                         <h3 class="h6 h5-sm h6-lg"><a href="#">Western o «cine de vaqueros»: ¿Por qué causaban furor en el Perú ?</a></h3>
-                        <ul class="list-inline list-unstyled meta">
-                            <li class="list-inline-item"><a href="#"><i class="fa fa-calendar"></i> 20 d </a></li>
-                            <li class="list-inline-item"><a href="#"><i class="fa fa-share" aria-hidden="true"></i> 53 </a></li>
-                            <li class="list-inline-item"><a href="#"><i class="fa fa-eye" aria-hidden="true"></i> 242 </a></li>
-                        </ul>
+                        <div class="mt-auto small">
+                            <a href="#"><i class="fa fa-calendar"></i> 20 d </a>
+                            <a href="#"><i class="fa fa-share" aria-hidden="true"></i> 53 </a>
+                            <a href="#"><i class="fa fa-eye" aria-hidden="true"></i> 242 </a>
+                        </div>
                     </div>
-                    <div class="col-sm-4 col-xs-6">
+                    <div class="col-sm-4 col-xs-6 d-flex flex-column">
                         <a href="#">
                             <img src="https://www.lapatria.pe/web/wp-content/uploads/2022/01/Cocina-310x174.jpg" width="310" height="174" class="img-fluid"> </a>
                         <h3 class="h6 h5-sm h6-lg"><a href="#">El humo de leña aumentaría el riesgo de cáncer de pulmón</a></h3>
-                        <ul class="list-inline list-unstyled meta">
-                            <li class="list-inline-item"><a href="#"><i class="fa fa-calendar"></i> 27 d </a></li>
-                            <li class="list-inline-item"><a href="#"><i class="fa fa-share" aria-hidden="true"></i> 47 </a></li>
-                            <li class="list-inline-item"><a href="#"><i class="fa fa-eye" aria-hidden="true"></i> 388 </a></li>
-                        </ul>
+                        <div class="mt-auto small">
+                            <a href="#"><i class="fa fa-calendar"></i> 27 d </a>
+                            <a href="#"><i class="fa fa-share" aria-hidden="true"></i> 47 </a>
+                            <a href="#"><i class="fa fa-eye" aria-hidden="true"></i> 388 </a>
+                        </div>
                     </div>
-                    <div class="col-sm-4 col-xs-6">
+                    <div class="col-sm-4 col-xs-6 d-flex flex-column">
                         <a href="#">
                             <img src="https://www.lapatria.pe/web/wp-content/uploads/2022/02/lunar-cancer-310x174.jpg" width="310" height="174" class="img-fluid"> </a>
                         <h3 class="h6 h5-sm h6-lg"><a href="#">¿Es posible detectar a tiempo un lunar peligroso?</a></h3>
-                        <ul class="list-inline list-unstyled meta">
-                            <li class="list-inline-item"><a href="#"><i class="fa fa-calendar"></i> 10 d </a></li>
-                            <li class="list-inline-item"><a href="#"><i class="fa fa-share" aria-hidden="true"></i> 28 </a></li>
-                            <li class="list-inline-item"><a href="#"><i class="fa fa-eye" aria-hidden="true"></i> 250 </a></li>
-                        </ul>
+                        <div class="mt-auto small">
+                            <a href="#"><i class="fa fa-calendar"></i> 10 d </a>
+                            <a href="#"><i class="fa fa-share" aria-hidden="true"></i> 28 </a>
+                            <a href="#"><i class="fa fa-eye" aria-hidden="true"></i> 250 </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -88,7 +88,7 @@
                         <button type="submit" class="btn btn-primary">Publicar</button>
                     </div>
                 </div>
-<hr>
+                <hr>
                 <div class="comment-widgets mt-3">
                     <!-- Comment Row -->
                     <div class="d-flex flex-row comment-row m-t-0">

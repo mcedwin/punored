@@ -16,49 +16,63 @@
         </button>
     </div>
 </div>
-<?php for ($i = 1; $i <= 5; $i++) : ?>
-    <article>
-        <div class="row">
-            <div class="col-md-3">
-                <a href="#">
-                    <img src="http://placehold.it/260x180" class="img-fluid">
-                </a>
+<div class="row">
+    <div class="col-md-9">
+        <?php for ($i = 1; $i <= 5; $i++) : ?>
+            <article>
+                <div class="row">
+                    <div class="col-md-3">
+                        <a href="#">
+                            <img src="http://placehold.it/260x180" class="img-fluid">
+                        </a>
+                    </div>
+                    <div class="col-md-9">
+                        <p>
+                            Lorem ipsum dolor sit amet, id nec conceptam conclusionemque. Et eam tation option. Utinam salutatus ex eum. Ne mea dicit tibique facilisi, ea mei omittam explicari conclusionemque, ad nobis propriae quaerendum sea.
+                        </p>
+                        <a class="btn btn-secondary" href="#">Read more</a>
+                    </div>
+                </div>
+                <div>
+
+                    <i class="icon-user"></i> by <a href="#">John<?php echo $i ?></a>
+                    | <i class="icon-calendar"></i> Sept 16th, 2012
+                    | <i class="icon-comment"></i> <a href="#">3 Comments</a>
+                    | <i class="icon-share"></i> <a href="#">39 Shares</a>
+                    | <i class="icon-tags"></i> Tags : <a href="#"><span class="label label-info">Snipp</span></a>
+                    <a href="#"><span class="label label-info">Bootstrap</span></a>
+                    <a href="#"><span class="label label-info">UI</span></a>
+                    <a href="#"><span class="label label-info">growth</span></a>
+
+                </div>
+            </article>
+
+            <hr>
+        <?php endfor; ?>
+        <nav aria-label="...">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link">Previous</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item" aria-current="page">
+                    <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                Top noticias
             </div>
-            <div class="col-md-9">
-                <p>
-                    Lorem ipsum dolor sit amet, id nec conceptam conclusionemque. Et eam tation option. Utinam salutatus ex eum. Ne mea dicit tibique facilisi, ea mei omittam explicari conclusionemque, ad nobis propriae quaerendum sea.
-                </p>
-                <a class="btn btn-secondary" href="#">Read more</a>
+            <div class="card-body">
+                Nam viverra tellus velit, eu cursus eros fermentum pellentes. Cras lacinia blandit justo ac volutpat. Vestibulum commodo diam nulla, sit amet hendrerit dui facilisis et. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempus turpis nec nibh dapibus, fermentum vehicula e
             </div>
         </div>
-        <div>
-
-            <i class="icon-user"></i> by <a href="#">John<?php echo $i ?></a>
-            | <i class="icon-calendar"></i> Sept 16th, 2012
-            | <i class="icon-comment"></i> <a href="#">3 Comments</a>
-            | <i class="icon-share"></i> <a href="#">39 Shares</a>
-            | <i class="icon-tags"></i> Tags : <a href="#"><span class="label label-info">Snipp</span></a>
-            <a href="#"><span class="label label-info">Bootstrap</span></a>
-            <a href="#"><span class="label label-info">UI</span></a>
-            <a href="#"><span class="label label-info">growth</span></a>
-
-        </div>
-    </article>
-
-    <hr>
-<?php endfor; ?>
-<nav aria-label="...">
-  <ul class="pagination justify-content-center">
-    <li class="page-item disabled">
-      <a class="page-link">Previous</a>
-    </li>
-    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-    <li class="page-item" aria-current="page">
-      <a class="page-link" href="#">2</a>
-    </li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item">
-      <a class="page-link" href="#">Next</a>
-    </li>
-  </ul>
-</nav>
+    </div>
+</div>
