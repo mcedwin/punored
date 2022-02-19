@@ -51,13 +51,13 @@ class EstuModel extends Model
   {
     $this->db->table('estudiante')->insert($data);
   }
-  function Update($id, $data)
+  function Actualizar($id, $data)
   {
     $this->db->table('estudiante')->update($id, $data);
   }
-  function Delete($id)
+  function Eliminar($id)
   {
-    $this->db->table('edstudiante')->delete($id);
+    $this->db->table('estudiante')->delete($id);
   }
   public function getEstudiantes($fields = [''])
   {

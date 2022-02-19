@@ -3,6 +3,7 @@
             <div class="card">
                 <div class="card-header">
                     <?php echo $titulo; ?>
+                    <a href="#" class="btn btn-primary float-end">Agregar</a>
                 </div>
                 <div class="card-body">
 
