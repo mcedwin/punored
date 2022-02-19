@@ -10,11 +10,12 @@ class EstuModel extends Model
   public function __construct()
   {
     parent::__construct();
+    $this->db = \Config\Database::connect();
+
     $this->fields = array(  
-      'est_nombre' => array('label' => 'Nombre', 'required' => True),
-      'est_apellido' => array('label' => 'Apellido', 'required' => True),
-      'est_edad' => array('label' => 'Edad','required' => True),
-      
+      'est_nombre' => array('label' => 'Nombre'),
+      'est_apellido' => array('label' => 'Apellido'),
+      'est_edad' => array('label' => 'Edad')
     );
     $dfields = $this->db->getFieldData('estudiante');
 
@@ -34,18 +35,41 @@ class EstuModel extends Model
     return $this->fields;
   }
 
-  function get($id = '')
+  function get($id = 0)
   {
-    $this->fields['estudiante'] = $this->db->query("SELECT est_id as id,est_nombre as text FROM estudiante WHERE est_id !=1")->getResult();
     if (!empty($id)) {
-      $row = $this->db->query("SELECT * FROM estudiante WHERE est_id='{$id}'")->row();
+      $row = $this->db->query("SELECT * FROM estudiante WHERE est_id = $id")->getRow();
       foreach ($row as $k => $value) {
         if (!isset($this->fields[$k])) continue;
-        $this->fields[$k]->value =  $value;
+        $this->fields[$k]->value = $value;
       }
     }
     return (object)$this->fields;
   }
   
+  function Savedata($data)
+  {
+    $this->db->table('estudiante')->insert($data);
+  }
+  function Actualizar($id, $data)
+  {
+    $this->db->table('estudiante')->update($id, $data);
+  }
+  function Eliminar($id)
+  {
+    $this->db->table('estudiante')->delete($id);
+  }
+  public function getEstudiantes($fields = [''])
+  {
+    $sql = 'SELECT ';
+    ///Select all fields
+    foreach ($fields as $field) $sql .= " $field,";
+    $sql[strlen($sql) - 1] = " ";
+    $sql .= ' FROM estudiante ';
+
+    $query = $this->db->query($sql);
+    $results = $query->getResultArray();
+    return $results;
+  }
 
 }

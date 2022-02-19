@@ -37,7 +37,6 @@ class PersonaModel extends Model
     return $this->fields;
   }
 
-
   public function getTables()
   {
     return $this->tables = $this->db->listTables();
@@ -56,7 +55,8 @@ class PersonaModel extends Model
     $results = $query->getResultArray();
     return $results;
   }
-/*
+
+  /*
   function getPerson($id = 0)
   {
     $sql = "SELECT pers_nombre, pers_email FROM persona WHERE pers_id = '{$id}'";
