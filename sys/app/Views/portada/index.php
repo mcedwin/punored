@@ -123,7 +123,7 @@
                 <div class="row">
                     <?php for ($i = 0; $i < 18; $i++) : ?>
                         <div class="col-2">
-                            <img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar<?php echo ($i + 1) % 8 + 1; ?>.png" alt="">
+                            <a href="<?php echo base_url('Miembros/info/1')?>"><img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar<?php echo ($i + 1) % 8 + 1; ?>.png" alt=""></a>
                         </div>
                     <?php endfor; ?>
                 </div>

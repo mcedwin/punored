@@ -187,4 +187,11 @@ class Miembros extends BaseController
             $this->dieMsg();
         }
     }
+
+    function info($id){
+
+        $this->showHeader(true);
+        $this->showContent('info');
+        $this->showFooter();
+    }
 }
