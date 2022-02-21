@@ -8,6 +8,11 @@ class NoticiasModel extends Model
 {
     protected $table = 'entrada';
 
+    public function __construct()
+    {
+      parent::__construct();
+    }
+
     public function getDataListaNoticia(){
       $builder = $this->db->table($this->table);
       $result = $builder->select([
