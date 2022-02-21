@@ -36,11 +36,9 @@ class Noticias extends BaseController
 	{
 		helper("formulario");
 		//$this->permitir_acceso();
-		$this->addCss(array('lib/select2/dist/css/select2.min'));
 		$this->addJs(array(
 			"lib/tinymce/tinymce.min.js",
 			"lib/tinymce/jquery.tinymce.min.js",
-			'js/habilidad/scripts.js',
 			'js/entrada/publicar.js'
 		));
 
@@ -80,15 +78,16 @@ class Noticias extends BaseController
 
 	public function guardar($id = '')
 	{
-		$this->load->model('Model_entrada');
-		$data = $this->validar($this->Model_entrada->getFields());
+		$model = new EntradaModel();
+
+		$data = $this->validar($model->getFields());
 		$data['entr_fechareg'] = date('Y-m-d H:i:s');
 		unset($data['usua_foto']);
 
 		if (empty($id)) {
 			$data['entr_usua_id'] = $this->user->id;
 			$this->db->table('entrada')->insert($data);
-			$id = $this->db->insert_id();
+			//$id = $this->db->insert_id();
 
 			/*$path = 'img_' . $id . '.small.jpg';
 			if ($this->guardar_imagen('uploads/entrada', $path)) {
@@ -103,7 +102,7 @@ class Noticias extends BaseController
 			$this->db->table('entrada')->update($data, "entr_id='{$id}' AND entr_usua_id={$this->user->id}");
 		}
 
-		$this->dieMsg(true);
+		$this->dieMsg(true,'',base_url('/'));
 	}
 
   public function guardar2()
