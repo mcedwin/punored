@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 use App\Models\EntradaModel;
+use App\Models\NoticiasModel;
 
 class Noticias extends BaseController
 {
@@ -11,6 +12,18 @@ class Noticias extends BaseController
 		$this->ShowContent('index');
 		$this->showFooter();
 	}
+
+  public function index2()
+  {
+    $model = new NoticiasModel();
+
+    $all = $model->getDataListaNoticia();
+    $data = $all->data;
+
+    $this->showHeader();
+    $this->showContent('index2', ['noticias' => $data]);
+    $this->showFooter();
+  }
 
 	public function ver($id)
 	{
@@ -93,10 +106,29 @@ class Noticias extends BaseController
 		$this->dieMsg(true);
 	}
 
+  public function guardar2()
+  {
+    $model = new EntradaModel();
+    $data = $this->validar($model->getFields());
+    $data['entr_fechareg'] = date('Y-m-d H:i:s');
+    $data['entr_usua_id'] = $this->user->id;
+    $this->db->table('entrada')->insert($data);
+    $id = $this->db->insert_id();
+    $this->dieMsg(true);
+  }
+
 	public function eliminar($id)
 	{
 		$this->dieAjax();
 		$this->db->query("DELETE FROM entrada WHERE entr_id='{$id}' AND entr_usua_id='{$this->user->id}'");
 		$this->dieMsg();
 	}
+
+  public function test()
+  {
+    $this->showHeader();
+    $model = new EntradaModel();
+    $datos['fields'] = $model->get();
+    echo '<pre>'; var_dump($datos); echo '</pre>';
+  }
 }

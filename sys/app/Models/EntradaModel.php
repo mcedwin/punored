@@ -6,7 +6,9 @@ use CodeIgniter\Model;
 
 class EntradaModel extends Model
 {
-    var $fields;
+  protected $table = 'entrada';
+
+  var $fields;
   public function __construct()
   {
     parent::__construct();
@@ -42,11 +44,13 @@ class EntradaModel extends Model
 
   function get($id = '')
   {
+    $builderEntradaCate = $this->db->table('entrada_categoria');
+    $this->fields['categorias'] = $builderEntradaCate->select('cate_id as `id`, cate_nombre as `text`')->get()->getResult();
 
-    $this->fields['categorias'] = $this->db->query("SELECT cate_id as id,cate_nombre as text FROM entrada_categoria WHERE cate_id!=3")->getResult();
+    $builderEntrada = $this->db->table($this->table);
   
     if (!empty($id)) {
-      $row = $this->db->query("SELECT * FROM entrada WHERE entr_id='{$id}'")->getRow();
+      $row = $builderEntrada->select()->where('entr_id', $id)->get()->getRow();
       foreach ($row as $k => $value) {
         if (!isset($this->fields[$k])) continue;
         $this->fields[$k]->value =  $value;

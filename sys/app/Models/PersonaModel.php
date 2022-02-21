@@ -6,12 +6,16 @@ use CodeIgniter\Model;
 
 class PersonaModel extends Model
 {
-  var $db;
-  var $fields;
+  protected $table = 'persona';
+  protected $builder = '';
+  
+  var $fields = [];
+
   public function __construct()
   {
     parent::__construct();
-    $this->db = \Config\Database::connect();
+
+    $this->builder = $this->db->table($this->table);
 
     $this->fields = array(
       'pers_nombre' => array('label' => 'Nombre'),
@@ -39,7 +43,7 @@ class PersonaModel extends Model
 
   public function getTables()
   {
-    return $this->tables = $this->db->listTables();
+    return $this->db->listTables();
   }
 
   //Get fields data from personas table, by param
@@ -69,7 +73,7 @@ class PersonaModel extends Model
 
   function saveData($data)
   {
-    $this->db->table('persona')->insert($data);
+    $this->builder->insert($data);
   }
 
   function get($id = 0)
@@ -90,5 +94,19 @@ class PersonaModel extends Model
   public function getFlds()
   {
     return $this->fields;
+  }
+
+  public function actualizarById($id, $data)
+  {
+    $this->builder
+      ->where('pers_id', $id)
+      ->update($data);
+  }
+
+  public function eliminarById($id)
+  {
+    $this->builder
+      ->where('pers_id', $id)
+      ->delete();
   }
 }
