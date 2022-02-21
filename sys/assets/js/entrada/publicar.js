@@ -120,7 +120,7 @@ $(document).ready(function() {
 
     $('#form').submit(function() {
         // data.contenido = pre_wpautop(tinyMCE.get('entr_descripcion').getContent());
-        $(this).mysave(() => document.location = baseurl);
+        $(this).mysave(() => document.location = base_url);
         return false;
     });
 
