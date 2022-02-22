@@ -22,7 +22,7 @@
     <div class="row">
       <div class="col-md-3">
         <a href="<?php echo $noticia['entr_url'] ?>">
-          <img src="<?php echo $noticia['entr_foto'] ?>" class="img-fluid" alt="there isn't an image">
+          <img src="<?php echo base_url("uploads/noticias/" . $noticia['entr_foto']) ?>" class="img-fluid" alt="there isn't an image">
         </a>
       </div>
       <div class="col-md-9">
@@ -49,20 +49,73 @@
 
   <hr>
 <?php endforeach; ?>
-
+<?php
+$flagIni = True;
+$flagEnd = True;
+?>
 <nav aria-label="...">
   <ul class="pagination justify-content-center">
     <li class="page-item <?php echo ($current_page == 1) ? 'disabled' : '' ?>">
-      <a class="page-link" href="#">Previous</a>
+      <a class="page-link" href="<?php echo base_url('Noticias/index/' . ($current_page - 1)) ?>">Previous</a>
     </li>
     <?php for ($i = 1; $i <= $last_page; $i++) : ?>
-      <li class="page-item <?php echo ($current_page == $i) ? 'active' : '' ?>">
-        <a class="page-link" href="<?php echo base_url("Noticias/index/$i") ?>"><?php echo $i ?></a>
-      </li>
-    <?php endfor ?>
-    <li class="page-item <?php echo ($current_page == $last_page)?'disabled':'' ?>">
-      <a class="page-link " href="#">Next</a>
+      <?php if ($last_page <= 10) : ?>
+        <li class="page-item <?php echo ($current_page == $i) ? 'active' : '' ?>">
+          <a class="page-link" href="<?php echo base_url("Noticias/index/$i") ?>"><?php echo $i ?></a>
+        </li>
+      <?php else : ?>
+        <?php if ($i <= 3) : ?>
+          <li class="page-item <?php echo ($current_page == $i) ? 'active' : '' ?>">
+            <a class="page-link" href="<?php echo base_url("Noticias/index/$i") ?>"><?php echo $i ?></a>
+          </li>
+          <?php if ($current_page <= 3 && $flagIni == True && $i == 3) : ?>
+            <span class="page-link border-0">...</span>
+            <?php $flagIni = False; ?>
+          <?php endif; ?>
+        <?php endif; ?>
+        <?php if ($i >= 4 && $i <= $last_page - 3 && $i == $current_page) : ?>
+          <?php if ($i != 4) : ?>
+            <span class="page-link border-0">...</span>
+            <li class="page-item <?php echo ($current_page == $i - 1) ? 'active' : '' ?>">
+              <a class="page-link" href="<?php echo base_url("Noticias/index/" . ($i - 1)) ?>"><?php echo $i - 1 ?></a>
+            </li>
+          <?php endif; ?>
+          <li class="page-item <?php echo ($current_page == $i) ? 'active' : '' ?>">
+            <a class="page-link" href="<?php echo base_url("Noticias/index/" . $i) ?>"><?php echo $i ?></a>
+          </li>
+          <?php if ($i != $last_page - 3) : ?>
+            <li class="page-item <?php echo ($current_page == $i + 1) ? 'active' : '' ?>">
+              <a class="page-link" href="<?php echo base_url("Noticias/index/" . ($i + 1)) ?>"><?php echo $i + 1 ?></a>
+            </li>
+            <span class="page-link border-0">...</span>
+          <?php endif; ?>
+        <?php endif; ?>
+        <?php if ($i >= $last_page - 2) : ?>
+          <?php if ($current_page >= $last_page - 2 && $flagEnd == True) : ?>
+            <span class="page-link border-0">...</span>
+            <?php $flagEnd = False; ?>
+          <?php endif; ?>
+          <li class="page-item <?php echo ($current_page == $i) ? 'active' : '' ?>">
+            <a class="page-link" href="<?php echo base_url("Noticias/index/$i") ?>"><?php echo $i ?></a>
+          </li>
+        <?php endif; ?>
+        <!-- TODO:Verificar estas formas de paginacion -->
+        <!-- n > 10
+          1    : 1,2,3         ...       n-2,n-1,n |1,2  ==current
+          izq  : 1,2,3,i+1     ...       n-2,n-1,n |3    ==current
+          izq  : 1,2,3,i,i+1   ...       n-2,n-1,n |4    ==current
+          izq  : 1,2,3,i-1,i,i+1   ...   n-2,n-1,n |5    ==current
+          medio: 1,2,3 ... i-1,i,i+1 ... n-2,n-1,n |i    ==current
+          der  : 1,2,3   ...   i-1,i,i+1,n-2,n-1,n |n-4  ==current
+          der  : 1,2,3     ...     i-1,i,n-2,n-1,n |n-3  ==current
+          der  : 1,2,3       ...     i-1,n-2,n-1,n |n-2  ==current
+          last : 1,2,3         ...       n-2,n-1,n |n-1,n==current
+        -->
+      <?php endif; ?>
+    <?php endfor; ?>
+    <li class="page-item <?php echo ($current_page == $last_page) ? 'disabled' : '' ?>">
+      <a class="page-link " href="<?php echo base_url('Noticias/index/' . ($current_page + 1)) ?>">Next</a>
     </li>
   </ul>
 </nav>
-<?php echo "$current_page $last_page" ?>
+<?php echo "$current_page $last_page $quant_results" ?>

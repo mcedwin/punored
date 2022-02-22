@@ -11,7 +11,7 @@ class Noticias extends BaseController
     $model = new NoticiasModel();
     $quant_results = $model->count();
     $quant_to_show = 5;
-    $page -= 1;
+    $page = $page - 1;
     if ($page < 0 || $page * $quant_to_show > $quant_results) {
       return redirect()->to(base_url('Noticias/index'));
       // $page = 0;
@@ -23,7 +23,7 @@ class Noticias extends BaseController
       'noticias' => $model->getDataListado($quant_to_show, $start_from),
       'quant_results' => $quant_results,
       'current_page' => $page + 1,
-      'last_page' => $quant_pages + 1
+      'last_page' => $quant_pages + 1 - (($quant_results % $quant_to_show == 0) ? 1 : 0)
     );
 
     $this->showHeader();
@@ -96,7 +96,7 @@ class Noticias extends BaseController
 
 			$path = 'img_' . $id . '.small.jpg';
 			if ($this->guardar_imagen('uploads/noticias', $path)) {
-				$this->db->table('entrada')->update('entrada', array('entr_foto'=>$path), "entr_id='{$id}'"); // AND entr_usua_id={$this->user->id}
+				$this->db->table('entrada')->update(array('entr_foto'=>$path), "entr_id='{$id}'"); // AND entr_usua_id={$this->user->id}
 			}
 
 		} else {
@@ -128,11 +128,39 @@ class Noticias extends BaseController
 		$this->dieMsg();
 	}
 
-  public function test()
+  public function test($page = 1)
   {
-    $this->showHeader();
     $model = new NoticiasModel();
-    $datos = $model->count();
-    echo '<pre>'; var_dump($datos); echo '</pre>';
+    $quant_results = $model->count();
+    $quant_to_show = 5;
+    $page -= 1;
+    if ($page < 0 || $page * $quant_to_show > $quant_results) {
+      return redirect()->to(base_url('Noticias/index'));
+      // $page = 0;
+    }
+    $start_from = $page * $quant_to_show;
+    $quant_pages = (int) ($quant_results / $quant_to_show);
+
+    $data = array(
+      'noticias' => $model->getDataListado($quant_to_show, $start_from),
+      'quant_results' => $quant_results,
+      'current_page' => $page + 1,
+      'last_page' => $quant_pages + 1 - (($quant_results % $quant_to_show == 0) ? 1 : 0)
+    );
+
+    $this->showHeader();
+    $this->showContent('index', $data);
+    $this->showFooter();
+  }
+  public function test2()
+  {
+    $model = new NoticiasModel();
+
+    $data = [
+      'users' => $model->paginate(10),
+      'pager' => $model->pager
+    ];
+    
+    echo '<pre>'; var_dump($data); echo '</pre>';
   }
 }
