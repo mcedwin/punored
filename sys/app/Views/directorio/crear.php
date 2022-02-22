@@ -6,7 +6,7 @@
                 </div>
                 <div class="card-body">
 
-                    <form method="post" action="<?php echo base_url("Directorio/guardar/" . $id); ?>" id="form_registrar" class="form-validate" enctype="multipart/form-data">
+                    <form method="post" action="<?php echo base_url("Directorio/guardar/" . $id); ?>" id="form_registrar" class="form-validate needs-validation" enctype="multipart/form-data">
                         <div class="form-row">
                             <?php
                             $fields->dire_cate_id->type = 'select';

@@ -56,16 +56,14 @@ class DirectorioModel extends Model
       }
       return (object)$this->fields;
     }
-    public function getDirectorio($fields = [''])
-  {
-    $sql = 'SELECT ';
-    ///Select all fields
-    foreach ($fields as $field) $sql .= " $field,";
-    $sql[strlen($sql) - 1] = " ";
-    $sql .= ' FROM directorio ';
-
-    $query = $this->db->query($sql);
-    $results = $query->getResultArray();
-    return $results;
+  public function getDirectorioData(){
+    $builder = $this->db->table('directorio');
+    $builder->select([
+      'dire_nombre',
+      'dire_resumen',
+      'dire_imagen'
+    ]);
+    $query = $builder->get();
+    return $query->getResultArray();
   }
 }

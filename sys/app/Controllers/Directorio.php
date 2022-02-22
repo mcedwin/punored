@@ -12,12 +12,17 @@ class Directorio extends BaseController
 	}
     public function index()
 	{
-
 		$this->showHeader();
 		$this->ShowContent('index');
 		$this->showFooter();	
 	}
-
+	public function index2()
+	{
+		$data = $this->model->getDirectorioData();
+		$this->showHeader();
+		$this->ShowContent('indextest', ['dire' => $data]);
+		$this->showFooter();
+	}
 	public function crear()
 	{
 		helper('formulario');
@@ -29,14 +34,13 @@ class Directorio extends BaseController
 		$this->addJs(array(
 			'js/directorio/form.js'
 		));
+		
 		$this->showHeader();
 		$this->ShowContent('crear', $datos);
 		$this->showFooter();
 	}
 	public function guardar($id = '')
 	{
-		//$this->dieAjax();
-
 		$data = [
 			'dire_nombre' => $this->request->getPost('dire_nombre'),
 			'dire_resumen' => $this->request->getPost('dire_resumen'),
@@ -48,7 +52,7 @@ class Directorio extends BaseController
 
 		$data = $this->validar($this->model->getFields());
 		$this->model->saveData($data);
-		$this->dieMsg(true, '', base_url('Directorio'));
+		$this->dieMsg(true,'', base_url('Directorio'));
 	}
 	
 }

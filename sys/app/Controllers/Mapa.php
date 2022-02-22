@@ -7,6 +7,13 @@ class Mapa extends BaseController
 {
     public function index($rowno = 0)
 	{
+		$this->addCss(array(
+			'lib/leaflet/leaflet.css'
+		));
+		$this->addJs(array(
+			'lib/leaflet/leaflet.js',
+			'js/mapa/mostrar.js'
+		));
 		$this->showHeader();
 		$this->ShowContent('index');
 		$this->showFooter();

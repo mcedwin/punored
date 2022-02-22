@@ -1,4 +1,3 @@
-
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
     <h4 class="mb-0">Encuestas</h4>
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -23,57 +22,33 @@
             <div class="col-md-8">
                 <section class="card card-default">
 
-                    <img src="<?php echo base_url('sys/assets/img/poll.jpg'); ?>" class="card-img-top" alt="...">
+                    <img src="<?php echo base_url('uploads/encuestas/' . $encuesta->encu_foto); ?>" class="card-img-top" alt="...">
                     <div class="card-body">
-
-                        ¿Cuál de los siguientes ciudadanos cree usted que podría ser el futuro gobernador de la región Puno?
-
-
+                        <?php echo $encuesta->encu_titulo; ?>
                         <div class="poll-area mt-2">
-                            <input type="radio" name="poll" id="opt-1">
-                            <input type="radio" name="poll" id="opt-2">
-                            <input type="radio" name="poll" id="opt-3">
-                            <input type="radio" name="poll" id="opt-4">
-                            <label for="opt-1" class="opt-1">
-                                <div class="rowi">
-                                    <div class="column">
-                                        <span class="circle"></span>
-                                        <span class="text">Alexander Flores Pari</span>
+                            <?php $total = 0; foreach ($detalle as $index => $deta) : ?>
+                                <?php
+                                $total += $deta->deta_puntos;
+                                ?>
+                                <input type="radio" name="poll" id="opt-<?php echo $index; ?>">
+                            <?php endforeach; ?>
+                            <?php foreach ($detalle as $index => $deta) : ?>
+                                <?php
+                                $porc = number_format(($total > 0 ? $deta->deta_puntos * 100 / $total : 0),2);
+
+                                ?>
+                                <label for="opt-<?php echo $index; ?>" class="opt-<?php echo $index; ?>">
+                                    <div class="rowi">
+                                        <div class="column">
+                                            <span class="circle"></span>
+                                            <span class="text"><?php echo $deta->deta_alternativa; ?></span>
+                                        </div>
+                                        <span class="percent"><?php echo $porc; ?> % </span>
                                     </div>
-                                    <span class="percent">30%</span>
-                                </div>
-                                <div class="progress" style='--w:30;'></div>
-                            </label>
-                            <label for="opt-2" class="opt-2">
-                                <div class="rowi">
-                                    <div class="column">
-                                        <span class="circle"></span>
-                                        <span class="text">Richard Hancco Soncco</span>
-                                    </div>
-                                    <span class="percent">20%</span>
-                                </div>
-                                <div class="progress" style='--w:20;'></div>
-                            </label>
-                            <label for="opt-3" class="opt-3">
-                                <div class="rowi">
-                                    <div class="column">
-                                        <span class="circle"></span>
-                                        <span class="text">Wilber Cutipa Alejo</span>
-                                    </div>
-                                    <span class="percent">40%</span>
-                                </div>
-                                <div class="progress" style='--w:40;'></div>
-                            </label>
-                            <label for="opt-4" class="opt-4">
-                                <div class="rowi">
-                                    <div class="column">
-                                        <span class="circle"></span>
-                                        <span class="text">Hugo Quinto Huamán</span>
-                                    </div>
-                                    <span class="percent">10%</span>
-                                </div>
-                                <div class="progress" style='--w:10;'></div>
-                            </label>
+                                    <div class="progress" style='--w:<?php echo $porc; ?>;'></div>
+                                </label>
+                            <?php endforeach; ?>
+
                         </div>
                         <div class="text-end">
                             <button type="submit" class="btn btn-primary">Votar</button>
@@ -84,13 +59,13 @@
         </div>
     </div>
     <div class="col-md-4">
-    <div class="card side-miembros mb-2">
+        <div class="card side-miembros mb-2">
             <div class="card-header">Encuestas activas</div>
             <div class="card-body">
                 <div class="row">
                     <?php for ($i = 0; $i < 18; $i++) : ?>
                         <div class="col-2">
-                            <a href="<?php echo base_url('Miembros/info/1')?>"><img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar<?php echo ($i + 1) % 8 + 1; ?>.png" alt=""></a>
+                            <a href="<?php echo base_url('Miembros/info/1') ?>"><img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar<?php echo ($i + 1) % 8 + 1; ?>.png" alt=""></a>
                         </div>
                     <?php endfor; ?>
                 </div>
@@ -102,7 +77,7 @@
                 <div class="row">
                     <?php for ($i = 0; $i < 18; $i++) : ?>
                         <div class="col-2">
-                            <a href="<?php echo base_url('Miembros/info/1')?>"><img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar<?php echo ($i + 1) % 8 + 1; ?>.png" alt=""></a>
+                            <a href="<?php echo base_url('Miembros/info/1') ?>"><img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar<?php echo ($i + 1) % 8 + 1; ?>.png" alt=""></a>
                         </div>
                     <?php endfor; ?>
                 </div>
@@ -114,7 +89,7 @@
                 <div class="row">
                     <?php for ($i = 0; $i < 18; $i++) : ?>
                         <div class="col-2">
-                            <a href="<?php echo base_url('Miembros/info/1')?>"><img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar<?php echo ($i + 1) % 8 + 1; ?>.png" alt=""></a>
+                            <a href="<?php echo base_url('Miembros/info/1') ?>"><img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar<?php echo ($i + 1) % 8 + 1; ?>.png" alt=""></a>
                         </div>
                     <?php endfor; ?>
                 </div>

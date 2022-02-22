@@ -54,7 +54,6 @@
         </div>
         <script src="<?php echo base_url('sys/assets/lib/jquery-3.6.0.min.js') ?>"></script>
         <script src="<?php echo base_url('sys/assets/lib/bootstrap5/js/bootstrap.bundle.min.js') ?>"></script>
-        <script src="<?php echo base_url('sys/assets/lib/leaflet/leaflet.js') ?>"></script>
         <script src="<?php echo base_url('sys/assets/js/scripts.js') ?>"></script>
         <script>
             var base_url = '<?php echo base_url() ?>';
