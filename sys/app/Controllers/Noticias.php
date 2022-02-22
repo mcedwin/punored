@@ -55,11 +55,9 @@ class Noticias extends BaseController
 	
 	public function editar($id)
 	{
-		$this->addCss(array('lib/select2/dist/css/select2.min'));
 		$this->addJs(array(
 			"lib/tinymce/tinymce.min.js",
 			"lib/tinymce/jquery.tinymce.min.js",
-			'lib/select2/dist/js/select2.js',
 			'js/habilidad/scripts.js',
 			'js/entrada/publicar.js'
 		));
@@ -85,21 +83,21 @@ class Noticias extends BaseController
 		unset($data['usua_foto']);
 
 		if (empty($id)) {
-			$data['entr_usua_id'] = $this->user->id;
+			//$data['entr_usua_id'] = $this->user->id;
 			$this->db->table('entrada')->insert($data);
-			//$id = $this->db->insert_id();
+			$id = $this->db->insertID();
 
-			/*$path = 'img_' . $id . '.small.jpg';
-			if ($this->guardar_imagen('uploads/entrada', $path)) {
-				$this->db->update('entrada', array('entr_foto'=>$path), "entr_id='{$id}' AND entr_usua_id={$this->user->id}");
-			}*/
+			$path = 'img_' . $id . '.small.jpg';
+			if ($this->guardar_imagen('uploads/noticias', $path)) {
+				$this->db->update('entrada', array('entr_foto'=>$path), "entr_id='{$id}'"); // AND entr_usua_id={$this->user->id}
+			}
 
 		} else {
-			/*$path = 'img_' . $id . '.small.jpg';
-			if ($this->guardar_imagen('uploads/entrada', $path)) {
+			$path = 'img_' . $id . '.small.jpg';
+			if ($this->guardar_imagen('uploads/noticias', $path)) {
 				$data = $data + array('entr_foto' => $path);
-			}*/
-			$this->db->table('entrada')->update($data, "entr_id='{$id}' AND entr_usua_id={$this->user->id}");
+			}
+			$this->db->table('entrada')->update($data, "entr_id='{$id}'"); // AND entr_usua_id={$this->user->id}
 		}
 
 		$this->dieMsg(true,'',base_url('/'));

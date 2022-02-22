@@ -68,56 +68,58 @@ class BaseController extends Controller
     }
 
 
-  //codeigniter 3
-  public function validar($fields)
-  {
-    $data = array();
-    foreach ($this->request->getPost() as $key => $val) {
-      if (!isset($fields[$key])) continue;
-      if ($fields[$key]->required == true) {
-        if ($fields[$key]->type != 'bit' && strlen($val) <= 0) $this->dieMsg(false, "Campo requerido : " . $fields[$key]->label);
-      }
-      if (in_array($fields[$key]->type, array('text', 'varchar', 'url', 'email', 'fore', 'decimal', 'int', 'enum'))) {
-        $data[$key] = $this->request->getPost($key);
-        if ($fields[$key]->type == 'int' && empty($val)) $data[$key] = null;
-      } else if ($fields[$key]->type == 'date') {
-        $data[$key] = dateToMysql($val);
-      } else if ($fields[$key]->type == 'bit') {
-        $data[$key] = $this->request->getPost($key) == '1' ? 1 : 0;
-      }
-    }
-    return $data;
+    //codeigniter 3
+    public function validar($fields)
+    {
+        $data = array();
+        foreach ($this->request->getPost() as $key => $val) {
+            if (!isset($fields[$key])) continue;
+            if ($fields[$key]->required == true) {
+                if ($fields[$key]->type != 'bit' && strlen($val) <= 0) $this->dieMsg(false, "Campo requerido : " . $fields[$key]->label);
+            }
+            if (in_array($fields[$key]->type, array('text', 'varchar', 'url', 'email', 'fore', 'decimal', 'int', 'enum'))) {
+                $data[$key] = $this->request->getPost($key);
+                if ($fields[$key]->type == 'int' && empty($val)) $data[$key] = null;
+            } else if ($fields[$key]->type == 'date') {
+                $data[$key] = dateToMysql($val);
+            } else if ($fields[$key]->type == 'bit') {
+                $data[$key] = $this->request->getPost($key) == '1' ? 1 : 0;
+            }
+        }
+        return $data;
     }
 
-    //codeigniter 3
     public function guardar_imagen($folder, $name)
     {
-        $config['upload_path']          = FCPATH . $folder;
-        $config['allowed_types']        = 'jpg|png|jfif';
-        $config['max_size']             = 100000;
-        $this->load->library('upload', $config);
-        $this->upload->initialize($config); ///esto esta medio raro
-        $this->session->set_userdata('uniqueid', uniqid());
 
-        if ($this->upload->do_upload('foto')) {
-            $this->load->helper('Formulario');
-            $this->resize_user('./' . $folder, $this->upload->data('full_path'), $name);
-            unlink($this->upload->data('full_path'));
-            return true;
+        $validationRule = [
+            'foto' => [
+                'label' => 'Image File',
+                'rules' => 'uploaded[foto]'
+                    . '|is_image[foto]'
+                    . '|mime_in[foto,image/jpg,image/jpeg,image/gif,image/png,image/webp]'
+                    . '|max_size[foto,1000]'
+                    . '|max_dims[foto,2024,2768]',
+            ],
+        ];
+
+        if (!$this->validate($validationRule)) {
+            $data = $this->validator->getErrors();
+            $this->dieMsg(false, implode('\n', $data));
+        }
+
+        $img = $this->request->getFile('foto');
+
+        if (!$img->hasMoved()) {
+            $this->resize_user('./' . $folder, WRITEPATH . 'uploads/' . $img->store(), $name);
         } else {
-            if (empty($_FILES['foto']['name'])) {
-                return false;
-            }
-            $this->output->set_status_header(500, 'Error : Posiblemente el tipo de archivo no sea permitido.' . $this->upload->display_errors());
-            return false;
+            $this->dieMsg(false, 'Archivo movido');
         }
     }
 
     function resize_user($folder, $full_path, $fname)
     {
         $result = true;
-        $this->load->library('image_lib');
-        $counter = 0;
         $sizes = array(
             'Pequeño' => (object) array(
                 'ancho' => 64,
@@ -131,16 +133,10 @@ class BaseController extends Controller
             ),
         );
         foreach ($sizes as $size) {
-            $counter++;
-            $config['image_library'] = 'gd2';
-            $config['source_image'] = $full_path;
-            $config['maintain_ratio'] = TRUE;
-            $config['width']         = $size->ancho;
-            $config['height']       = $size->alto;
-            $config['new_image'] = $folder . '/' . str_replace('small', $size->sufijo, $fname);
-            $this->image_lib->clear();
-            $this->image_lib->initialize($config);
-            $this->image_lib->resize();
+            $image = \Config\Services::image()
+                ->withFile($full_path)
+                ->crop($size->ancho, $size->alto, 0,0,true)
+                ->save($folder . '/' . str_replace('small', $size->sufijo, $fname));
         }
         return $result;
     }
@@ -186,10 +182,10 @@ class BaseController extends Controller
         $datos['menu'] = [];
 
         //if ($this->user->id) {
-            $datos['menu'] = [
-                ['url' => 'Portada/acerca', 'base' => 'acerca', 'name' => 'Acerca'],
-            ];
-       // }
+        $datos['menu'] = [
+            ['url' => 'Portada/acerca', 'base' => 'acerca', 'name' => 'Acerca'],
+        ];
+        // }
 
         foreach ($this->csss as $css) {
             $strcss .= '<link href="' . ((preg_match('#^htt#', $css) == TRUE) ? '' : base_url('sys/assets') . '/') . $css . '?v=' . $this->frontVersion . '" rel="stylesheet" type="text/css" media="all" />';
