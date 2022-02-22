@@ -17,8 +17,7 @@ class Noticias extends BaseController
   {
     $model = new NoticiasModel();
 
-    $all = $model->getDataListaNoticia();
-    $data = $all->data;
+    $data = $model->getDataListaNoticia();
 
     $this->showHeader();
     $this->showContent('index2', ['noticias' => $data]);
