@@ -115,6 +115,8 @@ class BaseController extends Controller
         } else {
             $this->dieMsg(false, 'Archivo movido');
         }
+
+        return true;
     }
 
     function resize_user($folder, $full_path, $fname)
