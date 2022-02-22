@@ -6,21 +6,28 @@ use App\Models\NoticiasModel;
 
 class Noticias extends BaseController
 {
-    public function index($rowno = 0)
-	{
-		$this->showHeader();
-		$this->ShowContent('index');
-		$this->showFooter();
-	}
-
-  public function index2()
+  public function index($page = 1)
   {
     $model = new NoticiasModel();
-
-    $data = $model->getDataListaNoticia();
+    $quant_results = $model->count();
+    $quant_to_show = 5;
+    $page -= 1;
+    if ($page < 0 || $page * $quant_to_show > $quant_results) {
+      return redirect()->to(base_url('Noticias/index'));
+      // $page = 0;
+    }
+    $start_from = $page * $quant_to_show;
+    $quant_pages = (int) ($quant_results / $quant_to_show);
+      
+    $data = array(
+      'noticias' => $model->getDataListado($quant_to_show, $start_from),
+      'quant_results' => $quant_results,
+      'current_page' => $page + 1,
+      'last_page' => $quant_pages + 1
+    );
 
     $this->showHeader();
-    $this->showContent('index2', ['noticias' => $data]);
+    $this->showContent('index', $data);
     $this->showFooter();
   }
 
@@ -125,8 +132,8 @@ class Noticias extends BaseController
   public function test()
   {
     $this->showHeader();
-    $model = new EntradaModel();
-    $datos['fields'] = $model->get();
+    $model = new NoticiasModel();
+    $datos = $model->count();
     echo '<pre>'; var_dump($datos); echo '</pre>';
   }
 }
