@@ -83,6 +83,7 @@ class Noticias extends BaseController
 	public function guardar($id = '')
 	{
 		$model = new EntradaModel();
+    
 
 		$data = $this->validar($model->getFields());
 		$data['entr_fechareg'] = date('Y-m-d H:i:s');
@@ -95,7 +96,7 @@ class Noticias extends BaseController
 
 			$path = 'img_' . $id . '.small.jpg';
 			if ($this->guardar_imagen('uploads/noticias', $path)) {
-				$this->db->update('entrada', array('entr_foto'=>$path), "entr_id='{$id}'"); // AND entr_usua_id={$this->user->id}
+				$this->db->table('entrada')->update('entrada', array('entr_foto'=>$path), "entr_id='{$id}'"); // AND entr_usua_id={$this->user->id}
 			}
 
 		} else {
