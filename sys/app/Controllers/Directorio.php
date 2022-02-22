@@ -16,7 +16,13 @@ class Directorio extends BaseController
 		$this->ShowContent('index');
 		$this->showFooter();	
 	}
-
+	public function index2()
+	{
+		$data = $this->model->getDirectorioData();
+		$this->showHeader();
+		$this->ShowContent('indextest', ['dire' => $data]);
+		$this->showFooter();
+	}
 	public function crear()
 	{
 		helper('formulario');
