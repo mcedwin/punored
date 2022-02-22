@@ -8,7 +8,7 @@
     <meta name="description" content="Control de desarrollo" />
     <link rel="stylesheet" href="<?php echo base_url('/sys/assets/lib/bootstrap5/css/bootstrap1.min.css') ?>" />
     <link rel="stylesheet" href="<?php echo base_url('/sys/assets/lib/fontawesome6/css/all.min.css') ?>" />
-    <link rel="stylesheet" href="<?php echo base_url('/sys/assets/lib/leaflet/leaflet.css') ?>" />
+
     
     <link href="<?php echo base_url('sys/assets/css/style.css') ?>" rel="stylesheet" media="all">
     <?php echo isset($css) ? $css : ""; ?>
