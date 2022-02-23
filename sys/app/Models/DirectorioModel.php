@@ -6,13 +6,16 @@ use CodeIgniter\Model;
 
 class DirectorioModel extends Model
 {
-    var $db;
-    var $fields;
+  protected $table = 'directorio';
+  var $db;
+  var $fields;
+  public $pager= '';
   public function __construct()
   {
     parent::__construct();
     $this->db = \Config\Database::connect();
-  
+    $this->pager = \Config\Services::pager();
+
     $this->fields = array(
       'dire_nombre' => array('label' => 'Nombre'),
       'dire_resumen' => array('label' => 'Resumen', ),
@@ -56,14 +59,20 @@ class DirectorioModel extends Model
       }
       return (object)$this->fields;
     }
-  public function getDirectorioData(){
-    $builder = $this->db->table('directorio');
-    $builder->select([
-      'dire_nombre',
-      'dire_resumen',
-      'dire_imagen'
-    ]);
-    $query = $builder->get();
-    return $query->getResultArray();
+  public function getDirectorioData($pag_size = 5, $offset = 0){
+    $builder = $this->db->table($this->table);
+    $query = $builder->select([
+        'dire_nombre',
+        'dire_resumen',
+        'dire_imagen',
+        'dire_logo',
+      ])->limit($pag_size, $offset);
+    $result = $query->get()->getResultArray();
+    return $result;
+  }
+  public function count()
+  {
+    $builder = $this->db->table($this->table);
+    return $builder->countAll();
   }
 }
