@@ -11,16 +11,12 @@ class UsuarioModel extends Model
     {
         parent::__construct();
         $this->fields = array(
-            'usua_dniruc' => array('label' => 'N° Documento'),
             'usua_nombres' => array('label' => 'Nombres'),
-            'usua_apellidos' => array('label' => 'Apellidos'),
             'usua_movil' => array('label' => 'Teléfono movil', 'required' => false),
             'usua_email' => array('label' => 'Email'),
             'usua_foto' => array('label' => 'Imagen','required' => false),
             'usua_nick' => array('label' => 'Usuario'),
             'usua_password' => array('label' => 'Password', 'required' => false),
-            'usua_ubig_id' => array('label' => 'Ubicación'),
-            'usua_rsocial' => array('label' => 'Razón social'),
             'usua_descripcion' => array('label' => 'Descripción'),
         );
 
@@ -44,9 +40,8 @@ class UsuarioModel extends Model
 
     function get($id = '')
     {
-        $this->fields['ubigeo'] = (object) array('id' => '', 'text' => '');
         if (!empty($id)) {
-            $row = $this->db->query("SELECT * FROM users WHERE user_id='{$id}'")->getRow();
+            $row = $this->db->query("SELECT * FROM usuario WHERE usua_id='{$id}'")->getRow();
             foreach ($row as $k => $value) {
                 if (!isset($this->fields[$k])) continue;
                 //if ($this->fields[$k]->type == 'date') $value = dateToUser($value);

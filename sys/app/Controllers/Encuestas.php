@@ -19,4 +19,10 @@ class Encuestas extends BaseController
 		$this->ShowContent('index',$datos);
 		$this->showFooter();
 	}
+
+	public function crear(){
+		$this->showHeader();
+		$this->ShowContent('index');
+		$this->showFooter();
+	}
 }

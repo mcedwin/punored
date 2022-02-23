@@ -56,8 +56,8 @@ class BaseController extends Controller
         $this->method = $router->methodName();
         $session = session();
         $this->user = (object)[
-            'id' => $session->get('user_id'),
-            'name' => $session->get('user_name')
+            'id' => $session->get('id'),
+            'name' => $session->get('user')
         ];
 
         parent::initController($request, $response, $logger);

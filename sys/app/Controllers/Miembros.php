@@ -1,23 +1,36 @@
 <?php
 
 namespace App\Controllers;
+
 use App\Models\UsuarioModel;
 
 class Miembros extends BaseController
 {
     public function index($rowno = 0)
-	{
-		$this->showHeader();
-		$this->ShowContent('index');
-		$this->showFooter();
-	}
+    {
+        $this->showHeader();
+        $this->ShowContent('index');
+        $this->showFooter();
+    }
 
-	function registrar()
+    public function perfil()
+    {
+        helper("formulario");
+        $model = new UsuarioModel();
+        $datos['fields'] = $model->get($this->user->id);
+        $datos['fields']->usua_password->value = '';
+        $datos['fields']->usua_foto->value = base_url('uploads/usuario') . (empty($datos['fields']->usua_foto->value) ? '/sinlogo.png' : '/' . $datos['fields']->usua_foto->value);
+        $this->showHeader();
+        $this->ShowContent('perfil',$datos);
+        $this->showFooter();
+    }
+
+    function registrar()
     {
         helper("formulario");
         $model = new UsuarioModel();
         $datos['fields'] = $model->get();
-        
+
         $this->addJs(array("js/login/login.js"));
         $this->showHeader(true);
         $this->showContent('registrar', $datos);
@@ -34,10 +47,10 @@ class Miembros extends BaseController
         $password = ($this->request->getPost("usua_password"));
         $password2 = md5(rand(999999999, 9999999999));
         $row = $this->db->query("SELECT * FROM usuario WHERE usua_email='{$email}'")->getRow();
-        
+
 
         if ($row) {
-           $this->dieMsg(false, 'Usted ya esta registrado');
+            $this->dieMsg(false, 'Usted ya esta registrado');
         }
         $datos = array(
             'usua_nombres' => $nombres,
@@ -52,7 +65,7 @@ class Miembros extends BaseController
         $this->dieMsg();
     }
 
-	function proc_cambiar($password2)
+    function proc_cambiar($password2)
     {
         $email = $this->request->getPost("email");
         $password = $this->request->getPost("password");
@@ -75,7 +88,7 @@ class Miembros extends BaseController
     }
 
 
-	function cambiar($email, $password2)
+    function cambiar($email, $password2)
     {
         $this->addJs(array("js/login/login.js"));
         $datos['password2'] = $password2;
@@ -188,7 +201,8 @@ class Miembros extends BaseController
         }
     }
 
-    function info($id){
+    function info($id)
+    {
 
         $this->showHeader(true);
         $this->showContent('info');
