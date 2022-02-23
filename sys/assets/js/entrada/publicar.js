@@ -102,16 +102,13 @@ $(document).ready(function() {
         relative_urls: false,
         remove_script_host: false,
         setup: (editor) => {
-
             editor.on('submit', function() {
                 return false;
             });
-
             editor.on('change', function() {
                 $("#entr_descripcion").text(pre_wpautop(editor.getContent()));
                 // editor.save();
             });
-
         }
     });
 
@@ -131,12 +128,7 @@ $(document).ready(function() {
                 $this.closest('div').find('table').addClass('d-none')
             }
             $this.closest('tr').remove();
-
-
         });
         return false;
     }
-
-
-
 });
