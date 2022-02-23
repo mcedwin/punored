@@ -40,7 +40,7 @@ class Directorio extends BaseController
 			'fields' => $this->model->get()
 		];
 		$this->addJs(array(
-			'js/directorio/form.js'
+			'js/directorio/form.js',
 		));
 		
 		$this->showHeader();
@@ -49,18 +49,23 @@ class Directorio extends BaseController
 	}
 	public function guardar($id = '')
 	{
-		$data = [
-			'dire_nombre' => $this->request->getPost('dire_nombre'),
-			'dire_resumen' => $this->request->getPost('dire_resumen'),
-			'dire_contenido' =>$this->request->getPost('dire_contenido'),
-			'dire_logo' =>$this->request->getPost('dire_logo'),
-			'dire_imagen' => $this->request->getPost('dire_imagen'),
-			'dire_cate_id' => $this->request->getPost('dire_cate_id')
-		];
+		$model = new DirectorioModel();
 
-		$data = $this->validar($this->model->getFields());
-		$this->model->saveData($data);
-		$this->dieMsg(true,'', base_url('Directorio'));
+		$data = $this->validar($model->getFields());
+		if(empty($id)){
+			$this->db->table('entrada')->insert($data);
+			$id = $this->db->insertID();
+			$path = 'img_'.$id.'.small.jpg';
+			if($this->guardar_imagen('uploads/directorio', $path)){
+				$this->db->table('entrada')->update(array('entr_foto'=>$path), "entr_id = '{$id}'" );
+			}
+		}else{
+			$path = 'img_'.$id.'.small.jpg';
+			if($this->guardar_imagen('uploads/directorio',$path)){
+				$data = $data + array('entr_foto' => $path);
+			}
+			$this->db->table('entrada')->update($data,"entr_id = '{$id}'");
+		}
+		$this->dieMsg(true,'', base_url('/'));
 	}
-	
 }

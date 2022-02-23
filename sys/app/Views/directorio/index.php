@@ -6,12 +6,12 @@
             <div class="card mb-3">
                 <div class="row g-0">
                 <div class="col-md-4">
-                    <img src="<?php echo $d['dire_imagen']?>" class="img-fluid rounded-start" alt="...">
+                    <img src="<?php echo $d['entr_foto']?>" class="img-fluid rounded-start" alt="not image yet">
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h5 class="card-title"><?php echo $d['dire_nombre']?></h5>
-                        <p class="card-text"><?php echo $d['dire_resumen']?></p>
+                        <h5 class="card-title"><?php echo $d['entr_titulo']?></h5>
+                        <p class="card-text"><?php echo $d['entr_resumen']?></p>
                         <a class="btn btn-secondary" href="#">Read more</a>
                     </div>
                 </div>
