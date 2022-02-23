@@ -1,3 +1,5 @@
+// stylelint-disable indentation
+
 // Utilities
 
 $utilities: () !default;
@@ -236,6 +238,12 @@ $utilities: map-merge(
       class: flex,
       values: wrap nowrap wrap-reverse
     ),
+    "gap": (
+      responsive: true,
+      property: gap,
+      class: gap,
+      values: $spacers
+    ),
     "justify-content": (
       responsive: true,
       property: justify-content,
@@ -426,13 +434,6 @@ $utilities: map-merge(
       responsive: true,
       property: padding-left,
       class: ps,
-      values: $spacers
-    ),
-    // Gap utility
-    "gap": (
-      responsive: true,
-      property: gap,
-      class: gap,
       values: $spacers
     ),
     // scss-docs-end utils-spacing

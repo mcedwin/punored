@@ -102,16 +102,13 @@ $(document).ready(function() {
         relative_urls: false,
         remove_script_host: false,
         setup: (editor) => {
-
             editor.on('submit', function() {
                 return false;
             });
-
             editor.on('change', function() {
                 $("#entr_descripcion").text(pre_wpautop(editor.getContent()));
                 // editor.save();
             });
-
         }
     });
 
@@ -124,40 +121,6 @@ $(document).ready(function() {
         return false;
     });
 
-
-    $('.editha').click(function() {
-        $(this).onlydialog(
-            function(dlg) {
-                var a = [];
-                $r = $('.skills').clone().children();
-                $r.each(function(item, el) {
-                    a.push({ rid: '', hid: $(el).data('id'), text: $(el).find('span').text() })
-                })
-                mjson = JSON.stringify(a)
-                console.log(mjson)
-                $(dlg).find('.boxes').attr('data-ids', mjson);
-                //console.log($(dlg).find('.boxes').attr('ids'))
-                dlg.load_habis();
-            },
-            function(dlg) {
-                $('.skills').empty();
-                $(dlg).find('.boxes').clone().children().appendTo('.skills');
-                dlg.modal('hide');
-                $('.skills a').on('click', function() {
-                    $(this).parent('.hbox').remove();
-                    return false;
-                })
-            }
-        );
-        return false;
-    });
-
-    $('.skills a').on('click', function() {
-        $(this).parent('.hbox').remove();
-        return false;
-    })
-
-
     $fun_del = function() {
         $this = $(this);
         $.bsAlert.confirm("¿Desea eliminar el registro?", function() {
@@ -165,25 +128,7 @@ $(document).ready(function() {
                 $this.closest('div').find('table').addClass('d-none')
             }
             $this.closest('tr').remove();
-
-
         });
         return false;
     }
-
-    $('.add_reg').click(function() {
-        if ($(this).closest('div').find('select:last').val() == '') return false;
-        if ($(this).closest('div').find('table').hasClass('d-none')) $(this).closest('div').find('table').removeClass('d-none');
-
-        $r = $('.pclonar').find('tbody tr').clone();
-        $r.find('input').val('');
-        $r.find('.del_reg').click($fun_del);
-        $(this).closest('div').find('tbody').append($r);
-
-        return false;
-    });
-
-    $('.del_reg').click($fun_del)
-
-
 });

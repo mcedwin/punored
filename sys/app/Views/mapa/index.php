@@ -1,4 +1,3 @@
-
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
     <h4 class="mb-0">Mapa de Puno</h4>
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -18,14 +17,15 @@
     </div>
 </div>
 <div class="mapcontainer">
-<div id="map" style="height:500px"></div>
-<div id="puntero"></div>
+    <div id="map" style="height:500px"></div>
+    <div id="puntero"></div>
 </div>
 <style>
-    .mapcontainer{
+    .mapcontainer {
         position: relative;
     }
-    #puntero{
+
+    #puntero {
         position: absolute;
         width: 20px;
         height: 20px;

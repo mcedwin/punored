@@ -30,7 +30,7 @@
                     </button>
                 </div>
             </form>
-            <?php if (empty(session()->get('user_id'))) : ?>
+            <?php if (empty(session()->get('id'))) : ?>
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a href="<?php echo base_url('Login'); ?>" class="nav-link">Ingresar</a>
@@ -41,13 +41,13 @@
                 </ul>
             <?php else :  ?>
                 <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-user" aria-hidden="true"></i>
-                        <?php echo session()->get('user_name')  ?>
+                        <?php echo session()->get('user')  ?>
                     </button>
-                    <div class="dropdown-menu  dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="<?php echo base_url('Miembros/perfil'); ?>">Perfil</a>
-                        <a class="dropdown-item" href="<?php echo base_url('Login/logout'); ?>">Salir</a>
+                        <a class="dropdown-item" href="<?php echo base_url('Login/salir'); ?>">Salir</a>
                     </div>
                 </div>
             <?php endif; ?>

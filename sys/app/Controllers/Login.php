@@ -36,13 +36,14 @@ class Login extends BaseController
         } else {
             $this->dieMsg(false, "Error al ingresar sus datos ó no a confirmado su cuenta");
         }
-        $this->dieMsg(true, '', base_url('Home/index'));
+        $this->dieMsg(true, '', base_url('Miembros/perfil'));
     }
 
     function salir()
     {
-        $this->session->sess_destroy();
-        redirect();
+        $session = session(); 
+        $session->destroy();
+        return redirect()->to('/'); 
     }
 
     
