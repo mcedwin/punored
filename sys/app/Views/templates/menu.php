@@ -45,7 +45,7 @@
                         <i class="fa fa-user" aria-hidden="true"></i>
                         <?php echo session()->get('user')  ?>
                     </button>
-                    <div class="dropdown-menu  dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="<?php echo base_url('Miembros/perfil'); ?>">Perfil</a>
                         <a class="dropdown-item" href="<?php echo base_url('Login/salir'); ?>">Salir</a>
                     </div>
