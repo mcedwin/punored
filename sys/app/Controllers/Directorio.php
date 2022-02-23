@@ -10,18 +10,26 @@ class Directorio extends BaseController
 	{
 		$this->model = new DirectorioModel();
 	}
-    public function index()
+    public function index($page = 1)
 	{
+		$quant_results = $this->model->count();
+		$quant_to_show = 5;
+		$page = $page - 1;
+		if($page < 0 || $page * $quant_to_show > $quant_results){
+			return redirect()->to(base_url('Directorio/index'));
+		}
+		$start_from = $page * $quant_to_show;
+		$quant_pages = (int) ($quant_results / $quant_to_show);
+
+		$data = array(
+			'directorio' => $this->model->getDirectorioData($quant_to_show, $start_from),
+			'quant_results' => $quant_results,
+			'current_page' => $page + 1,
+			'last_page' => $quant_pages + 1 - (($quant_results % $quant_to_show == 0) ? 1 :0)
+		);
 		$this->showHeader();
-		$this->ShowContent('index');
+		$this->ShowContent('index', $data);
 		$this->showFooter();	
-	}
-	public function index2()
-	{
-		$data = $this->model->getDirectorioData();
-		$this->showHeader();
-		$this->ShowContent('indextest', ['dire' => $data]);
-		$this->showFooter();
 	}
 	public function crear()
 	{
