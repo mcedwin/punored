@@ -3,8 +3,6 @@ function replaceAll(str, find, replace) {
 }
 
 var baseurl;
-var nameurl;
-var fun_ubigeo;
 
 $(function() {
     $.gs_loader = $('<div>').hide();

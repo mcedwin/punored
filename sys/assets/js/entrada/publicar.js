@@ -98,7 +98,7 @@ $(document).ready(function() {
         object_resizing: false,
         plugins: 'paste code lists advlist link',
         paste_as_text: true,
-        images_upload_url: $('#baseurl').val() + 'Noticia/procesar_imagen',
+        //images_upload_url: $('#baseurl').val() + 'Noticia/procesar_imagen',
         relative_urls: false,
         remove_script_host: false,
         setup: (editor) => {
@@ -117,7 +117,10 @@ $(document).ready(function() {
 
     $('#form').submit(function() {
         // data.contenido = pre_wpautop(tinyMCE.get('entr_descripcion').getContent());
-        $(this).mysave(() => document.location = base_url);
+        //$(this).mysave(() => document.location = base_url);
+        /*$(this).mysave(function(){
+
+        });*/
         return false;
     });
 
