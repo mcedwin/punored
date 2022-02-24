@@ -90,9 +90,9 @@ function wpautop(pee) {
 }
 /* Fin de Funciones para formatear el contenido */
 $(document).ready(function() {
-    $("#entr_descripcion").text(wpautop($("#entr_descripcion").text()))
+    $("#entr_contenido").text(wpautop($("#entr_contenido").text()))
     tinymce.init({
-        selector: "#entr_descripcion",
+        selector: "#entr_contenido",
         menubar: false,
         toolbar: 'bold italic | alignleft aligncenter | bullist numlist | link image',
         object_resizing: false,
@@ -106,7 +106,7 @@ $(document).ready(function() {
                 return false;
             });
             editor.on('change', function() {
-                $("#entr_descripcion").text(pre_wpautop(editor.getContent()));
+                $("#entr_contenido").text(pre_wpautop(editor.getContent()));
                 // editor.save();
             });
         }
@@ -116,11 +116,10 @@ $(document).ready(function() {
     //$('#form').load_ubigeo();
 
     $('#form').submit(function() {
-        // data.contenido = pre_wpautop(tinyMCE.get('entr_descripcion').getContent());
-        //$(this).mysave(() => document.location = base_url);
-        /*$(this).mysave(function(){
 
-        });*/
+        // data.contenido = pre_wpautop(tinyMCE.get('entr_contenido').getContent());
+        $(this).mysave(() => document.location = base_url);
+
         return false;
     });
 

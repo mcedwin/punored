@@ -8,19 +8,29 @@ class Noticias extends BaseController
 {
   public function index($page = 1)
   {
+    
+    //✅TODO filtro Recientes 
+    $filter = $this->request->getGet('filtro') ?? 'recientes';
+    //✅TODO filtro categoria
+    $categ_id = $this->request->getGet('categoria');
+    $filters = ['filtro' => $filter, 'categoria' => $categ_id];
+
+    
     $model = new NoticiasModel();
-    $quant_results = $model->count();
+    $quant_results = $model->countListado($filters);
     $quant_to_show = 5;
-    $page = $page - 1;
+    $page = (int)$page - 1;
     if ($page < 0 || $page * $quant_to_show > $quant_results) {
-      return redirect()->to(base_url('Noticias/index'));
-      // $page = 0;
+      return redirect()->to(base_url('Noticias/index')); // $page = 0;
     }
     $start_from = $page * $quant_to_show;
     $quant_pages = (int) ($quant_results / $quant_to_show);
-      
+    
+    
     $data = array(
-      'noticias' => $model->getDataListado($quant_to_show, $start_from),
+      'categorias' => $this->db->table('entrada_categoria')->select(['cate_nombre','cate_id'])->get()->getResult(),
+      'noticias' => $model->getDataListado($filters, $quant_to_show, $start_from),
+      'filtros' => $filters,
       'quant_results' => $quant_results,
       'current_page' => $page + 1,
       'last_page' => $quant_pages + 1 - (($quant_results % $quant_to_show == 0) ? 1 : 0)
@@ -83,13 +93,14 @@ class Noticias extends BaseController
 	public function guardar($id = '')
 	{
 		$model = new EntradaModel();
+    $id = '';
     
-
 		$data = $this->validar($model->getFields());
 		$data['entr_fechareg'] = date('Y-m-d H:i:s');
 		unset($data['usua_foto']);
 
 		if (empty($id)) {
+      $data['entr_tipo_id'] = $this->request->getPost('entr_tipo_id');
 			//$data['entr_usua_id'] = $this->user->id;
 			$this->db->table('entrada')->insert($data);
 			$id = $this->db->insertID();
@@ -110,57 +121,23 @@ class Noticias extends BaseController
 		$this->dieMsg(true,'',base_url('/'));
 	}
 
-  public function guardar2()
-  {
-    $model = new EntradaModel();
-    $data = $this->validar($model->getFields());
-    $data['entr_fechareg'] = date('Y-m-d H:i:s');
-    $data['entr_usua_id'] = $this->user->id;
-    $this->db->table('entrada')->insert($data);
-    $id = $this->db->insert_id();
-    $this->dieMsg(true);
-  }
-
 	public function eliminar($id)
 	{
+    $model = new NoticiasModel();
+    $builder = $model->getBuilder();
 		$this->dieAjax();
-		$this->db->query("DELETE FROM entrada WHERE entr_id='{$id}' AND entr_usua_id='{$this->user->id}'");
+    $builder
+      ->where('entr_id', $id)
+      ->where('entr_usua_id', $this->user->id)
+    ->delete();
 		$this->dieMsg();
 	}
 
-  public function test($page = 1)
+  public function test3()
   {
-    $model = new NoticiasModel();
-    $quant_results = $model->count();
-    $quant_to_show = 5;
-    $page -= 1;
-    if ($page < 0 || $page * $quant_to_show > $quant_results) {
-      return redirect()->to(base_url('Noticias/index'));
-      // $page = 0;
-    }
-    $start_from = $page * $quant_to_show;
-    $quant_pages = (int) ($quant_results / $quant_to_show);
+    $model = new EntradaModel();
 
-    $data = array(
-      'noticias' => $model->getDataListado($quant_to_show, $start_from),
-      'quant_results' => $quant_results,
-      'current_page' => $page + 1,
-      'last_page' => $quant_pages + 1 - (($quant_results % $quant_to_show == 0) ? 1 : 0)
-    );
-
-    $this->showHeader();
-    $this->showContent('index', $data);
-    $this->showFooter();
-  }
-  public function test2()
-  {
-    $model = new NoticiasModel();
-
-    $data = [
-      'users' => $model->paginate(10),
-      'pager' => $model->pager
-    ];
-    
+    $data = $this->validar($model->getFields());
     echo '<pre>'; var_dump($data); echo '</pre>';
   }
 }
