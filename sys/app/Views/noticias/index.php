@@ -24,7 +24,7 @@ $filterPath .= (!$filtros['categoria']) ? '' : ('&categoria=' . $filtros['catego
       Categorias
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownTipoCategoria">
-      <!-- TODO tipo de categorias -->
+      <!-- ✅TODO tipo de categorias -->
       <?php foreach ($categorias as $categoria) : ?>
         <li><a class="dropdown-item" href="<?php echo base_url('Noticias/index/1' . '?filtro=' . $filtros['filtro'] . '&categoria='. $categoria->cate_id) ?>"><?php echo $categoria->cate_nombre ?></a></li>
       <?php endforeach; ?>

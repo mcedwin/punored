@@ -21,8 +21,7 @@ class Noticias extends BaseController
     $quant_to_show = 5;
     $page = (int)$page - 1;
     if ($page < 0 || $page * $quant_to_show > $quant_results) {
-      return redirect()->to(base_url('Noticias/index'));
-      // $page = 0;
+      return redirect()->to(base_url('Noticias/index')); // $page = 0;
     }
     $start_from = $page * $quant_to_show;
     $quant_pages = (int) ($quant_results / $quant_to_show);
@@ -94,13 +93,14 @@ class Noticias extends BaseController
 	public function guardar($id = '')
 	{
 		$model = new EntradaModel();
+    $id = '';
     
-
 		$data = $this->validar($model->getFields());
 		$data['entr_fechareg'] = date('Y-m-d H:i:s');
 		unset($data['usua_foto']);
 
 		if (empty($id)) {
+      $data['entr_tipo_id'] = $this->request->getPost('entr_tipo_id');
 			//$data['entr_usua_id'] = $this->user->id;
 			$this->db->table('entrada')->insert($data);
 			$id = $this->db->insertID();
@@ -133,35 +133,11 @@ class Noticias extends BaseController
 		$this->dieMsg();
 	}
 
-  public function test()
-  {
-    // $model = new NoticiasModel();
-    // $data = array(
-    //   'noticias' => $model->getDataListado(),
-    // );
-    // echo '<pre>'; var_dump($data); echo '</pre>';
-
-    echo '<pre>';
-    var_dump($this->db->table('entrada_categoria')->select('cate_nombre')->get()->getResult());
-    echo '</pre>';
-  }
-  
-  public function test2()
-  {
-    $pager = \Config\Services::pager();
-    $model = new NoticiasModel();
-
-    $data = [
-      'noticias' => $model->paginate(5),
-      'pager' => $model->pager
-    ];
-    return view('noticias/index2',$data);
-  }
   public function test3()
   {
-    $arr = [];
-    $arr['a'] = 3;
-    var_dump( $arr == null );
-    var_dump( empty($arr == null) );
+    $model = new EntradaModel();
+
+    $data = $this->validar($model->getFields());
+    echo '<pre>'; var_dump($data); echo '</pre>';
   }
 }

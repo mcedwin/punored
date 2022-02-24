@@ -13,8 +13,9 @@ class EntradaModel extends Model
   {
     parent::__construct();
     $this->fields = array(
+      'entr_tipo_id' => array('label' => 'Tipo de entrada', 'type' => 'hidden', 'required' => false),
       'entr_titulo' => array('label' => 'Titulo'),
-      'entr_descripcion' => array('label' => 'Descripción'),
+      'entr_contenido' => array('label' => 'Descripción'),
       #'entr_ubig_id' => array('label' => 'Ubicación', 'required' => false),
       'entr_url' => array('label' => 'Pagina web de referencia', 'required' => false),
       #'entr_empl_remu_id' => array('label' => 'Remuneración'),
