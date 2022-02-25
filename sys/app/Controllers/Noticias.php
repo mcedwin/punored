@@ -145,17 +145,12 @@ class Noticias extends BaseController
       'entr_id' => $this->request->getPost('entr_id'),
       'usua_id' => $this->request->getPost('usua_id'),
     ];
-    if ($punto == '1') $data['pmas'] = $punto;
-    else if ($punto == '-1') $data['pmenos'] = $punto;
-    else redirect()->to(base_url('Noticias'));
+    if ($punto == 'mas') $data['pmas'] = $punto;
+    else if ($punto == 'menos') $data['pmenos'] = $punto;
 
     $model->insertPoint($data);
 
-    // echo "<pre>";
-    // echo "<response>";
     echo json_encode($model->getPoints($data['entr_id'], $data['usua_id']));
-    // echo "</response>";
-    // echo "</pre>";
   }
   
   public function test3()

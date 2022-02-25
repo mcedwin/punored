@@ -3,16 +3,16 @@ $(document).ready(function () {
     const noticiaId = $(this).closest("#Noticia").attr("id_noticia");
   
     if ($(this).attr('id') == 'puntosMas') {
-      puntosMas(noticiaId, userId, "1");
+      puntosAdd(noticiaId, userId, 'mas');
     }
     if ($(this).attr("id") == "puntosMenos") {
-      puntosMas(noticiaId, userId, "-1");
+      puntosAdd(noticiaId, userId, 'menos');
     }
   
     return false;
   });
   
-  const puntosMas = function (entr_id, usua_id, point) {
+  const puntosAdd = function (entr_id, usua_id, point) {
     //point just can be 'mas' or 'menos'
     const url = base_url + "/Noticias/setPunto/" + point;
     $.ajax({

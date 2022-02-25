@@ -65,15 +65,16 @@ class NoticiasModel extends Model
   }
 
   public function insertPoint($vdata) {
-    $builderEntrada = $this->db->table($this->table);
+    $builderEntrada = $this->db->table('entrada');
     $builderEntrada->where('entr_id', $vdata['entr_id']);
-    $builderUsuaEntr = $this->getBuilderUsuaEntr($vdata['entr_id'], $vdata['usua_id']);
+    // $builderEntrada = $this->getBuilder()->where('entr_id', $vdata['entr_id']);
+    $resultEntrada = $builderEntrada->select(['entr_pmas', 'entr_pmenos'])->get()->getRowArray();
     
+    $builderUsuaEntr = $this->getBuilderUsuaEntr($vdata['entr_id'], $vdata['usua_id']);
+    $resultUsuaEntr = $builderUsuaEntr->select(['rela_nmas', 'rela_nmenos'])->get()->getRowArray();
     //Getting last punctuations
     $lastDataEntrada = 0;
     $lastDataUsuaEntr = 0;
-    $resultEntrada = $builderEntrada->select(['entr_pmas'])->get()->getRowArray();
-    $resultUsuaEntr = $builderUsuaEntr->select(['rela_nmas'])->get()->getRowArray();
     if($resultUsuaEntr != null){
       if (isset($vdata['pmas'])) {
         $lastDataEntrada = $resultEntrada['entr_pmas'];
@@ -87,36 +88,32 @@ class NoticiasModel extends Model
     }
     if ($lastDataUsuaEntr >= 5) return -1;
     //Add point to Entrada
-    unset($builderEntrada);
-    $builderEntrada = $this->getBuilder();
-    $builderEntrada->where('entr_id', $vdata['entr_id']);
-    if (isset($vdata['pmas'])) $builderEntrada->set(['entr_pmas' => (int)$lastDataEntrada + 1]);
-    else $builderEntrada->set(['entr_pmenos' => (int)$lastDataEntrada + 1]);
-    $builderEntrada->update();
+    
+    $builderEntrada2 = $this->db->table($this->table);
+    $builderEntrada2->where('entr_id', $vdata['entr_id']);
+    if (isset($vdata['pmas'])) $builderEntrada2->set(['entr_pmas' => (int)$lastDataEntrada + 1]);
+    else if (isset($vdata['pmenos'])) $builderEntrada2->set(['entr_pmenos' => (int)$lastDataEntrada + 1]);
+    $builderEntrada2->update();
     //Add point or create relation with point
-    unset($builderUsuaEntr);
+    
     if ($resultUsuaEntr == null) { //no existe registro Usua_Entr
-      $builderUsuaEntr = $this->db->table('usuario_entrada');
+      $builderUsuaEntr2 = $this->db->table('usuario_entrada');
       $data = [
         'rela_usua_id' => $vdata['usua_id'],
         'rela_entr_id' => $vdata['entr_id'],
-        'rela_like' => 0
+        'rela_like' => 0,
+        'rela_nmas' => 0,
+        'rela_nmenos' => 0
       ];
-      if (isset($vdata['pmas'])) {
-        $data['rela_nmas'] = 1;
-        $data['rela_nmenos'] = 0;
-      }
-      else {
-        $data['rela_nmas'] = 0;
-        $data['rela_nmenos'] = 1;
-      }
-      $builderUsuaEntr->insert($data);
+      if (isset($vdata['pmas'])) $data['rela_nmas'] = 1;
+      else if (isset($vdata['pmenos'])) $data['rela_nmenos'] = 1;
+      $builderUsuaEntr2->insert($data);
     }
     else {//ya existe
-      $builderUsuaEntr = $this->getBuilderUsuaEntr($vdata['entr_id'], $vdata['usua_id']);
-      if (isset($vdata['pmas'])) $builderUsuaEntr->set(['rela_nmas' => (int)$lastDataUsuaEntr + 1]);
-      else $builderUsuaEntr->set(['rela_nmenos' => (int)$lastDataUsuaEntr + 1]);
-      $builderUsuaEntr->update();
+      $builderUsuaEntr2 = $this->getBuilderUsuaEntr($vdata['entr_id'], $vdata['usua_id']);
+      if (isset($vdata['pmas'])) $builderUsuaEntr2->set(['rela_nmas' => (int)$lastDataUsuaEntr + 1]);
+      else $builderUsuaEntr2->set(['rela_nmenos' => (int)$lastDataUsuaEntr + 1]);
+      $builderUsuaEntr2->update();
     }
     return $this->db->affectedRows();
   }
@@ -153,8 +150,8 @@ class NoticiasModel extends Model
 
   public function getLastPoints2()
   {
-    $builderUsuaEntr = $this->getBuilderUsuaEntr(3, 1);
-    $lastDataUsuaEntr = $builderUsuaEntr->select(['rela_nmas'])
+    $builderUsuaEntr = $this->getBuilderUsuaEntr(3, 7);
+    $lastDataUsuaEntr = $builderUsuaEntr->select(['rela_nmas','rela_nmenos'])
     ->get()->getRowArray();
     return $lastDataUsuaEntr;
   }
