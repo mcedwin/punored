@@ -18,7 +18,7 @@ class Directorio extends BaseController
 
 		$quant_results = $this->model->countListado($filters);
 		$quant_to_show = 5;
-		$page = $page - 1;
+		$page = (int)$page - 1;
 		if($page < 0 || $page * $quant_to_show > $quant_results){
 			return redirect()->to(base_url('Directorio/index'));
 		}
@@ -27,7 +27,7 @@ class Directorio extends BaseController
 
 		$data = array(
 			'categorias' => $this->db->table('entrada_categoria')->select(['cate_nombre','cate_id'])->get()->getResult(),
-			'directorio' => $this->model->getDirectorioData($filters, $quant_to_show, $start_from),
+			'directorios' => $this->model->getDirectorioData($filters, $quant_to_show, $start_from),
 			'filtros' => $filters,
 			'quant_results' => $quant_results,
 			'current_page' => $page + 1,

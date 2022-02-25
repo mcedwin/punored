@@ -1,4 +1,5 @@
-<?php
+<?php //✅TODO usar ?=
+//predefined filter is recents
 $filterPath = (empty($filtros['filtro']) || ($filtros['filtro'] == 'recientes' && !$filtros['categoria'])) ? '' : ('?filtro=' . $filtros['filtro']);
 $filterPath .= (!$filtros['categoria']) ? '' : ('&categoria=' . $filtros['categoria']);
 ?>
@@ -6,11 +7,20 @@ $filterPath .= (!$filtros['categoria']) ? '' : ('&categoria=' . $filtros['catego
   <h4 class="mb-0">Directorio</h4>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group me-3">
+      <!-- <button type="button" class="btn btn-sm btn-outline-secondary">Relevantes</button>
+      <button type="button" class="btn btn-sm btn-outline-secondary">Antiguos</button>
+      <button type="button" class="btn btn-sm btn-outline-secondary">Recientes</button> -->
       <a type="button" class="btn btn-sm btn-outline-secondary" href="<?php echo base_url('Directorio/index/1' . '?filtro=relevantes') ?>">Relevantes</a>
       <a type="button" class="btn btn-sm btn-outline-secondary" href="<?php echo base_url('Directorio/index/1' . '?filtro=antiguos') ?>">Antiguos</a>
       <a type="button" class="btn btn-sm btn-outline-secondary" href="<?php echo base_url('Directorio/index/1' . '?filtro=recientes') ?>">Recientes</a>
     </div>
     <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" id="dropdownTipoCategoria" data-bs-toggle="dropdown">
+      <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg> -->
       Categorias
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownTipoCategoria">
@@ -21,61 +31,76 @@ $filterPath .= (!$filtros['categoria']) ? '' : ('&categoria=' . $filtros['catego
     </ul>
   </div>
 </div>
-    <?php foreach ($directorio as $d) : ?>
-        <article>
-            <div class="card mb-3">
-                <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="<?php echo base_url("uploads/directorio/" . $d['entr_foto'])?>" class="img-fluid rounded-start" alt="not image yet">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title"><?php echo $d['entr_titulo']?></h5>
-                        <p class="card-text"><?php echo $d['entr_resumen']?></p>
-                        <a class="btn btn-secondary" href="#">Read more</a>
-                    </div>
-                </div>
-                </div>
-            </div>
-        </article>
-    <?php endforeach; ?>
+
+<?php foreach ($directorios as $directorio) : ?>
+  <article>
+    <div class="row">
+      <div class="col-md-3">
+        <div>
+          <img src="<?php echo base_url("uploads/directorio/" . $directorio['entr_foto']) ?>" class="img-fluid" alt="there isn't an image">
+        </div>
+      </div>
+      <div class="col-md-9">
+        <p>
+          <?php echo $directorio['entr_resumen'] ?>
+        </p>
+        <a class="btn btn-secondary" href="#">Read more</a>
+      </div>
+    </div>
+    <div>
+
+      <i class="icon-user"></i> by <a href="#">Gabriel</a>
+      | <i class="icon-calendar"></i> <?php echo $directorio['entr_fechapub'] ?>
+      | <i class="icon-comment"></i> <a href="#">3 Comments</a>
+      | <i class="icon-share"></i> <a href="#">39 Shares</a>
+      | <i class="icon-tags"></i> Tags : <a href="#"><span class="label label-info">Snipp</span></a>
+      <a href="#"><span class="label label-info">Bootstrap</span></a>
+      <a href="#"><span class="label label-info">UI</span></a>
+      <a href="#"><span class="label label-info">growth</span></a>
+
+
+    </div>
+  </article>
+
+  <hr>
+<?php endforeach; ?>
 <?php
 $flagIni = True;
 $flagEnd = True;
 ?>
 <nav aria-label="...">
   <ul class="pagination justify-content-center">
-    <li class="page-item <?php echo ($current_page == 1) ? 'disabled' : ''?>">
-      <a class="page-link" href ="<?php echo base_url('Directorio/index'. ($current_page - 1). $filterPath)?>"> Previous</a>
+    <li class="page-item <?php echo ($current_page == 1) ? 'disabled' : '' ?>">
+      <a class="page-link" href="<?php echo base_url('Directorio/index/' . ($current_page - 1) . $filterPath) ?>">Previous</a>
     </li>
-    <?php for($i = 1; $i <= $last_page; $i++) :?>
-      <?php if($last_page <= 10) : ?>
-        <li class="page-item <?php echo ($current_page == $i) ? 'active': '' ?>">
-          <a class="page-link" href="<?php echo base_url("Directorio/index/". $i . $filterPath) ?>"><?php echo $i?></a>
+    <?php for ($i = 1; $i <= $last_page; $i++) : ?>
+      <?php if ($last_page <= 10) : ?>
+        <li class="page-item <?php echo ($current_page == $i) ? 'active' : '' ?>"><!-- Keep it for CEO -->
+          <a class="page-link" href="<?php echo base_url("Directorio/index/" . $i . $filterPath) ?>"><?php echo $i ?></a>
         </li>
-      <?php else: ?>
-        <?php if( $i <= 3) :?>
+      <?php else : ?>
+        <?php if ($i <= 3) : ?>
           <li class="page-item <?php echo ($current_page == $i) ? 'active' : '' ?>">
-            <a class="page-link" href="<?php echo base_url("Directorio/index/".$i.$filterPath) ?>"><?php echo $i ?></a>
+            <a class="page-link" href="<?php echo base_url("Directorio/index/" . $i . $filterPath) ?>"><?php echo $i ?></a>
           </li>
-          <?php if($current_page <= 3 && $flagIni == True && $i == 3) : ?>
+          <?php if ($current_page <= 3 && $flagIni == True && $i == 3) : ?>
             <span class="page-link border-0">...</span>
             <?php $flagIni = False; ?>
           <?php endif; ?>
         <?php endif; ?>
-        <?php if($i >=4 && $i <= $last_page-3 && $i == $current_page) :?>
+        <?php if ($i >= 4 && $i <= $last_page - 3 && $i == $current_page) : ?>
           <?php if ($i != 4) : ?>
             <span class="page-link border-0">...</span>
             <li class="page-item <?php echo ($current_page == $i - 1) ? 'active' : '' ?>">
-              <a class="page-link" href="<?php echo base_url("Directorio/index/" . ($i - 1). $filterPath) ?>"><?php echo $i - 1 ?></a>
+              <a class="page-link" href="<?php echo base_url("Directorio/index/" . ($i - 1) . $filterPath) ?>"><?php echo $i - 1 ?></a>
             </li>
           <?php endif; ?>
           <li class="page-item <?php echo ($current_page == $i) ? 'active' : '' ?>">
-            <a class="page-link" href="<?php echo base_url("Directorio/index/" . $i. $filterPath) ?>"><?php echo $i ?></a>
+            <a class="page-link" href="<?php echo base_url("Directorio/index/" . $i . $filterPath) ?>"><?php echo $i ?></a>
           </li>
           <?php if ($i != $last_page - 3) : ?>
             <li class="page-item <?php echo ($current_page == $i + 1) ? 'active' : '' ?>">
-              <a class="page-link" href="<?php echo base_url("Directorio/index/" . ($i + 1).$filterPath) ?>"><?php echo $i + 1 ?></a>
+              <a class="page-link" href="<?php echo base_url("Directorio/index/" . ($i + 1) . $filterPath) ?>"><?php echo $i + 1 ?></a>
             </li>
             <span class="page-link border-0">...</span>
           <?php endif; ?>
@@ -86,14 +111,15 @@ $flagEnd = True;
             <?php $flagEnd = False; ?>
           <?php endif; ?>
           <li class="page-item <?php echo ($current_page == $i) ? 'active' : '' ?>">
-            <a class="page-link" href="<?php echo base_url("Directorio/index/".$i.$filterPath) ?>"><?php echo $i ?></a>
+            <a class="page-link" href="<?php echo base_url("Directorio/index/" . $i . $filterPath) ?>"><?php echo $i ?></a>
           </li>
         <?php endif; ?>
       <?php endif; ?>
     <?php endfor; ?>
     <li class="page-item <?php echo ($current_page == $last_page) ? 'disabled' : '' ?>">
-      <a class="page-link " href="<?php echo base_url('Directorio/index/' . ($current_page + 1). $filterPath) ?>">Next</a>
+      <a class="page-link " href="<?php echo base_url('Directorio/index/' . ($current_page + 1) . $filterPath) ?>">Next</a>
     </li>
   </ul>
 </nav>
+
 

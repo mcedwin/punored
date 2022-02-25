@@ -9,23 +9,20 @@ class DirectorioModel extends Model
   protected $table = 'entrada';
   var $db;
   var $fields;
-  public $pager= '';
   protected $entr_tipo = 3;
   public function __construct()
   {
     parent::__construct();
-    $this->db = \Config\Database::connect();
-    $this->pager = \Config\Services::pager();
-
-    $this->fields = array(
-      'entr_tipo_id' => array('label' => 'Tipo de entrada', 'type' => 'hidden', 'required' => false),
-      'entr_titulo' => array('label' => 'Titulo'),
-      'entr_resumen' => array('label' => 'Resumen'),
-      'entr_contenido' => array('label' => 'Contenido'),
-      'entr_dire_logo' => array('label' => 'Logo'),
-      'entr_foto' => array('label' => 'Imagen'),
-      'entr_cate_id' => array('label' => 'Categoria'),
-    );
+      $this->db = \Config\Database::connect();
+      $this->fields = array(
+        'entr_tipo_id' => array('label' => 'Tipo de entrada', 'type' => 'hidden', 'required' => false),
+        'entr_titulo' => array('label' => 'Titulo'),
+        'entr_resumen' => array('label' => 'Resumen'),
+        'entr_contenido' => array('label' => 'Contenido'),
+        'entr_dire_logo' => array('label' => 'Logo'),
+        'entr_foto' => array('label' => 'Imagen'),
+        'entr_cate_id' => array('label' => 'Categoria'),
+      );
   
     $dfields = $this->db->getFieldData($this->table);
   
@@ -60,12 +57,14 @@ class DirectorioModel extends Model
     }
       return (object)$this->fields;
     }
-  public function getDirectorioData($filters = ['filtro' => 'recientes'],$pag_size = 5, $offset = 0){
-    $builder = $this->db->table($this->table);
+  public function getDirectorioData($filters = ['filtro' => 'recientes'], $pag_size = 5, $offset = 0)
+  {
+    $builder = $this->getBuilder();
     $query = $builder->select([
         'entr_titulo',
         'entr_resumen',
         'entr_foto',
+        'entr_fechapub',
         'entr_dire_logo',
     ]);
     $filter = $filters['filtro'] ?? 'recientes';
