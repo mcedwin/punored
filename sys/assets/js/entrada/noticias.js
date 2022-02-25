@@ -24,10 +24,10 @@ $(document).ready(function () {
         "usua_id": usua_id,
       },
       success: function (response) {
-        // console.log(response)
+        console.log(response)
       },
       fail: function (err) {
-        // console.log(err);
+        console.log(err);
       }
     });
   }

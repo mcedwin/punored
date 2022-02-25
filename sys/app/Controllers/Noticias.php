@@ -138,7 +138,7 @@ class Noticias extends BaseController
 
   public function setPunto($punto)
   {
-    $this->dieAjax();
+    // $this->dieAjax();
     $model = new NoticiasModel();
 
     $data = [
@@ -161,17 +161,6 @@ class Noticias extends BaseController
   public function test3()
   {
     $model = new NoticiasModel();
-    // echo '<pre>'; var_dump($model->getLastPoints2()); echo '</pre>';
-    // echo (null > 5)?"yes":"no";
-    echo '<script>
-    $html = document.querySelector("html");
-    $html.innerHTML = "";
-    </script>';
-    // echo "<pre>";
-    // echo "<response id='#response'>";
-    echo json_encode($model->getPoints(5, 1));
-    // var_dump( $model->getPoints(5, 1));
-    // echo "</response>";
-    // echo "</pre>";
+    echo '<pre>'; var_dump($model->getLastPoints2()); echo '</pre>';
   }
 }
