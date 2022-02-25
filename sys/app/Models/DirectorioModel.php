@@ -10,6 +10,7 @@ class DirectorioModel extends Model
   var $db;
   var $fields;
   public $pager= '';
+  protected $entr_tipo = 3;
   public function __construct()
   {
     parent::__construct();
@@ -17,6 +18,7 @@ class DirectorioModel extends Model
     $this->pager = \Config\Services::pager();
 
     $this->fields = array(
+      'entr_tipo_id' => array('label' => 'Tipo de entrada', 'type' => 'hidden', 'required' => false),
       'entr_titulo' => array('label' => 'Titulo'),
       'entr_resumen' => array('label' => 'Resumen'),
       'entr_contenido' => array('label' => 'Contenido'),
@@ -42,37 +44,60 @@ class DirectorioModel extends Model
   {
     return $this->fields;
   }
-  function saveData($data)
-  {
-    $this->db->table($this->table)->insert($data);
-  }
-  
-  function get($id = 0)
+  function get($id = '')
     {
-      $this->fields['categorias'] = $this->db->query("SELECT cate_id as id, cate_nombre as text FROM entrada_categoria WHERE cate_tipo_id = 3")->getResult();
-      if (!empty($id)) {
-        $row = $this->db->query("SELECT * FROM entrada WHERE cate_id = $id")->getRow();
-        foreach ($row as $k => $value) {
-          if (!isset($this->fields[$k])) continue;
-          $this->fields[$k]->value = $value;
-        }
+      $builderEntradaCate = $this->db->table('entrada_categoria');
+    $this->fields['categorias'] = $builderEntradaCate->select('cate_id as `id`, cate_nombre as `text`')->get()->getResult();
+
+    $builderEntrada = $this->db->table($this->table);
+  
+    if (!empty($id)) {
+      $row = $builderEntrada->select()->where('entr_id', $id)->get()->getRow();
+      foreach ($row as $k => $value) {
+        if (!isset($this->fields[$k])) continue;
+        $this->fields[$k]->value =  $value;
       }
+    }
       return (object)$this->fields;
     }
-  public function getDirectorioData($pag_size = 5, $offset = 0){
+  public function getDirectorioData($filters = ['filtro' => 'recientes'],$pag_size = 5, $offset = 0){
     $builder = $this->db->table($this->table);
     $query = $builder->select([
         'entr_titulo',
         'entr_resumen',
         'entr_foto',
         'entr_dire_logo',
-      ])->limit($pag_size, $offset);
+    ]);
+    $filter = $filters['filtro'] ?? 'recientes';
+    if($filter == 'recientes'){
+      $builder->orderBy('entr_fechapub', 'DESC');
+    }
+    else if($filter == 'antiguos'){
+      $builder->orderBy('entr_fechapub', 'ASC');
+    }
+    else if ($filter == 'relevantes'){
+      $builder->orderBy('entr_pmas', 'DESC');
+    }
+    $categoria = $filters['categoria'] ?? null;
+    if($categoria){
+      $builder->where('entr_cate_id', $categoria);
+    }
+
+    $builder->limit($pag_size, $offset);
     $result = $query->get()->getResultArray();
     return $result;
   }
-  public function count()
+  public function countListado($filters = [])
   {
+    $builder = $this->getBuilder();
+    if(isset($filters['categoria'])){
+      $builder->where('entr_cate_id', $filters['categoria']);
+    }
+    return $builder->countAllResults();
+  }
+  public function getBuilder() {
     $builder = $this->db->table($this->table);
-    return $builder->countAll();
+    $builder->where('entr_tipo_id', $this->entr_tipo);
+    return $builder;
   }
 }
