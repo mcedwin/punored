@@ -9,13 +9,12 @@ class Noticias extends BaseController
   public function index($page = 1)
   {
     
-    //✅TODO filtro Recientes 
+    //filtros
     $filter = $this->request->getGet('filtro') ?? 'recientes';
-    //✅TODO filtro categoria
     $categ_id = $this->request->getGet('categoria');
     $filters = ['filtro' => $filter, 'categoria' => $categ_id];
 
-    
+    //Paginacion
     $model = new NoticiasModel();
     $quant_results = $model->countListado($filters);
     $quant_to_show = 5;
@@ -35,6 +34,10 @@ class Noticias extends BaseController
       'current_page' => $page + 1,
       'last_page' => $quant_pages + 1 - (($quant_results % $quant_to_show == 0) ? 1 : 0)
     );
+
+    $this->addJs(array(
+      'js/entrada/noticias.js'
+    ));
 
     $this->showHeader();
     $this->showContent('index', $data);
@@ -133,11 +136,42 @@ class Noticias extends BaseController
 		$this->dieMsg();
 	}
 
+  public function setPunto($punto)
+  {
+    $this->dieAjax();
+    $model = new NoticiasModel();
+
+    $data = [
+      'entr_id' => $this->request->getPost('entr_id'),
+      'usua_id' => $this->request->getPost('usua_id'),
+    ];
+    if ($punto == '1') $data['pmas'] = $punto;
+    else if ($punto == '-1') $data['pmenos'] = $punto;
+    else redirect()->to(base_url('Noticias'));
+
+    $model->insertPoint($data);
+
+    // echo "<pre>";
+    // echo "<response>";
+    echo json_encode($model->getPoints($data['entr_id'], $data['usua_id']));
+    // echo "</response>";
+    // echo "</pre>";
+  }
+  
   public function test3()
   {
-    $model = new EntradaModel();
-
-    $data = $this->validar($model->getFields());
-    echo '<pre>'; var_dump($data); echo '</pre>';
+    $model = new NoticiasModel();
+    // echo '<pre>'; var_dump($model->getLastPoints2()); echo '</pre>';
+    // echo (null > 5)?"yes":"no";
+    echo '<script>
+    $html = document.querySelector("html");
+    $html.innerHTML = "";
+    </script>';
+    // echo "<pre>";
+    // echo "<response id='#response'>";
+    echo json_encode($model->getPoints(5, 1));
+    // var_dump( $model->getPoints(5, 1));
+    // echo "</response>";
+    // echo "</pre>";
   }
 }
