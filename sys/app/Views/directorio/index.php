@@ -7,20 +7,11 @@ $filterPath .= (!$filtros['categoria']) ? '' : ('&categoria=' . $filtros['catego
   <h4 class="mb-0">Directorio</h4>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group me-3">
-      <!-- <button type="button" class="btn btn-sm btn-outline-secondary">Relevantes</button>
-      <button type="button" class="btn btn-sm btn-outline-secondary">Antiguos</button>
-      <button type="button" class="btn btn-sm btn-outline-secondary">Recientes</button> -->
       <a type="button" class="btn btn-sm btn-outline-secondary" href="<?php echo base_url('Directorio/index/1' . '?filtro=relevantes') ?>">Relevantes</a>
       <a type="button" class="btn btn-sm btn-outline-secondary" href="<?php echo base_url('Directorio/index/1' . '?filtro=antiguos') ?>">Antiguos</a>
       <a type="button" class="btn btn-sm btn-outline-secondary" href="<?php echo base_url('Directorio/index/1' . '?filtro=recientes') ?>">Recientes</a>
     </div>
     <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" id="dropdownTipoCategoria" data-bs-toggle="dropdown">
-      <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" aria-hidden="true">
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-        <line x1="16" y1="2" x2="16" y2="6"></line>
-        <line x1="8" y1="2" x2="8" y2="6"></line>
-        <line x1="3" y1="10" x2="21" y2="10"></line>
-      </svg> -->
       Categorias
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownTipoCategoria">
@@ -33,33 +24,43 @@ $filterPath .= (!$filtros['categoria']) ? '' : ('&categoria=' . $filtros['catego
 </div>
 
 <?php foreach ($directorios as $directorio) : ?>
-  <article>
+  <article id="Directorio" id_directorio="<?php echo $directorio['entr_id'] ?>">
     <div class="row">
-      <div class="col-md-3">
-        <div>
-          <img src="<?php echo base_url("uploads/directorio/" . $directorio['entr_foto']) ?>" class="img-fluid" alt="there isn't an image">
+    <div class="col-1">
+        <div class="d-flex flex-column h-100">
+          <a href="#" id="puntosMas" class="btn btn-sm btn-outline-success">✔</a>
+          <a href="#" id="puntosMenos" class="mt-auto btn btn-sm btn-outline-danger">❌</a>
         </div>
       </div>
-      <div class="col-md-9">
-        <p>
-          <?php echo $directorio['entr_resumen'] ?>
-        </p>
-        <a class="btn btn-secondary" href="#">Read more</a>
-      </div>
+      <div class="col-11">
+        <div class="row">
+          <div class="col-md-3">
+            <div>
+              <img src="<?php echo base_url("uploads/directorio/" . $directorio['entr_foto']) ?>" class="img-fluid" alt="there isn't an image">
+            </div>
+          </div>
+          <div class="col-md-9">
+            <p>
+              <?php echo $directorio['entr_resumen'] ?>
+            </p>
+            <a class="btn btn-secondary" href="#">Read more</a>
+          </div>
+        </div>
+        <div>
+
+          <i class="icon-user"></i> by <a href="#">Gabriel</a>
+          | <i class="icon-calendar"></i> <?php echo $directorio['entr_fechapub'] ?>
+          | <i class="icon-comment"></i> <a href="#">3 Comments</a>
+          | <i class="icon-share"></i> <a href="#">39 Shares</a>
+          | <i class="icon-tags"></i> Tags : <a href="#"><span class="label label-info">Snipp</span></a>
+          <a href="#"><span class="label label-info">Bootstrap</span></a>
+          <a href="#"><span class="label label-info">UI</span></a>
+          <a href="#"><span class="label label-info">growth</span></a>
+
+
+        </div>
     </div>
-    <div>
-
-      <i class="icon-user"></i> by <a href="#">Gabriel</a>
-      | <i class="icon-calendar"></i> <?php echo $directorio['entr_fechapub'] ?>
-      | <i class="icon-comment"></i> <a href="#">3 Comments</a>
-      | <i class="icon-share"></i> <a href="#">39 Shares</a>
-      | <i class="icon-tags"></i> Tags : <a href="#"><span class="label label-info">Snipp</span></a>
-      <a href="#"><span class="label label-info">Bootstrap</span></a>
-      <a href="#"><span class="label label-info">UI</span></a>
-      <a href="#"><span class="label label-info">growth</span></a>
-
-
-    </div>
+  </div>
   </article>
 
   <hr>
@@ -121,5 +122,7 @@ $flagEnd = True;
     </li>
   </ul>
 </nav>
-
+<script>
+  const userId = <?php echo session()->get('id') ?>
+</script>
 
