@@ -12,7 +12,7 @@
 </div>
 <ul class="list-group">
     <a href="<?php echo base_url('Miembros/perfil/') ?>" class="list-group-item list-group-item-action <?php echo (isset($from) && $from == 'Miembros/perfil/') ? 'active' : '' ?>" aria-current="true">Editar perfil</a>
-    <a href="<?php echo base_url('Miembros/misNoticias/') ?>" class="list-group-item list-group-item-action <?php echo (isset($from) && $from == 'Miembros/misNoticias/') ? 'active' : '' ?>">Mis noticias</a>
+    <a href="<?php echo base_url('Noticias/misNoticias/') ?>" class="list-group-item list-group-item-action <?php echo (isset($from) && $from == 'Noticias/misNoticias/') ? 'active' : '' ?>">Mis noticias</a>
     <a href="#" class="list-group-item list-group-item-action">Mis anuncios</a>
     <a href="#" class="list-group-item list-group-item-action">Mis reportes</a>
     <a href="#" class="list-group-item list-group-item-action">Actvidades</a>

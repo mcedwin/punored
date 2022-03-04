@@ -44,6 +44,7 @@ $(document).ready(function () {
     // $.bsAlert.confirm('¿Desea eliminar el registro?', eliminar(entrada_id));
     return false;
   });
+  
   const eliminar = function (entr_id) {
     const url = base_url + "/Noticias/eliminar/" + entr_id;
     $.ajax({

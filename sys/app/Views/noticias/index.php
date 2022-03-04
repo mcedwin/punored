@@ -3,7 +3,7 @@
 $filterPath = (isset($filtros['filtro']) && ($filtros['filtro'] != 'recientes' || isset($filtros['categoria']))) ? '?filtro=' . $filtros['filtro'] : '';
 $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categoria']) : '';
 ?>
-<?php if (isset($from) && $from == 'Miembros/misNoticias/') : ?>
+<?php if (isset($from) && $from == 'Noticias/misNoticias/') : ?>
 <div class="row">
     <div class="col-md-3">
         <?php echo view('templates/menu_perfil'); ?>

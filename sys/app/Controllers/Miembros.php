@@ -211,47 +211,4 @@ class Miembros extends BaseController
         $this->showFooter();
     }
 
-    public function misNoticias($page = 1)
-    {
-        $filter = $this->request->getGet('filtro') ?? 'recientes';
-        $categ_id = $this->request->getGet('categoria');
-        $filters = [
-            'filtro' => $filter,
-            'categoria' => $categ_id,
-            'user' => session()->get('id')
-        ];
-
-        //Paginacion
-        $model = new NoticiasModel();
-        $quant_results = $model->countListado($filters);
-        $quant_to_show = 5;
-        $page = (int)$page - 1;
-        if ($page < 0 || $page * $quant_to_show > $quant_results) {
-            return redirect()->to(base_url('Miembros/misnoticias')); // $page = 0;
-        }
-        $start_from = $page * $quant_to_show;
-        $quant_pages = (int) ($quant_results / $quant_to_show);
-
-
-        $data = array(
-            'categorias' => $this->db->table('entrada_categoria')->select(['cate_nombre', 'cate_id'])->get()->getResult(),
-            'noticias' => $model->getDataListado($filters, $quant_to_show, $start_from),
-            'filtros' => $filters,
-            'quant_results' => $quant_results,
-            'current_page' => $page + 1,
-            'last_page' => $quant_pages + 1 - (($quant_results % $quant_to_show == 0) ? 1 : 0),
-            'from' => 'Miembros/misNoticias/'
-        );
-
-        $this->addJs(array(
-            'js/entrada/noticias.js'
-        ));
-
-        if (!empty(session()->get('id')))
-        $data['misnoticias'] = $model->getBuilder()->where('entr_usua_id', session()->get('id'))->select('entr_id')->get()->getResult();
-
-        $this->showHeader();
-        $this->ShowContent('../noticias/index', $data);
-        $this->showFooter();
-    }
 }

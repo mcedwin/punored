@@ -14,7 +14,7 @@ class NoticiasModel extends Model
     parent::__construct();
   }
 
-  public function getDataListado($filters = ['filtro' => 'recientes'], $pag_size = 5, $offset = 0)
+  public function getDataListado($filters = [], $pag_size = 5, $offset = 0)
   {
     $builder = $this->getBuilder();
     $builder->select([
@@ -22,7 +22,8 @@ class NoticiasModel extends Model
       'entr_contenido',
       'entr_foto',
       'entr_url',
-      'entr_fechapub'
+      'entr_fechapub',
+      'entr_fechaven'
     ])
       ->select('usua_nombres');
     // ✅TODO filrado
@@ -44,7 +45,17 @@ class NoticiasModel extends Model
       $builder->where('entr_usua_id', $filters['user']);
     }
 
-    
+    $espublico = $filters['espublico'] ?? true;
+    if ($espublico === true) {
+        $builder->where('entr_espublico', 1);
+    }
+
+    $fechaf = $filters['fecha'] ?? true;
+    if ($fechaf === true) {
+        $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'))
+            ->where('entr_fechaven >', date('Y-m-d H:i:s'));
+    }
+
     $builder->join('usuario', 'usua_id = entr_usua_id', 'left')
       ->limit($pag_size, $offset);
 
@@ -56,11 +67,20 @@ class NoticiasModel extends Model
   function countListado($filters = [])
   {
     $builder = $this->getBuilder();
+    $fechaf = $filters['fecha'] ?? true;
+    if ($fechaf === true) {
+        $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'))
+            ->where('entr_fechaven >', date('Y-m-d H:i:s'));
+    }
     if (isset($filters['categoria'])) {
       $builder->where('entr_cate_id', $filters['categoria']);
     }
     if(isset($filters['user'])){
       $builder->where('entr_usua_id', $filters['user']);
+    }
+    $espublico = $filters['espublico'] ?? true;
+    if ($espublico === true) {
+        $builder->where('entr_espublico', 1);
     }
     return $builder->countAllResults();
   }
@@ -142,7 +162,7 @@ class NoticiasModel extends Model
       ->where('entr_id', $entrId);
     $resultEntrada = $builderEntrada->get()->getRowArray();
     $builderUsuaEntr
-      ->select('rela_nmas', 'rela_nmenos');
+      ->select(['rela_nmas', 'rela_nmenos']);
     $resultUsuaEntr = $builderUsuaEntr->get()->getRowArray();
     
     return array(
@@ -151,7 +171,7 @@ class NoticiasModel extends Model
       'totalpmas_entr' => $resultEntrada['entr_pmas'] ?? null,
       'totalpmenos_entr' => $resultEntrada['entr_pmenos'] ?? null,
       'totalpmas_usua' => $resultUsuaEntr['rela_nmas'] ?? null,
-      'totalpmenos_usua' => $resultUsuaEntr['rela_nmenos'] ?? null
+      'totalpmenos_usua' => $resultUsuaEntr['rela_nmenos'] ?? null,
     );
   }
 
