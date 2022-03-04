@@ -33,6 +33,10 @@ class Directorio extends BaseController
 			'current_page' => $page + 1,
 			'last_page' => $quant_pages + 1 - (($quant_results % $quant_to_show == 0) ? 1 :0)
 		);
+		$this->addJs(array(
+			"js/directorio/directorio.js",
+			
+		));
 		$this->showHeader();
 		$this->ShowContent('index', $data);
 		$this->showFooter();	
@@ -83,5 +87,22 @@ class Directorio extends BaseController
 		}
 		$this->dieMsg(true,'', base_url('/'));
 	}
+	public function setPunto($punto)
+  	{
+    // $this->dieAjax();
+    $model = new DirectorioModel();
+
+    $data = [
+      'entr_id' => $this->request->getPost('entr_id'),
+      'usua_id' => $this->request->getPost('usua_id'),
+    ];
+    if ($punto == 'mas') $data['pmas'] = $punto;
+    else if ($punto == 'menos') $data['pmenos'] = $punto;
+
+    $model->insertPoint($data);
+
+    echo json_encode($model->getPoints($data['entr_id'], $data['usua_id']));
+  }
+  
 
 }
