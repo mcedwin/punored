@@ -39,6 +39,10 @@ class NoticiasModel extends Model
     if ($categoria) {
       $builder->where('entr_cate_id', $categoria);
     }
+    
+    if (isset($filters['user'])) {
+      $builder->where('entr_usua_id', $filters['user']);
+    }
 
     
     $builder->join('usuario', 'usua_id = entr_usua_id', 'left')
@@ -54,6 +58,9 @@ class NoticiasModel extends Model
     $builder = $this->getBuilder();
     if (isset($filters['categoria'])) {
       $builder->where('entr_cate_id', $filters['categoria']);
+    }
+    if(isset($filters['user'])){
+      $builder->where('entr_usua_id', $filters['user']);
     }
     return $builder->countAllResults();
   }

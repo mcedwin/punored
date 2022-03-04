@@ -11,7 +11,7 @@ class Noticias extends BaseController
     
     //filtros
     $filter = $this->request->getGet('filtro') ?? 'recientes';
-    $categ_id = $this->request->getGet('categoria');
+    $categ_id = $this->request->getGet('categoria') ?? null;
     $filters = ['filtro' => $filter, 'categoria' => $categ_id];
 
     //Paginacion
@@ -32,8 +32,11 @@ class Noticias extends BaseController
       'filtros' => $filters,
       'quant_results' => $quant_results,
       'current_page' => $page + 1,
-      'last_page' => $quant_pages + 1 - (($quant_results % $quant_to_show == 0) ? 1 : 0)
+      'last_page' => $quant_pages + 1 - (($quant_results % $quant_to_show == 0) ? 1 : 0),
+      'from' => 'Noticias/index/'
     );
+    if(!empty(session()->get('id')))
+        $data['misnoticias'] = $model->getBuilder()->where('entr_usua_id', session()->get('id'))->select('entr_id')->get()->getResult();
 
     $this->addJs(array(
       'js/entrada/noticias.js'
@@ -74,6 +77,7 @@ class Noticias extends BaseController
 	
 	public function editar($id)
 	{
+        helper("formulario");
 		$this->addJs(array(
 			"lib/tinymce/tinymce.min.js",
 			"lib/tinymce/jquery.tinymce.min.js",
@@ -126,14 +130,19 @@ class Noticias extends BaseController
 
 	public function eliminar($id)
 	{
-    $model = new NoticiasModel();
-    $builder = $model->getBuilder();
-		$this->dieAjax();
-    $builder
-      ->where('entr_id', $id)
-      ->where('entr_usua_id', $this->user->id)
-    ->delete();
-		$this->dieMsg();
+        $model = new NoticiasModel();
+        $builder = $model->getBuilder();
+        $this->dieAjax();
+        $builder/*Tabla usuario_entrada*/
+            ->where('entr_id', $id)
+            ->where('entr_usua_id', $this->user->id)
+        ->delete();
+        $model->db->table('usuario_entrada')
+            ->where('rela_usua_id', $this->user->id)
+            ->where('rela_entr_id', $id)
+        ->delete();
+        $this->dieMsg();
+        echo json_encode(['id'=> $id, 'iduser' => $this->user->id]);
 	}
 
   public function setPunto($punto)
@@ -143,7 +152,7 @@ class Noticias extends BaseController
 
     $data = [
       'entr_id' => $this->request->getPost('entr_id'),
-      'usua_id' => $this->request->getPost('usua_id'),
+      'usua_id' => $this->request->getPost('usua_id')//$this->user->id
     ];
     if ($punto == 'mas') $data['pmas'] = $punto;
     else if ($punto == 'menos') $data['pmenos'] = $punto;
