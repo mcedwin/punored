@@ -8,7 +8,7 @@
             <ul class="navbar-nav me-auto">
                 <?php
                 $uri = service('uri');
-                foreach ($menu as $mid => $m) :
+                foreach ($menu_top as $mid => $m) :
                     $active = "";
                     // if (preg_match("#{$m['base']}#i", $uri->getSegment(2))) $active = "active";
                 ?>
@@ -61,38 +61,30 @@
                 <div class="sidebar-line border-end"></div>
                 <div class="sticky-top">
                     <ul class="list-unstyled ps-0 py-2 ">
-                        <li class="mb-1">
-                            <span class="text-black-50">
-                                Contenidos
-                            </span>
-                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                <li><a href="<?php echo base_url('Noticias'); ?>" class="link-dark rounded ico"><i class="fas fa-rss"></i> Noticias</a></li>
-                                <li><a href="<?php echo base_url('Anuncios'); ?>" class="link-dark rounded ico"><i class="far fa-list-alt"></i> Anuncios</a></li>
-                                <li><a href="<?php echo base_url('Directorio'); ?>" class="link-dark rounded ico"><i class="far fa-building"></i> Directorio</a></li>
-                                <li><a href="<?php echo base_url('Portada/crear'); ?>" class="link-dark rounded ico"><i class="far fa-plus-square"></i> Publicar</a></li>
-                            </ul>
-                        </li>
-                        <li class="border-top my-3"></li>
-                        <li class="mb-1">
-                            <span class="text-black-50">
-                                Aplicaciones
-                            </span>
-                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                <li><a href="<?php echo base_url('Encuestas'); ?>" class="link-dark rounded ico"><i class="far fa-chart-bar"></i> Encuestas</a></li>
-                                <li><a href="<?php echo base_url('Mapa'); ?>" class="link-dark rounded ico"><i class="fas fa-map-marker-alt"></i> Mapa</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="border-top my-3"></li>
-                        <li class="mb-1">
-                            <span class="text-black-50">
-                                Colaboradores
-                            </span>
-                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                <li><a href="<?php echo base_url('Miembros'); ?>" class="link-dark rounded ico"><i class="fas fa-users"></i> Todos</a></li>
-                                <li><a href="<?php echo base_url('Miembros/registrar'); ?>" class="link-dark rounded ico"><i class="fas fa-user-plus"></i> Registrarse</a></li>
-                            </ul>
-                        </li>
+                        <?php
+                        $uri = service('uri');
+                        foreach ($menu_left as $menu) :
+                        ?>
+                            <li class="mb-1">
+                                <span class="text-black-50">
+                                    <?php echo $menu['title'] ?>
+                                </span>
+                                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                    <?php
+                                    foreach ($menu['menu'] as $m) :
+                                        $active = "";
+                                        if (preg_match("#{$m['base']}#i", $uri->getSegment(1))) $active = "active";
+                                    ?>
+                                        <li class="<?php echo $active ?>"><a href="<?php echo base_url($m['url']); ?>" class="link-dark rounded ico"><i class="<?php echo $m['ico']; ?>"></i> <?php echo $m['name']; ?></a></li>
+                                    <?php
+                                    endforeach;
+                                    ?>
+                                </ul>
+                            </li>
+                            <li class="border-top my-3"></li>
+                        <?php
+                        endforeach;
+                        ?>
                     </ul>
                 </div>
             </div>

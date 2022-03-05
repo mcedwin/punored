@@ -3,17 +3,18 @@
         <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar" class="rounded-circle img-fluid" style="width: 100px;">
         <h5 class="my-3">John Smith</h5>
         <p class="text-muted mb-1">Full Stack Developer</p>
-        <p class="text-muted mb-4">Bay Area, San Francisco, CA</p>
-        <div class="d-flex justify-content-center mb-2">
-            <button type="button" class="btn btn-primary">Follow</button>
-            <button type="button" class="btn btn-outline-primary ms-1">Message</button>
-        </div>
+        <p class="text-muted mb-1">Bay Area, San Francisco, CA</p>
     </div>
 </div>
 <ul class="list-group">
-    <a href="<?php echo base_url('Miembros/perfil/') ?>" class="list-group-item list-group-item-action <?php echo (isset($from) && $from == 'Miembros/perfil/') ? 'active' : '' ?>" aria-current="true">Editar perfil</a>
-    <a href="<?php echo base_url('Miembros/misNoticias/') ?>" class="list-group-item list-group-item-action <?php echo (isset($from) && $from == 'Miembros/misNoticias/') ? 'active' : '' ?>">Mis noticias</a>
-    <a href="#" class="list-group-item list-group-item-action">Mis anuncios</a>
-    <a href="#" class="list-group-item list-group-item-action">Mis reportes</a>
-    <a href="#" class="list-group-item list-group-item-action">Actvidades</a>
+    <?php
+    $uri = service('uri');
+    foreach ($menu_user as $m) :
+        $active = "";
+        if (preg_match("#{$m['base']}#i", $uri->getSegment(1))) $active = "active";
+    ?>
+    <a href="<?php echo base_url($m['url']) ?>" class="list-group-item list-group-item-action <?php echo $active; ?>" aria-current="true"><?php echo $m['name']; ?></a>
+    <?php
+    endforeach;
+    ?>
 </ul>
