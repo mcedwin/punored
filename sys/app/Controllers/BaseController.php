@@ -43,6 +43,7 @@ class BaseController extends Controller
     public $jss = [];
     public $frontVersion = 1;
     public $user;
+    protected $datos = [];
 
     /**
      * Constructor.
@@ -57,8 +58,16 @@ class BaseController extends Controller
         $session = session();
         $this->user = (object)[
             'id' => $session->get('id'),
-            'name' => $session->get('user')
+            'name' => $session->get('user'),
+            'photo' => '',
         ];
+        if (!empty($this->user->id)) {
+            $row = $this->db->query("SELECT * FROM usuario WHERE usua_id='{$this->user->id}'")->getRow();
+            $row->usua_foto = base_url('uploads/usuario') . (empty($row->usua_foto) ? '/sinlogo.png' : '/' . $row->usua_foto);
+            $this->user->photo = $row->usua_foto;
+        }
+
+        $this->datos['user'] = $this->user;;
 
         parent::initController($request, $response, $logger);
 
@@ -181,16 +190,16 @@ class BaseController extends Controller
         $strcss = '';
         $strjs = '';
 
-        $datos['menu_top'] = [];
+        $this->datos['menu_top'] = [];
 
         //if ($this->user->id) {
-        $datos['menu_top'] = [
+        $this->datos['menu_top'] = [
             ['url' => 'Portada/acerca', 'base' => 'acerca', 'name' => 'Acerca'],
         ];
         // }
 
        
-        $datos['menu_left'] = [
+        $this->datos['menu_left'] = [
             [
                 'title'=>'Contenidos',
                 'menu'=>[
@@ -216,7 +225,7 @@ class BaseController extends Controller
             ],
         ];
 
-        $datos['menu_user'] = [
+        $this->datos['menu_user'] = [
             ['url' => 'Miembros/perfil', 'base' => 'miembros', 'name' => 'Perfil'],
             ['url' => 'Noticias/misnoticias', 'base' => 'noticias', 'name' => 'Noticias'],
             ['url' => 'Anuncios/misanuncios', 'base' => 'anuncios', 'name' => 'Anuncios'],
@@ -234,13 +243,13 @@ class BaseController extends Controller
         $this->mc_scripts['js'] = $strjs;
         $this->mc_scripts['css'] = $strcss;
         echo view('templates/header', $this->mc_scripts);
-        if ($menu) echo view('templates/menu', $datos);
+        if ($menu) echo view('templates/menu', $this->datos);
     }
 
 
     public function showContent($path, $response = [])
     {
-        echo view(strtolower($this->controller) . '/' . $path, $response);
+        echo view(strtolower($this->controller) . '/' . $path, array_merge($this->datos,$response));
     }
     public function showFooter()
     {

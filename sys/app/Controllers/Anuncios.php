@@ -56,9 +56,9 @@ class Anuncios extends BaseController
 			));
 
 			$model = new AnunciosModel();
-			$datos['id'] = '0';
-			$datos['titulo'] = 'Publicar Anuncio';
-			$datos['fields'] = $model->get();
+			$this->datos['id'] = '0';
+			$this->datos['titulo'] = 'Publicar Anuncio';
+			$this->datos['fields'] = $model->get();
 
 			$this->showHeader();
 			$this->ShowContent('form', $datos);
@@ -75,11 +75,11 @@ class Anuncios extends BaseController
 			));
 
 			$model = new AnunciosModel();
-			$datos['id'] = $id;
-			$datos['titulo'] = 'Editar noticia';
-			$datos['fields'] = $model->get($id);
-			$datos['fields']->entr_foto->value = base_url('uploads/anuncios') . (empty($datos['fields']->entr_foto->value) ? '/sinlogo.png' : '/' . $datos['fields']->entr_foto->value);
-			//$datos['fields']->entr_descripcion->value = 
+			$this->datos['id'] = $id;
+			$this->datos['titulo'] = 'Editar noticia';
+			$this->datos['fields'] = $model->get($id);
+			$this->datos['fields']->entr_foto->value = base_url('uploads/anuncios') . (empty($this->datos['fields']->entr_foto->value) ? '/sinlogo.png' : '/' . $this->datos['fields']->entr_foto->value);
+			//$this->datos['fields']->entr_descripcion->value = 
 
 			$this->showHeader();
 			$this->ShowContent('form', $datos);

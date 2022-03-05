@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-3">
-        <?php echo view('templates/menu_perfil'); ?>
+        <?php  include(APPPATH.'views/templates/menu_perfil.php'); ?>
     </div>
 
 

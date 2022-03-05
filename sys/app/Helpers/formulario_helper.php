@@ -124,7 +124,7 @@ function myform_select($modo, $key, $datos, $label, $value, $required, $default 
     $param = empty($rel)?array():array('data-rel'=>$rel);
     $strlabel = "<label for='{$key}'><strong>{$label}</strong></label>";
     if ($modo == 'noedit') {
-        return $strlabel . '<div>' . (empty($value) ? $value : $datos[$value]) . '</div>';
+        return $strlabel . '<div>' . (empty($value) ? $value : $this->datos[$value]) . '</div>';
     }
     $args = array('class' => 'form-control '.$class, 'id' => $key)+$param;
     if ($required) {
@@ -157,7 +157,7 @@ function myform_subselect($modo, $value = '', $name = '', $datos = array(), $req
 {
     
     if ($modo == 'noedit') {
-        return '<div>' . (empty($value) ? '' : $datos[$value]) . '</div>';
+        return '<div>' . (empty($value) ? '' : $this->datos[$value]) . '</div>';
     } else {
         return form_dropdown($name, $datos,  $value, array('class' => 'form-control ', 'id' => $name) + ($required ? array('required' => '') : array()));
     }
