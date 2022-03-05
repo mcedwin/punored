@@ -41,6 +41,12 @@ class Directorio extends BaseController
 		$this->ShowContent('index', $data);
 		$this->showFooter();	
 	}
+
+	public function misregistros(){
+		$this->showHeader();
+		$this->ShowContent('misregistros');
+		$this->showFooter();
+	}
 	public function crear()
 	{
 		helper('formulario');

@@ -20,6 +20,12 @@ class Encuestas extends BaseController
 		$this->showFooter();
 	}
 
+	public function misencuestas(){
+		$this->showHeader();
+		$this->ShowContent('misencuestas');
+		$this->showFooter();
+	}
+
 	public function crear(){
 		$this->showHeader();
 		$this->ShowContent('index');

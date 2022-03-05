@@ -22,10 +22,27 @@ class Miembros extends BaseController
         $this->datos['fields'] = $model->get($this->user->id);
         $this->datos['fields']->usua_password->value = '';
         $this->datos['fields']->usua_foto->value = base_url('uploads/usuario') . (empty($this->datos['fields']->usua_foto->value) ? '/sinlogo.png' : '/' . $this->datos['fields']->usua_foto->value);
+        $this->addJs(array("js/miembros/perfil.js"));
         $this->showHeader();
         $this->ShowContent('perfil');
         $this->showFooter();
     }
+
+    public function guardar()
+	{
+		$model = new UsuarioModel();
+		$data = $this->validar($model->getFields());
+		unset($data['usua_foto']);
+		if (empty($data['usua_password'])) unset($data['usua_password']);
+		else $data['usua_password'] = md5($this->input->post('usua_password'));
+
+		$path = 'img_' . $this->user->id . '.small.jpg';
+		if ($this->guardar_imagen('uploads/usuario', $path)) {
+			$data = array_merge($data, array('usua_foto' => $path));
+		}
+		$this->db->table('usuario')->update($data, array('usua_id' => $this->user->id));
+		$this->dieMsg(true);
+	}
 
     function registrar()
     {

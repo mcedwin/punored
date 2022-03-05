@@ -100,6 +100,9 @@ class BaseController extends Controller
 
     public function guardar_imagen($folder, $name)
     {
+        if (empty($_FILES['foto']['name'])) {
+            return false;
+        }
 
         $validationRule = [
             'foto' => [
@@ -229,8 +232,9 @@ class BaseController extends Controller
             ['url' => 'Miembros/perfil', 'base' => 'miembros', 'name' => 'Perfil'],
             ['url' => 'Noticias/misnoticias', 'base' => 'noticias', 'name' => 'Noticias'],
             ['url' => 'Anuncios/misanuncios', 'base' => 'anuncios', 'name' => 'Anuncios'],
+            ['url' => 'Directorio/misregistros', 'base' => 'directorio', 'name' => 'Directorio'],
             ['url' => 'Mapa/misregistros', 'base' => 'mapa', 'name' => 'Mapas'],
-            ['url' => 'Encuesta/misencuestas', 'base' => 'encuesta', 'name' => 'Encuestas'],
+            ['url' => 'Encuestas/misencuestas', 'base' => 'encuesta', 'name' => 'Encuestas'],
         ];
 
         foreach ($this->csss as $css) {

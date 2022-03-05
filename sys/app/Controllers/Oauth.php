@@ -39,14 +39,14 @@ class Oauth extends BaseController
 		$ip = $this->request->getIPAddress();
 		if (!isset($row->usua_id)) {
 			$password = md5('dejfkkdkdk39393dfjk..');
-			$data = array('usua_email' => $email, 'usua_nombres' => $nombres, 'usua_apellidos' => $apellidos, 'usua_password' => $password, 'usua_tipo_id' => '1');
-			$this->db->insert('usuario', $data);
-			$id = $this->db->insert_id();
+			$data = array('usua_email' => $email, 'usua_nombres' => $nombres, 'usua_apellidos' => $apellidos, 'usua_password' => $password, 'usua_tipo_id' => '2');
+			$this->db->table('usuario')->insert($data);
+			$id = $this->db->insertID();
 
 			$path = 'img_' . $id . '.small.jpg';
 
 			if (copy($foto, './uploads/usuario/' . $path)) {
-				$this->db->update('usuario', array('usua_foto' => $path), array('usua_id' => $id));
+				$this->db->table('usuario')->update(array('usua_foto' => $path), array('usua_id' => $id));
 			}
 			$row = $this->db->query("SELECT * FROM usuario WHERE usua_id='{$id}'")->getRow();
 		} else {
@@ -54,7 +54,7 @@ class Oauth extends BaseController
 		}
 		$sesdata = array(
 			'id'  => $id,
-			'user'  => $email,
+			'user'  => $nombres,
 			'type'     => $row->usua_tipo_id,
 			'auth'     => true
 		);
@@ -62,7 +62,6 @@ class Oauth extends BaseController
 		$session->set($sesdata);
 		$sql = "UPDATE usuario SET usua_lastip='{$ip}' WHERE usua_id='{$id}'";
 		$this->db->query($sql);
-		//die("Hola");
 		return redirect()->to(base_url()); 
 	}
 
