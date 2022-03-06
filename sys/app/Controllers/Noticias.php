@@ -3,6 +3,7 @@
 namespace App\Controllers;
 use App\Models\EntradaModel;
 use App\Models\NoticiasModel;
+use CodeIgniter\Entity\Cast\BooleanCast;
 
 class Noticias extends BaseController
 {
@@ -147,12 +148,14 @@ class Noticias extends BaseController
 
     public function setPunto($punto)
     {
-        // $this->dieAjax();
+        $this->dieAjax();
+        if (is_null($this->user->id)) return "";
+        
         $model = new NoticiasModel();
 
         $data = [
             'entr_id' => $this->request->getPost('entr_id'),
-            'usua_id' => $this->request->getPost('usua_id')//$this->user->id
+            'usua_id' => $this->user->id
         ];
         if ($punto == 'mas') $data['pmas'] = $punto;
         else if ($punto == 'menos') $data['pmenos'] = $punto;
@@ -212,9 +215,9 @@ class Noticias extends BaseController
   {
     // $model = new NoticiasModel();
     // echo '<pre>'; var_dump($model->getPoints(27,11)); echo '</pre>';
-    $a = ['a'=>false];
-    $r = $a['b'] ?? true;
-    echo ($r === true)?'yes':'no';
+    $a = $this->user->id;
+    var_dump($a);
+    var_dump(!(bool)[]);
     // echo date('Y-m-d H:i:s');
   }
 }

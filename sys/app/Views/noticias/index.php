@@ -145,7 +145,7 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
 <?php endif; ?>
 </div>
 <script>
-  const userId = <?php echo session()->get('id') ?>
+  const userId = <?php echo session()->get('id') ?? "''" ;?>
 </script>
 <?php
 // var_dump(session()->get('id'));
