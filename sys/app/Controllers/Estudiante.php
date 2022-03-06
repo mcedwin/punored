@@ -20,9 +20,9 @@ class Estudiante extends BaseController
 	}
     public function crear(){
         helper('formulario');
-		$datos['id'] = '0';
-		$datos['titulo'] = 'Registrar Estudiante';
-		$datos['fields'] = $this->model->get();
+		$this->datos['id'] = '0';
+		$this->datos['titulo'] = 'Registrar Estudiante';
+		$this->datos['fields'] = $this->model->get();
         
         $this->addJs(array(
             'js/estudiante/form.js'

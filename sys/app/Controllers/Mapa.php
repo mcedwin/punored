@@ -19,6 +19,12 @@ class Mapa extends BaseController
 		$this->showFooter();
 	}
 
+	public function misregistros(){
+		$this->showHeader();
+		$this->ShowContent('misregistros');
+		$this->showFooter();
+	}
+
 	public function crear(){
 		$this->addCss(array(
 			'lib/leaflet/leaflet.css'

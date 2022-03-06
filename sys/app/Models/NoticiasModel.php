@@ -19,6 +19,7 @@ class NoticiasModel extends Model
     $builder = $this->getBuilder();
     $builder->select([
       'entr_id',
+      'entr_titulo',
       'entr_contenido',
       'entr_foto',
       'entr_url',

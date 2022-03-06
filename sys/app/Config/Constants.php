@@ -77,3 +77,12 @@ defined('EXIT_USER_INPUT')     || define('EXIT_USER_INPUT', 7); // invalid user 
 defined('EXIT_DATABASE')       || define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      || define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+
+define('GP_CLIENT_ID','176346838180-q20l18ga75nnvdgn0u5fjca56ghrlj17.apps.googleusercontent.com');
+define('GP_CLIENT_SECRET','yUW5egL6AZhUiuDAnWhiw9Mi');
+define('GP_REDIRECT_URL','oauth/goo');
+
+define('FB_APP_ID','292788515471005');
+define('FB_APP_SECRET','b333dd363bee8cd6ab93d077e24eda85');
+define('FB_LOGIN_URL','oauth/face');

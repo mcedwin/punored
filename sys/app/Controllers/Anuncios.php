@@ -65,6 +65,12 @@ class Anuncios extends BaseController
 			$this->showFooter();
 		}
 
+		public function misanuncios(){
+			$this->showHeader();
+			$this->ShowContent('misregistros');
+			$this->showFooter();
+		}
+
 		
 		public function editar($id)
 		{

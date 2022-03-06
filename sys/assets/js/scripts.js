@@ -56,8 +56,6 @@ jQuery.getScriptA = function(resources, callback) {
         $(this).find(".inputfile").change(function() {
             mostrarImagen(this);
         });
-
-
     }
 
     function mostrarImagen(input) {

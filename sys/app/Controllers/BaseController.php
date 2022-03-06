@@ -43,6 +43,7 @@ class BaseController extends Controller
     public $jss = [];
     public $frontVersion = 1;
     public $user;
+    protected $datos = [];
 
     /**
      * Constructor.
@@ -57,8 +58,16 @@ class BaseController extends Controller
         $session = session();
         $this->user = (object)[
             'id' => $session->get('id'),
-            'name' => $session->get('user')
+            'name' => $session->get('user'),
+            'photo' => '',
         ];
+        if (!empty($this->user->id)) {
+            $row = $this->db->query("SELECT * FROM usuario WHERE usua_id='{$this->user->id}'")->getRow();
+            $row->usua_foto = base_url('uploads/usuario') . (empty($row->usua_foto) ? '/sinlogo.png' : '/' . $row->usua_foto);
+            $this->user->photo = $row->usua_foto;
+        }
+
+        $this->datos['user'] = $this->user;;
 
         parent::initController($request, $response, $logger);
 
@@ -91,6 +100,9 @@ class BaseController extends Controller
 
     public function guardar_imagen($folder, $name)
     {
+        if (empty($_FILES['foto']['name'])) {
+            return false;
+        }
 
         $validationRule = [
             'foto' => [
@@ -181,13 +193,49 @@ class BaseController extends Controller
         $strcss = '';
         $strjs = '';
 
-        $datos['menu'] = [];
+        $this->datos['menu_top'] = [];
 
         //if ($this->user->id) {
-        $datos['menu'] = [
+        $this->datos['menu_top'] = [
             ['url' => 'Portada/acerca', 'base' => 'acerca', 'name' => 'Acerca'],
         ];
         // }
+
+       
+        $this->datos['menu_left'] = [
+            [
+                'title'=>'Contenidos',
+                'menu'=>[
+                    ['url' => 'Noticias', 'base' => 'noticias', 'name' => 'Noticias','ico'=>'fas fa-rss'],
+                    ['url' => 'Anuncios', 'base' => 'anuncios', 'name' => 'Anuncios','ico'=>'far fa-list-alt'],
+                    ['url' => 'Directorio', 'base' => 'directorio', 'name' => 'Directorio','ico'=>'far fa-building'],
+                    ['url' => 'Portada/crear', 'base' => 'portada', 'name' => 'Publicar','ico'=>'far fa-plus-square'],
+                ],
+            ],
+            [
+                'title'=>'Aplicaciones',
+                'menu'=>[
+                    ['url' => 'Encuestas', 'base' => 'encuestas', 'name' => 'Encuestas','ico'=>'far fa-chart-bar'],
+                    ['url' => 'Mapa', 'base' => 'mapa', 'name' => 'Mapa','ico'=>'fas fa-map-marker-alt'],
+                ],
+            ],
+            [
+                'title'=>'Colaboradores',
+                'menu'=>[
+                    ['url' => 'Miembros', 'base' => 'miembros', 'name' => 'Todos','ico'=>'fas fa-users'],
+                    ['url' => 'Miembros/registrar', 'base' => 'miembros', 'name' => 'Registrarse','ico'=>'fas fa-user-plus'],
+                ],
+            ],
+        ];
+
+        $this->datos['menu_user'] = [
+            ['url' => 'Miembros/perfil', 'base' => 'miembros', 'name' => 'Perfil'],
+            ['url' => 'Noticias/misnoticias', 'base' => 'noticias', 'name' => 'Noticias'],
+            ['url' => 'Anuncios/misanuncios', 'base' => 'anuncios', 'name' => 'Anuncios'],
+            ['url' => 'Directorio/misregistros', 'base' => 'directorio', 'name' => 'Directorio'],
+            ['url' => 'Mapa/misregistros', 'base' => 'mapa', 'name' => 'Mapas'],
+            ['url' => 'Encuestas/misencuestas', 'base' => 'encuesta', 'name' => 'Encuestas'],
+        ];
 
         foreach ($this->csss as $css) {
             $strcss .= '<link href="' . ((preg_match('#^htt#', $css) == TRUE) ? '' : base_url('sys/assets') . '/') . $css . '?v=' . $this->frontVersion . '" rel="stylesheet" type="text/css" media="all" />';
@@ -199,13 +247,13 @@ class BaseController extends Controller
         $this->mc_scripts['js'] = $strjs;
         $this->mc_scripts['css'] = $strcss;
         echo view('templates/header', $this->mc_scripts);
-        if ($menu) echo view('templates/menu', $datos);
+        if ($menu) echo view('templates/menu', $this->datos);
     }
 
 
     public function showContent($path, $response = [])
     {
-        echo view(strtolower($this->controller) . '/' . $path, $response);
+        echo view(strtolower($this->controller) . '/' . $path, array_merge($this->datos,$response));
     }
     public function showFooter()
     {
