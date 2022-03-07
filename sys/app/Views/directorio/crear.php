@@ -1,4 +1,7 @@
 <div class="row">
+    <div class="col-md-3">
+            <?php echo view('templates/menu_perfil'); ?>
+        </div>
         <div class="col-md-9">
             <div class="card">
                 <div class="card-header">

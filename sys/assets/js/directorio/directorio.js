@@ -1,5 +1,9 @@
 $(document).ready(function () {
     $("a[id^='puntos']").click(function () {
+      if (userId === "") {
+        window.location.replace(`${base_url}/Login`);
+        return false;
+      }
       const DireId = $(this).closest("#Directorio").attr("id_directorio");
     
       if ($(this).attr('id') == 'puntosMas') {
@@ -21,7 +25,6 @@ $(document).ready(function () {
         dataType: "json",
         data: {
           "entr_id": entr_id,
-          "usua_id": usua_id,
         },
         success: function (response) {
           console.log(response)
@@ -31,5 +34,29 @@ $(document).ready(function () {
         }
       });
     }
-  
+
+    $("a#eliminar").click(function () {
+      console.log("click");
+      const entrada_id = $(this).closest("#Directorio").attr("id_directorio");
+      if (window.confirm("Desea eliminar el registro?")) {
+        eliminar(entrada_id);
+        // $(this).closest('#Noticia').hide();
+        document.location.reload(true);
+      }
+      else alert("cancelado");
+      // $.bsAlert.confirm('¿Desea eliminar el registro?', eliminar(entrada_id));
+      return false;
+    });
+    const eliminar = function (entr_id) {
+      const url = base_url + "/Directorio/eliminar/" + entr_id;
+      $.ajax({
+        type: "post",
+        url: url,
+        data: {},
+        dataType: "json",
+        success: function (response) {
+          console.log(response);
+        }
+      });
+    }
   })
