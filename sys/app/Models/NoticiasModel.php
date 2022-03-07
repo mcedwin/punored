@@ -24,7 +24,6 @@ class NoticiasModel extends Model
       'entr_foto',
       'entr_url',
       'entr_fechapub',
-      'entr_fechaven',
       'entr_pmas',
       'entr_pmenos',
     ])
@@ -56,8 +55,7 @@ class NoticiasModel extends Model
 
     $fechaf = $filters['fecha'] ?? true;
     if ($fechaf === true) {
-        $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'))
-            ->where('entr_fechaven >', date('Y-m-d H:i:s'));
+        $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'));
     }
 
     $builder->join('usuario', 'usua_id = entr_usua_id', 'left')//inner
@@ -74,8 +72,7 @@ class NoticiasModel extends Model
     $builder = $this->getBuilder();
     $fechaf = $filters['fecha'] ?? true;
     if ($fechaf === true) {
-        $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'))
-            ->where('entr_fechaven >', date('Y-m-d H:i:s'));
+        $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'));
     }
     if (isset($filters['categoria'])) {
       $builder->where('entr_cate_id', $filters['categoria']);

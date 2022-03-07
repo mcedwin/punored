@@ -8,16 +8,16 @@ class Noticias extends BaseController
 {
   public function index($page = 1)
   {
-    
     //filtros
     $filter = $this->request->getGet('filtro') ?? 'recientes';
     $categ_id = $this->request->getGet('categoria') ?? null;
     $filters = ['filtro' => $filter, 'categoria' => $categ_id];
 
+    helper("pagination");
     //Paginacion
     $model = new NoticiasModel();
     $quant_results = $model->countListado($filters);
-    $quant_to_show = 5;
+    $quant_to_show = 3;
     $page = (int)$page - 1;
     if ($page < 0 || $page * $quant_to_show > $quant_results) {
       return redirect()->to(base_url('Noticias/index')); // $page = 0;
@@ -108,6 +108,7 @@ class Noticias extends BaseController
 
 		if (empty($id)) {
       $data['entr_tipo_id'] = $this->request->getPost('entr_tipo_id');
+      $data['entr_usua_id'] = $this->user->id;
 			//$data['entr_usua_id'] = $this->user->id;
 			$this->db->table('entrada')->insert($data);
 			$id = $this->db->insertID();
