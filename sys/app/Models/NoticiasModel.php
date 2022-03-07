@@ -24,9 +24,12 @@ class NoticiasModel extends Model
       'entr_foto',
       'entr_url',
       'entr_fechapub',
-      'entr_fechaven'
+      'entr_fechaven',
+      'entr_pmas',
+      'entr_pmenos',
     ])
-      ->select('usua_nombres');
+      ->select('usua_nombres')
+      ->select('cate_nombre');
     // ✅TODO filrado
     $filter = $filters['filtro'] ?? 'recientes';
     if ($filter == 'recientes') {
@@ -57,7 +60,8 @@ class NoticiasModel extends Model
             ->where('entr_fechaven >', date('Y-m-d H:i:s'));
     }
 
-    $builder->join('usuario', 'usua_id = entr_usua_id', 'left')
+    $builder->join('usuario', 'usua_id = entr_usua_id', 'left')//inner
+        ->join('entrada_categoria', 'entr_cate_id = cate_id', 'inner')
       ->limit($pag_size, $offset);
 
     $query = $builder->get();
@@ -169,10 +173,10 @@ class NoticiasModel extends Model
     return array(
       'entr_id' => $entrId,
       'usua_id' => $usuaId,
-      'totalpmas_entr' => $resultEntrada['entr_pmas'] ?? null,
-      'totalpmenos_entr' => $resultEntrada['entr_pmenos'] ?? null,
-      'totalpmas_usua' => $resultUsuaEntr['rela_nmas'] ?? null,
-      'totalpmenos_usua' => $resultUsuaEntr['rela_nmenos'] ?? null,
+      'pmas_entr' => $resultEntrada['entr_pmas'] ?? null,
+      'pmenos_entr' => $resultEntrada['entr_pmenos'] ?? null,
+      'nmas_rela' => $resultUsuaEntr['rela_nmas'] ?? null,
+      'nmenos_rela' => $resultUsuaEntr['rela_nmenos'] ?? null,
     );
   }
 

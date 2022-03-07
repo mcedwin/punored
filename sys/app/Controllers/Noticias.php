@@ -3,7 +3,6 @@
 namespace App\Controllers;
 use App\Models\EntradaModel;
 use App\Models\NoticiasModel;
-use CodeIgniter\Entity\Cast\BooleanCast;
 
 class Noticias extends BaseController
 {
@@ -134,10 +133,16 @@ class Noticias extends BaseController
         $model = new NoticiasModel();
         $builder = $model->getBuilder();
         $this->dieAjax();
-        $builder/*Tabla usuario_entrada*/
+        $builder
             ->where('entr_id', $id)
             ->where('entr_usua_id', $this->user->id)
         ->delete();
+
+        // helper('filesystem');
+        // $file = new \CodeIgniter\Files\File("uploads/noticias/img_$id.small.jpg", true);
+        // $file->move('uploads/trash/noticias', $file->getBasename(), true);
+        // delete_files('uploads/trash/noticias/');
+
         $model->db->table('usuario_entrada')
             ->where('rela_usua_id', $this->user->id)
             ->where('rela_entr_id', $id)
