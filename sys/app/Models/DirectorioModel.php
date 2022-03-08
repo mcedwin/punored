@@ -19,6 +19,7 @@ class DirectorioModel extends Model
         'entr_titulo' => array('label' => 'Titulo'),
         'entr_resumen' => array('label' => 'Resumen'),
         'entr_contenido' => array('label' => 'Contenido'),
+        'entr_url' => array('label' => 'Pagina web de referencia', 'required' => false),
         'entr_dire_logo' => array('label' => 'Logo'),
         'entr_foto' => array('label' => 'Imagen'),
         'entr_cate_id' => array('label' => 'Categoria'),
@@ -57,7 +58,7 @@ class DirectorioModel extends Model
     }
       return (object)$this->fields;
     }
-  public function getDirectorioData($filters = ['filtro' => 'recientes'], $pag_size = 5, $offset = 0)
+  public function getDirectorioData($filters = [], $pag_size = 5, $offset = 0)
   {
     $builder = $this->getBuilder();
     $query = $builder->select([
@@ -65,9 +66,15 @@ class DirectorioModel extends Model
         'entr_titulo',
         'entr_resumen',
         'entr_foto',
+        'entr_url',
         'entr_fechapub',
+        'entr_fechaven',
         'entr_dire_logo',
-    ])->select('usua_nombres');
+        'entr_pmas',
+        'entr_pmenos',
+    ])
+      ->select('usua_nombres')
+      ->select('cate_nombre');
     $filter = $filters['filtro'] ?? 'recientes';
     if($filter == 'recientes'){
       $builder->orderBy('entr_fechapub', 'DESC');
@@ -82,16 +89,42 @@ class DirectorioModel extends Model
     if($categoria){
       $builder->where('entr_cate_id', $categoria);
     }
+    if (isset($filters['user'])) {
+      $builder->where('entr_usua_id', $filters['user']);
+    }
+    $espublico = $filters['espublico'] ?? true;
+    if ($espublico === true) {
+        $builder->where('entr_espublico', 1);
+    }
+    $fechaf = $filters['fecha'] ?? true;
+    if ($fechaf === true) {
+        $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'))
+            ->where('entr_fechaven >', date('Y-m-d H:i:s'));
+    }
 
-    $builder->join('usuario', 'usua_id = entr_usua_id', 'left')->limit($pag_size, $offset);
+    $builder->join('usuario', 'usua_id = entr_usua_id', 'left')
+        ->join('entrada_categoria', 'entr_cate_id = cate_id', 'inner')
+      ->limit($pag_size, $offset);
     $result = $query->get()->getResultArray();
     return $result;
   }
   public function countListado($filters = [])
   {
     $builder = $this->getBuilder();
+    $fechaf = $filters['fecha'] ?? true;
+    if ($fechaf === true) {
+      $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'))
+          ->where('entr_fechaven >', date('Y-m-d H:i:s'));
+    }
     if(isset($filters['categoria'])){
       $builder->where('entr_cate_id', $filters['categoria']);
+    }
+    if(isset($filters['user'])){
+      $builder->where('entr_usua_id', $filters['user']);
+    }
+    $espublico = $filters['espublico'] ?? true;
+    if ($espublico === true) {
+        $builder->where('entr_espublico', 1);
     }
     return $builder->countAllResults();
   }

@@ -6,35 +6,29 @@ use App\Models\NoticiasModel;
 
 class Noticias extends BaseController
 {
-  public function index($page = 1)
+  public function index(?int $page = 1)
   {
-    
+    $model = new NoticiasModel();
+    $data = ['from' => 'Noticias/index/'];
+
     //filtros
     $filter = $this->request->getGet('filtro') ?? 'recientes';
     $categ_id = $this->request->getGet('categoria') ?? null;
     $filters = ['filtro' => $filter, 'categoria' => $categ_id];
+    $data['filtros'] = $filters;
 
+    helper("pagination");
     //Paginacion
-    $model = new NoticiasModel();
     $quant_results = $model->countListado($filters);
-    $quant_to_show = 5;
-    $page = (int)$page - 1;
-    if ($page < 0 || $page * $quant_to_show > $quant_results) {
-      return redirect()->to(base_url('Noticias/index')); // $page = 0;
-    }
-    $start_from = $page * $quant_to_show;
-    $quant_pages = (int) ($quant_results / $quant_to_show);
+    $quant_to_show = 3;
+    $dataPag = setPaginationData($data, $quant_results, $quant_to_show, $page);
     
-    
-    $data = array(
+    //data
+    $data += [
       'categorias' => $this->db->table('entrada_categoria')->select(['cate_nombre','cate_id'])->get()->getResult(),
-      'noticias' => $model->getDataListado($filters, $quant_to_show, $start_from),
-      'filtros' => $filters,
-      'quant_results' => $quant_results,
-      'current_page' => $page + 1,
-      'last_page' => $quant_pages + 1 - (($quant_results % $quant_to_show == 0) ? 1 : 0),
-      'from' => 'Noticias/index/'
-    );
+      'noticias' => $model->getDataListado($filters, $quant_to_show, $dataPag['start_from_page']),
+    ];
+    
     if(!empty(session()->get('id')))
         $data['misnoticias'] = $model->getBuilder()->where('entr_usua_id', session()->get('id'))->select('entr_id')->get()->getResult();
 
@@ -108,6 +102,7 @@ class Noticias extends BaseController
 
 		if (empty($id)) {
       $data['entr_tipo_id'] = $this->request->getPost('entr_tipo_id');
+      $data['entr_usua_id'] = $this->user->id;
 			//$data['entr_usua_id'] = $this->user->id;
 			$this->db->table('entrada')->insert($data);
 			$id = $this->db->insertID();
@@ -133,10 +128,16 @@ class Noticias extends BaseController
         $model = new NoticiasModel();
         $builder = $model->getBuilder();
         $this->dieAjax();
-        $builder/*Tabla usuario_entrada*/
+        $builder
             ->where('entr_id', $id)
             ->where('entr_usua_id', $this->user->id)
         ->delete();
+
+        // helper('filesystem');
+        // $file = new \CodeIgniter\Files\File("uploads/noticias/img_$id.small.jpg", true);
+        // $file->move('uploads/trash/noticias', $file->getBasename(), true);
+        // delete_files('uploads/trash/noticias/');
+
         $model->db->table('usuario_entrada')
             ->where('rela_usua_id', $this->user->id)
             ->where('rela_entr_id', $id)
@@ -147,12 +148,14 @@ class Noticias extends BaseController
 
     public function setPunto($punto)
     {
-        // $this->dieAjax();
+        $this->dieAjax();
+        if (is_null($this->user->id)) return "";
+        
         $model = new NoticiasModel();
 
         $data = [
             'entr_id' => $this->request->getPost('entr_id'),
-            'usua_id' => $this->request->getPost('usua_id')//$this->user->id
+            'usua_id' => $this->user->id
         ];
         if ($punto == 'mas') $data['pmas'] = $punto;
         else if ($punto == 'menos') $data['pmenos'] = $punto;
@@ -212,9 +215,9 @@ class Noticias extends BaseController
   {
     // $model = new NoticiasModel();
     // echo '<pre>'; var_dump($model->getPoints(27,11)); echo '</pre>';
-    $a = ['a'=>false];
-    $r = $a['b'] ?? true;
-    echo ($r === true)?'yes':'no';
+    $a = $this->user->id;
+    var_dump($a);
+    var_dump(!(bool)[]);
     // echo date('Y-m-d H:i:s');
   }
 }
