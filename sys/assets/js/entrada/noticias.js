@@ -38,14 +38,14 @@ $(document).ready(function () {
 
   $("a#eliminar").click(function () {
     console.log("click");
-    const entrada_id = $(this).closest("#Noticia").attr("data-id");//data.('id')
+    const noticia = $(this).closest("#Noticia");
+    const entrada_id = noticia.attr("data-id");//data.('id')
     if (window.confirm("Desea eliminar el registro?")) {
       eliminar(entrada_id);
-      // $(this).closest('#Noticia').hide();
-    //   document.location.reload(true);
+      noticia.fadeOut();
+      //   document.location.reload(true);
     }
     // $.bsAlert.confirm('¿Desea eliminar el registro?', eliminar(entrada_id));
-      $(this).closest("#Noticia").fadeOut();
     return false;
   });
   
