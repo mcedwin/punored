@@ -16,6 +16,8 @@ class NoticiasModel extends Model
 
   public function getDataListado($filters = [], $pag_size = 5, $offset = 0)
   {
+    
+    
     $builder = $this->getBuilder();
     $builder->select([
       'entr_id',
@@ -61,6 +63,7 @@ class NoticiasModel extends Model
       ->limit($pag_size, $offset);
 
     $query = $builder->get();
+    die($this->db->getLastQuery());
     $result = $query->getResultArray();
     return $result;
   }
