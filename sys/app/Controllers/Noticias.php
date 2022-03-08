@@ -173,51 +173,6 @@ class Noticias extends BaseController
         echo json_encode($model->getPoints($data['entr_id'], $data['usua_id']));
     }
 
-    public function misNoticias2($page = 1)
-    {
-        $filter = $this->request->getGet('filtro') ?? 'recientes';
-        $categ_id = $this->request->getGet('categoria');
-        $filters = [
-            'filtro' => $filter,
-            'categoria' => $categ_id,
-            'user' => $this->user->id,
-            'espublico' => false,
-            'fecha' => false
-        ];
-        helper("pagination");
-        //Paginacion
-        $model = new NoticiasModel();
-        $quant_results = $model->countListado($filters);
-        $quant_to_show = 5;
-        $page = (int)$page - 1;
-        if ($page < 0 || $page * $quant_to_show > $quant_results) {
-            return redirect()->to(base_url('Noticias/misnoticias')); // $page = 0;
-        }
-        $start_from = $page * $quant_to_show;
-        $quant_pages = (int) ($quant_results / $quant_to_show);
-
-
-        $data = array(
-            'categorias' => $this->db->table('entrada_categoria')->select(['cate_nombre', 'cate_id'])->get()->getResult(),
-            'noticias' => $model->getDataListado($filters, $quant_to_show, $start_from),
-            'filtros' => $filters,
-            'quant_results' => $quant_results,
-            'current_page' => $page + 1,
-            'last_page' => $quant_pages + 1 - (($quant_results % $quant_to_show == 0) ? 1 : 0),
-            'from' => 'Noticias/misNoticias/'
-        );
-
-        $this->addJs(array(
-            'js/entrada/noticias.js'
-        ));
-
-        if (!empty(session()->get('id')))
-        $data['misnoticias'] = $model->getBuilder()->where('entr_usua_id', session()->get('id'))->select('entr_id')->get()->getResult();
-
-        $this->showHeader();
-        $this->ShowContent('misnoticias', $data);
-        $this->showFooter();
-    }
     public function misnoticias($page = 1)
     {
         $model = new NoticiasModel();
@@ -246,10 +201,4 @@ class Noticias extends BaseController
         $this->ShowContent('misregistros', $data);
         $this->showFooter();
     }
-  
-  public function test3()
-  {
-      $model = new EntradaModel();
-    echo '<pre>'; var_dump($model->get(300)); echo '</pre>';
-  }
 }
