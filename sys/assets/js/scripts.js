@@ -1,7 +1,3 @@
-function replaceAll(str, find, replace) {
-    return str.replace(new RegExp(find, 'g'), replace);
-}
-
 var baseurl;
 
 $(function() {
@@ -267,20 +263,17 @@ jQuery.getScriptA = function(resources, callback) {
         createConfirmWin: function(msg) {
             var $h1 = "";
             $h1 += "<div class='modal fade' id='bsAlertModal' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>";
-            $h1 += "    <div class='modal-dialog' role='document'>";
+            $h1 += "    <div class='modal-dialog'>";
             $h1 += "        <div class='modal-content'>";
             $h1 += "            <div class='modal-header'>";
             $h1 += "                <h5 class='modal-title' id='myModalLabel'>" + this.confirmTitle + "</h5>";
-            $h1 += "                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>";
-            $h1 += "                <span aria-hidden='true'>&times;</span>";
-            $h1 += "                <span class='sr-only'>Close</span>";
-            $h1 += "                </button>";
+            $h1 += "                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
             $h1 += "            </div>";
             $h1 += "            <div class='modal-body'>";
             $h1 += "                <p>" + msg + "</p>";
             $h1 += "            </div>";
             $h1 += "            <div class='modal-footer'>";
-            $h1 += "                <button type='button' class='btn btn-secondary' data-dismiss='modal'>" + this.closeDisplay + "</button>";
+            $h1 += "                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>" + this.closeDisplay + "</button>";
             $h1 += "                <button type='button' id='bsSaveBtn' class='btn btn-primary'>" + this.sureDisplay + "</button>";
             $h1 += "            </div>";
             $h1 += "        </div>";
@@ -366,7 +359,7 @@ jQuery.getScriptA = function(resources, callback) {
         $.ajax({
             type: "POST",
             dataType: "json",
-            url: $this.attr('href'),
+            url: $(this).attr('href'),
         }).done(function(data) {
             $.gs_loader.hide();
             if (onsucces !== undefined) onsucces();

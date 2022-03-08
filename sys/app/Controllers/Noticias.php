@@ -93,14 +93,14 @@ class Noticias extends BaseController
 
 	public function guardar($id = '')
 	{
-		$model = new EntradaModel();
-    $id = '';
+  	$model = new EntradaModel();
     
 		$data = $this->validar($model->getFields());
-		$data['entr_fechareg'] = date('Y-m-d H:i:s');
 		unset($data['usua_foto']);
-
+    
 		if (empty($id)) {
+      $data['entr_fechareg'] = date('Y-m-d H:i:s');
+      $data['entr_fechapub'] = date('Y-m-d H:i:s');
       $data['entr_tipo_id'] = $this->request->getPost('entr_tipo_id');
       $data['entr_usua_id'] = $this->user->id;
 			//$data['entr_usua_id'] = $this->user->id;
@@ -120,7 +120,7 @@ class Noticias extends BaseController
 			$this->db->table('entrada')->update($data, "entr_id='{$id}'"); // AND entr_usua_id={$this->user->id}
 		}
 
-		$this->dieMsg(true,'',base_url('/'));
+		$this->dieMsg(true,'',base_url('/Noticias/misnoticias'));
 	}
 
 	public function eliminar($id)
@@ -139,11 +139,11 @@ class Noticias extends BaseController
         // delete_files('uploads/trash/noticias/');
 
         $model->db->table('usuario_entrada')
-            ->where('rela_usua_id', $this->user->id)
+          ///  ->where('rela_usua_id', $this->user->id) //borra todo de noticias
             ->where('rela_entr_id', $id)
         ->delete();
         $this->dieMsg();
-        echo json_encode(['id'=> $id, 'iduser' => $this->user->id]);
+        //echo json_encode(['id'=> $id, 'iduser' => $this->user->id]);
 	}
 
     public function setPunto($punto)
@@ -176,7 +176,7 @@ class Noticias extends BaseController
             'espublico' => false,
             'fecha' => false
         ];
-
+        helper("pagination");
         //Paginacion
         $model = new NoticiasModel();
         $quant_results = $model->countListado($filters);
@@ -207,7 +207,7 @@ class Noticias extends BaseController
         $data['misnoticias'] = $model->getBuilder()->where('entr_usua_id', session()->get('id'))->select('entr_id')->get()->getResult();
 
         $this->showHeader();
-        $this->ShowContent('index', $data);
+        $this->ShowContent('misnoticias', $data);
         $this->showFooter();
     }
   

@@ -113,24 +113,13 @@ $(document).ready(function() {
     });
 
     $('#form').load_img();
-    //$('#form').load_ubigeo();
 
     $('#form').submit(function() {
-
         // data.contenido = pre_wpautop(tinyMCE.get('entr_contenido').getContent());
-        $(this).mysave(() => document.location = base_url);
+        $(this).mysave((data) => document.location = data.redirect);
 
         return false;
     });
 
-    $fun_del = function() {
-        $this = $(this);
-        $.bsAlert.confirm("¿Desea eliminar el registro?", function() {
-            if ($this.closest('div').find('tbody').children().length <= 1) {
-                $this.closest('div').find('table').addClass('d-none')
-            }
-            $this.closest('tr').remove();
-        });
-        return false;
-    }
+ 
 });

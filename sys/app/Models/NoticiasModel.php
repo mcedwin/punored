@@ -65,7 +65,7 @@ class NoticiasModel extends Model
       ->limit($pag_size, $offset);
 
     $query = $builder->get();
-    die($this->db->getLastQuery());
+    //die($this->db->getLastQuery());
     $result = $query->getResultArray();
     return $result;
   }
