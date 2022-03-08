@@ -64,11 +64,10 @@ class DirectorioModel extends Model
     $query = $builder->select([
         'entr_id',
         'entr_titulo',
-        'entr_resumen',
+        'entr_contenido',
         'entr_foto',
         'entr_url',
         'entr_fechapub',
-        'entr_fechaven',
         'entr_dire_logo',
         'entr_pmas',
         'entr_pmenos',
@@ -98,31 +97,34 @@ class DirectorioModel extends Model
     }
     $fechaf = $filters['fecha'] ?? true;
     if ($fechaf === true) {
-        $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'))
-            ->where('entr_fechaven >', date('Y-m-d H:i:s'));
+        $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'));
     }
-
-    $builder->join('usuario', 'usua_id = entr_usua_id', 'left')
-        ->join('entrada_categoria', 'entr_cate_id = cate_id', 'inner')
-      ->limit($pag_size, $offset);
-    $result = $query->get()->getResultArray();
+    $builder
+        ->select('usua_nombres')
+        ->select('cate_nombre')
+        ->join('usuario', 'usua_id = entr_usua_id', 'inner')
+        ->join('entrada_categoria', 'entr_cate_id = cate_id', 'inner');
+    if(!is_null($pag_size) && !is_null($offset))
+        $builder->limit($pag_size, $offset);
+    
+    $query = $builder->get();
+    $result = $query->getResultArray();
     return $result;
   }
-  public function countListado($filters = [])
+  function countListado($filters = [])
   {
     $builder = $this->getBuilder();
-    $fechaf = $filters['fecha'] ?? true;
+    $fechaf = $filters['fechapub'] ?? true;
     if ($fechaf === true) {
-      $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'))
-          ->where('entr_fechaven >', date('Y-m-d H:i:s'));
+        $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'));
     }
-    if(isset($filters['categoria'])){
+    if (isset($filters['categoria'])) {
       $builder->where('entr_cate_id', $filters['categoria']);
     }
     if(isset($filters['user'])){
       $builder->where('entr_usua_id', $filters['user']);
     }
-    $espublico = $filters['espublico'] ?? true;
+    $espublico = $filters['solo_publicos'] ?? true;
     if ($espublico === true) {
         $builder->where('entr_espublico', 1);
     }
@@ -134,9 +136,8 @@ class DirectorioModel extends Model
     return $builder;
   }
   public function insertPoint($vdata) {
-    $builderEntrada = $this->db->table('entrada');
+    $builderEntrada = $this->db->table($this->table);
     $builderEntrada->where('entr_id', $vdata['entr_id']);
-    // $builderEntrada = $this->getBuilder()->where('entr_id', $vdata['entr_id']);
     $resultEntrada = $builderEntrada->select(['entr_pmas', 'entr_pmenos'])->get()->getRowArray();
     
     $builderUsuaEntr = $this->getBuilderUsuaEntr($vdata['entr_id'], $vdata['usua_id']);
@@ -208,10 +209,10 @@ class DirectorioModel extends Model
       return array(
         'entr_id' => $entrId,
         'usua_id' => $usuaId,
-        'totalpmas_entr' => $resultEntrada['entr_pmas'] ?? null,
-        'totalpmenos_entr' => $resultEntrada['entr_pmenos'] ?? null,
-        'totalpmas_usua' => $resultUsuaEntr['rela_nmas'] ?? null,
-        'totalpmenos_usua' => $resultUsuaEntr['rela_nmenos'] ?? null
+        'pmas_entr' => $resultEntrada['entr_pmas'] ?? null,
+        'pmenos_entr' => $resultEntrada['entr_pmenos'] ?? null,
+        'nmas_rela' => $resultUsuaEntr['rela_nmas'] ?? null,
+        'nmenos_rela' => $resultUsuaEntr['rela_nmenos'] ?? null,
       );
     }
 }

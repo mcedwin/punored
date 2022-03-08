@@ -12,30 +12,27 @@ class Directorio extends BaseController
 	}
     public function index($page = 1)
 	{
+		$data = ['from' => 'Directorio/index/'];
+
+		//filtroa
 		$filter = $this->request->getGet('filtro') ?? 'recientes';
 		$categ_id = $this->request->getGet('categoria');
-    	$filters = ['filtro' => $filter, 'categoria' => $categ_id];
+		$filters = ['filtro' => $filter, 'categoria' => $categ_id];
+		$data['filtros'] = $filters;
+
+		helper("pagination");
 
 		$quant_results = $this->model->countListado($filters);
 		$quant_to_show = 5;
-		$page = (int)$page - 1;
-		if($page < 0 || $page * $quant_to_show > $quant_results){
-			return redirect()->to(base_url('Directorio/index'));
-		}
-		$start_from = $page * $quant_to_show;
-		$quant_pages = (int) ($quant_results / $quant_to_show);
+		$dataPag = setPaginationData($data, $quant_results, $quant_to_show, $page);
 
-		$data = array(
+		$data += [
 			'categorias' => $this->db->table('entrada_categoria')->select(['cate_nombre','cate_id'])->get()->getResult(),
-			'directorios' => $this->model->getDirectorioData($filters, $quant_to_show, $start_from),
-			'filtros' => $filters,
-			'quant_results' => $quant_results,
-			'current_page' => $page + 1,
-			'last_page' => $quant_pages + 1 - (($quant_results % $quant_to_show == 0) ? 1 :0),
-			'from' => 'Directorio/index/'
-		);
+			'directorios' => $this->model->getDirectorioData($filters, $quant_to_show, $dataPag['start_from_page']),
+		];
+
 		if(!empty(session()->get('id')))
-        $data['misdirectorios'] = $this->model->getBuilder()->where('entr_usua_id', session()->get('id'))->select('entr_id')->get()->getResult();
+        	$data['misregistros'] = $this->model->getBuilder()->where('entr_usua_id', session()->get('id'))->select('entr_id')->get()->getResult();
 
 		$this->addJs(array(
 			"js/directorio/directorio.js",
@@ -45,10 +42,10 @@ class Directorio extends BaseController
 		$this->ShowContent('index', $data);
 		$this->showFooter();	
 	}
-
-	public function misregistros(){
+	public function ver($id)
+	{
 		$this->showHeader();
-		$this->ShowContent('misregistros');
+		$this->ShowContent('ver');
 		$this->showFooter();
 	}
 	public function crear()
@@ -72,15 +69,14 @@ class Directorio extends BaseController
 	}
 	public function guardar($id = '')
 	{
-		$id = '';
-
 		$data = $this->validar($this->model->getFields());
-		$data['entr_fechareg'] = date('Y-m-d H:i:s');
 		unset($data['usua_foto']);
 
-		
 		if(empty($id)){
+			$data['entr_fechareg'] = date('Y-m-d H:i:s');
+			$data['entr_fechapub'] = date('Y-m-d H:i:s');
 			$data['entr_tipo_id'] = $this->request->getPost('entr_tipo_id');
+			$data['entr_usua_id'] = $this->user->id;
 			$this->db->table('entrada')->insert($data);
 			$id = $this->db->insertID();
 			$path = 'img_'.$id.'.small.jpg';
@@ -94,7 +90,7 @@ class Directorio extends BaseController
 			}
 			$this->db->table('entrada')->update($data,"entr_id = '{$id}'");
 		}
-		$this->dieMsg(true,'', base_url('/'));
+		$this->dieMsg(true,'', base_url('/Directorio/misdirectorios'));
 	}
 	public function editar($id)
 	{
@@ -104,32 +100,32 @@ class Directorio extends BaseController
 			"lib/tinymce/jquery.tinymce.min.js",
 			"js/directorio/form.js",	
 		));
-
-		$model = new EntradaModel();
 		$datos['id'] = $id;
-		$datos['titulo'] = 'Editar noticia';
-		$datos['fields'] = $model->get($id);
-		$datos['fields']->entr_foto->value = base_url('uploads/noticias') . (empty($datos['fields']->entr_foto->value) ? '/sinlogo.png' : '/' . $datos['fields']->entr_foto->value);
+		$datos['titulo'] = 'Editar Directorio';
+		$datos['fields'] = $this->model->get($id);
+		$datos['fields']->entr_foto->value = base_url('uploads/directorio') . (empty($datos['fields']->entr_foto->value) ? '/sinlogo.png' : '/' . $datos['fields']->entr_foto->value);
 		//$datos['fields']->entr_descripcion->value = 
 
 		$this->showHeader();
 		$this->ShowContent('crear', $datos);
 		$this->showFooter();
 	}
-	public function eliminar()
+	public function eliminar($id)
 	{
-		$builder = $this->model->getBuilder();
-		$this->dieAjax();
+        $builder = $this->model->getBuilder();
+        $this->dieAjax();
+
+        $this->db->table('usuario_entrada')
+            ->where('rela_usua_id', $this->user->id)
+            ->where('rela_entr_id', $id)
+        ->delete();
+
         $builder
             ->where('entr_id', $id)
             ->where('entr_usua_id', $this->user->id)
         ->delete();
-		$this->model->db->table('usuario_entrada')
-            ->where('rela_usua_id', $this->user->id)
-            ->where('rela_entr_id', $id)
-        ->delete();
         $this->dieMsg();
-        echo json_encode(['id'=> $id, 'iduser' => $this->user->id]);
+        //echo json_encode(['id'=> $id, 'iduser' => $this->user->id]);
 	}
 	public function setPunto($punto)
 	{
@@ -138,55 +134,38 @@ class Directorio extends BaseController
 
 		$data = [
 			'entr_id' => $this->request->getPost('entr_id'),
-			'usua_id' => $this->request->getPost('usua_id'),
+			'usua_id' => $this->user->id,
 		];
 		if ($punto == 'mas') $data['pmas'] = $punto;
 		else if ($punto == 'menos') $data['pmenos'] = $punto;
 
-		$model->insertPoint($data);
+		$this->model->insertPoint($data);
 
 		echo json_encode($this->model->getPoints($data['entr_id'], $data['usua_id']));
 	}
-	public function misDirectorios($page=1)
+	public function misregistros($page=1)
 	{
-		$filter = $this->request->getGet('filtro') ?? 'recientes';
-        $categ_id = $this->request->getGet('categoria');
+		$data = ['from' => 'Directorio/misregistros'];
         $filters = [
-            'filtro' => $filter,
-            'categoria' => $categ_id,
             'user' => session()->get('id'),
-            'espublico' => false,
+            'solo_publicos' => false,
             'fecha' => false
         ];
-		$quant_results = $this->model->countListado($filters);
-        $quant_to_show = 5;
-        $page = (int)$page - 1;
-        if ($page < 0 || $page * $quant_to_show > $quant_results) {
-            return redirect()->to(base_url('Directorio/misdirectorios')); // $page = 0;
-        }
-        $start_from = $page * $quant_to_show;
-        $quant_pages = (int) ($quant_results / $quant_to_show);
-
-
-        $data = array(
-            'categorias' => $this->db->table('entrada_categoria')->select(['cate_nombre', 'cate_id'])->get()->getResult(),
-            'directorios' => $this->model->getDataListado($filters, $quant_to_show, $start_from),
-            'filtros' => $filters,
-            'quant_results' => $quant_results,
-            'current_page' => $page + 1,
-            'last_page' => $quant_pages + 1 - (($quant_results % $quant_to_show == 0) ? 1 : 0),
-            'from' => 'Directorio/misDirectorios/'
-        );
+        helper("pagination");
+        $quant_results = $this->model->countListado($filters);
+        $quant_to_show = 4;
+        $dataPag = setPaginationData($data, $quant_results, $quant_to_show, $page);
+        
+        $data += [
+            'directorios' => $this->model->getDirectorioData($filters, $quant_to_show, $dataPag['start_from_page']),
+        ];
 
         $this->addJs(array(
             'js/directorio/directorio.js'
         ));
 
-        if (!empty(session()->get('id')))
-        $data['misdirectorios'] = $this->model->getBuilder()->where('entr_usua_id', session()->get('id'))->select('entr_id')->get()->getResult();
-
         $this->showHeader();
-        $this->ShowContent('index', $data);
+        $this->ShowContent('misregistros', $data);
         $this->showFooter();
 	}
 

@@ -44,14 +44,4 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-header">
-                    Indicaciones
-                </div>
-                <div class="card-body">
-                    Nam viverra tellus velit, eu cursus eros fermentum pellentes. Cras lacinia blandit justo ac volutpat. Vestibulum commodo diam nulla, sit amet hendrerit dui facilisis et. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempus turpis nec nibh dapibus, fermentum vehicula e
-                </div>
-            </div>
-        </div>
     </div>

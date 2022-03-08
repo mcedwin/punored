@@ -99,7 +99,7 @@ $(document).ready(function() {
         object_resizing: false,
         plugins: 'paste code lists advlist link',
         paste_as_text: true,
-        images_upload_url: $('#baseurl').val() + 'Noticia/procesar_imagen',
+        //images_upload_url: $('#baseurl').val() + 'Noticia/procesar_imagen',
         relative_urls: false,
         remove_script_host: false,
         setup: (editor) => {
@@ -114,22 +114,9 @@ $(document).ready(function() {
     });
 
     $('#form').load_img();
-    //$('#form').load_ubigeo();
 
     $('#form').submit(function() {
-        // data.contenido = pre_wpautop(tinyMCE.get('entr_descripcion').getContent());
-        $(this).mysave(() => document.location = base_url);
+        $(this).mysave((data) => document.location = data.redirect);
         return false;
     });
-
-    $fun_del = function() {
-        $this = $(this);
-        $.bsAlert.confirm("¿Desea eliminar el registro?", function() {
-            if ($this.closest('div').find('tbody').children().length <= 1) {
-                $this.closest('div').find('table').addClass('d-none')
-            }
-            $this.closest('tr').remove();
-        });
-        return false;
-    }
 });

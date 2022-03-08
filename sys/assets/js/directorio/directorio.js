@@ -4,7 +4,7 @@ $(document).ready(function () {
         window.location.replace(`${base_url}/Login`);
         return false;
       }
-      const DireId = $(this).closest("#Directorio").attr("id_directorio");
+      const DireId = $(this).closest("#Directorio").attr("data-id");
     
       if ($(this).attr('id') == 'puntosMas') {
         puntosAdd(DireId, userId, 'mas');
@@ -16,7 +16,7 @@ $(document).ready(function () {
       return false;
     });
     
-    const puntosAdd = function (entr_id, usua_id, point) {
+    const puntosAdd = function (entr_id, point) {
       //point just can be 'mas' or 'menos'
       const url = base_url + "/Directorio/setPunto/" + point;
       $.ajax({
@@ -24,7 +24,7 @@ $(document).ready(function () {
         url: url,
         dataType: "json",
         data: {
-          "entr_id": entr_id,
+          entr_id: entr_id,
         },
         success: function (response) {
           console.log(response)
@@ -37,26 +37,26 @@ $(document).ready(function () {
 
     $("a#eliminar").click(function () {
       console.log("click");
-      const entrada_id = $(this).closest("#Directorio").attr("id_directorio");
+      const directorio = $(this).closest("#Directorio");
+      const entrada_id = directorio.attr("data-id");
       if (window.confirm("Desea eliminar el registro?")) {
         eliminar(entrada_id);
-        // $(this).closest('#Noticia').hide();
-        document.location.reload(true);
+        directorio.fadeOut();
       }
-      else alert("cancelado");
-      // $.bsAlert.confirm('¿Desea eliminar el registro?', eliminar(entrada_id));
       return false;
     });
+
     const eliminar = function (entr_id) {
       const url = base_url + "/Directorio/eliminar/" + entr_id;
-      $.ajax({
-        type: "post",
-        url: url,
-        data: {},
-        dataType: "json",
-        success: function (response) {
+      $.post(
+        url,
+        {},
+        function(data, textStatus, jqXHR){
           console.log(response);
-        }
-      });
-    }
+          console.log(textStatus);
+          console.log(jqXHR);
+        },
+        "json"
+      );
+    };
   })
