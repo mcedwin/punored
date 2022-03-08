@@ -5,8 +5,8 @@ $(document).ready(function () {
       return false;
     }
 
-    const noticiaId = $(this).closest("#Noticia").attr("data-id");//.data('id')
-    
+    const noticiaId = $(this).closest("#Noticia").attr("data-id"); //.data('id')
+
     if ($(this).attr("id") == "puntosMas") {
       puntosAdd(noticiaId, "mas");
     }
@@ -16,30 +16,11 @@ $(document).ready(function () {
 
     return false;
   });
-  
-  const puntosAdd = function (entr_id, point) {
-    //point just can be 'mas' or 'menos'
-    const url = base_url + "/Noticias/setPunto/" + point;
-    $.ajax({
-      type: "post",
-      url: url,
-      dataType: "json",
-      data: {
-        "entr_id": entr_id,
-      },
-      success: function (response) {
-        console.log(response)
-      },
-      fail: function (err) {
-        console.log(err);
-      }
-    });
-  }
 
   $("a#eliminar").click(function () {
     console.log("click");
     const noticia = $(this).closest("#Noticia");
-    const entrada_id = noticia.attr("data-id");//data.('id')
+    const entrada_id = noticia.attr("data-id"); //data.('id')
     if (window.confirm("Desea eliminar el registro?")) {
       eliminar(entrada_id);
       noticia.fadeOut();
@@ -48,16 +29,46 @@ $(document).ready(function () {
     // $.bsAlert.confirm('¿Desea eliminar el registro?', eliminar(entrada_id));
     return false;
   });
-  
+  const puntosAdd = function (entr_id, point) {
+    //point just can be 'mas' or 'menos'
+    const url = base_url + "/Noticias/setPunto/" + point;
+    $.ajax({
+      type: "post",
+      url: url,
+      dataType: "json",
+      data: {
+        entr_id: entr_id,
+      },
+      success: function (response) {
+        console.log(response);
+      },
+      fail: function (err) {
+        console.log(err);
+      },
+    });
+  };
+
   const eliminar = function (entr_id) {
     const url = base_url + "/Noticias/eliminar/" + entr_id;
-      $.post(url, {},
-          function (data, textStatus, jqXHR) {
-              console.log(response);
-              console.log(textStatus);
-              console.log(jqXHR);
-          },
-          "json"
-      );
-  }
-})
+    $.post(
+      url,
+      {},
+      function (data, textStatus, jqXHR) {
+        console.log(response);
+        console.log(textStatus);
+        console.log(jqXHR);
+      },
+      "json"
+    );
+  };
+
+//   $("a#eliminar").click(function () {
+//     $this = $(this);
+//     $.bsAlert.confirm("¿Desea eliminar el registro?", function () {
+//       $this.myprocess(function () {
+//         $this.closest("#Noticia").hide();
+//       });
+//     });
+//     return false;
+//   });
+});
