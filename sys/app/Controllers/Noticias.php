@@ -6,35 +6,29 @@ use App\Models\NoticiasModel;
 
 class Noticias extends BaseController
 {
-  public function index($page = 1)
+  public function index(?int $page = 1)
   {
+    $model = new NoticiasModel();
+    $data = ['from' => 'Noticias/index/'];
+
     //filtros
     $filter = $this->request->getGet('filtro') ?? 'recientes';
     $categ_id = $this->request->getGet('categoria') ?? null;
     $filters = ['filtro' => $filter, 'categoria' => $categ_id];
+    $data['filtros'] = $filters;
 
     helper("pagination");
     //Paginacion
-    $model = new NoticiasModel();
     $quant_results = $model->countListado($filters);
     $quant_to_show = 3;
-    $page = (int)$page - 1;
-    if ($page < 0 || $page * $quant_to_show > $quant_results) {
-      return redirect()->to(base_url('Noticias/index')); // $page = 0;
-    }
-    $start_from = $page * $quant_to_show;
-    $quant_pages = (int) ($quant_results / $quant_to_show);
+    $dataPag = setPaginationData($data, $quant_results, $quant_to_show, $page);
     
-    
-    $data = array(
+    //data
+    $data += [
       'categorias' => $this->db->table('entrada_categoria')->select(['cate_nombre','cate_id'])->get()->getResult(),
-      'noticias' => $model->getDataListado($filters, $quant_to_show, $start_from),
-      'filtros' => $filters,
-      'quant_results' => $quant_results,
-      'current_page' => $page + 1,
-      'last_page' => $quant_pages + 1 - (($quant_results % $quant_to_show == 0) ? 1 : 0),
-      'from' => 'Noticias/index/'
-    );
+      'noticias' => $model->getDataListado($filters, $quant_to_show, $dataPag['start_from_page']),
+    ];
+    
     if(!empty(session()->get('id')))
         $data['misnoticias'] = $model->getBuilder()->where('entr_usua_id', session()->get('id'))->select('entr_id')->get()->getResult();
 

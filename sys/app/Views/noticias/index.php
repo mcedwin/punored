@@ -97,5 +97,4 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
 // foreach ($misnoticias as $mis_id) {
 //     var_dump($mis_id);
 // }
-
 ?>

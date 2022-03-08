@@ -1,5 +1,19 @@
 <?php
 
+// This data will go to the pagination view. $data(by reference)
+function setPaginationData(?array &$data, $quant_results, $quant_to_show, $page)
+{
+    if ($page < 1 || ($page - 1) * $quant_to_show > $quant_results) $page = 1;
+    $data['current_page'] = $page--;
+    $num_pages = (int)($quant_results / $quant_to_show);
+    $data['last_page'] = $num_pages + (($quant_results % $quant_to_show == 0) ? 0 : 1);
+    
+    return array(
+        'num_pages' => $num_pages,
+        'start_from_page' => $page * $quant_to_show,
+    );
+}
+
 function loadPagination(?int $current, ?int $last, ?string $path, ?string $params = null)
 {
   $html = '';
