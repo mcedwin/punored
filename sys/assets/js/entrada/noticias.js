@@ -1,9 +1,9 @@
-$(document).ready(function () {
-  $("a[id^='puntos']").click(function () {
-    if (userId === "") {
-      window.location.replace(`${base_url}/Login`);
-      return false;
-    }
+$(document).ready(function() {
+    $("a[id^='puntos']").click(function() {
+        if (userId === "") {
+            window.location.replace(`${base_url}/Login`);
+            return false;
+        }
 
     const noticiaId = $(this).closest("#Noticia").attr("data-id"); //.data('id')
 
