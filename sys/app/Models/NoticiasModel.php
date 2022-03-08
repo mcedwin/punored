@@ -14,7 +14,7 @@ class NoticiasModel extends Model
     parent::__construct();
   }
 
-  public function getDataListado($filters = [], $pag_size = 5, $offset = 0)
+  public function getDataListado($filters = [], $pag_size = null, $offset = null)
   {
     $builder = $this->getBuilder();
     $builder->select([
@@ -26,9 +26,7 @@ class NoticiasModel extends Model
       'entr_fechapub',
       'entr_pmas',
       'entr_pmenos',
-    ])
-      ->select('usua_nombres')
-      ->select('cate_nombre');
+    ]);
     // ✅TODO filrado
     $filter = $filters['filtro'] ?? 'recientes';
     if ($filter == 'recientes') {
@@ -48,19 +46,24 @@ class NoticiasModel extends Model
       $builder->where('entr_usua_id', $filters['user']);
     }
 
-    $espublico = $filters['espublico'] ?? true;
+    $espublico = $filters['solo_publicos'] ?? true;
     if ($espublico === true) {
         $builder->where('entr_espublico', 1);
     }
 
-    $fechaf = $filters['fecha'] ?? true;
+    $fechaf = $filters['fechapub'] ?? true;
     if ($fechaf === true) {
         $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'));
     }
 
-    $builder->join('usuario', 'usua_id = entr_usua_id', 'left')//inner
-        ->join('entrada_categoria', 'entr_cate_id = cate_id', 'inner')
-      ->limit($pag_size, $offset);
+    $builder
+        ->select('usua_nombres')
+        ->select('cate_nombre')
+        ->join('usuario', 'usua_id = entr_usua_id', 'inner')//inner
+        ->join('entrada_categoria', 'entr_cate_id = cate_id', 'inner');
+
+    if(!is_null($pag_size) && !is_null($offset))
+        $builder->limit($pag_size, $offset);
 
     $query = $builder->get();
     $result = $query->getResultArray();
@@ -70,7 +73,7 @@ class NoticiasModel extends Model
   function countListado($filters = [])
   {
     $builder = $this->getBuilder();
-    $fechaf = $filters['fecha'] ?? true;
+    $fechaf = $filters['fechapub'] ?? true;
     if ($fechaf === true) {
         $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'));
     }
@@ -80,7 +83,7 @@ class NoticiasModel extends Model
     if(isset($filters['user'])){
       $builder->where('entr_usua_id', $filters['user']);
     }
-    $espublico = $filters['espublico'] ?? true;
+    $espublico = $filters['solo_publicos'] ?? true;
     if ($espublico === true) {
         $builder->where('entr_espublico', 1);
     }

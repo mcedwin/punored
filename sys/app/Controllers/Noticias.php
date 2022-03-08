@@ -43,8 +43,14 @@ class Noticias extends BaseController
 
 	public function ver($id)
 	{
+        $model = new NoticiasModel();
+        $res = $model->getBuilder()->where('entr_id', $id)->select()->get()->getRow();
+        if ($model->db->affectedRows() == 0) return redirect()->to(base_url('Noticias'));
+        $data = [
+            'reg' => $res
+        ];
 		$this->showHeader();
-		$this->ShowContent('ver');
+		$this->ShowContent('ver', $data);
 		$this->showFooter();
 	}
 
@@ -128,20 +134,22 @@ class Noticias extends BaseController
         $model = new NoticiasModel();
         $builder = $model->getBuilder();
         $this->dieAjax();
+
+        $this->db->table('usuario_entrada')
+            ->where('rela_usua_id', $this->user->id)
+            ->where('rela_entr_id', $id)
+        ->delete();
+
         $builder
             ->where('entr_id', $id)
             ->where('entr_usua_id', $this->user->id)
         ->delete();
-
+        // if($model->db->affectedRows() === 0) return 0;
         // helper('filesystem');
         // $file = new \CodeIgniter\Files\File("uploads/noticias/img_$id.small.jpg", true);
         // $file->move('uploads/trash/noticias', $file->getBasename(), true);
         // delete_files('uploads/trash/noticias/');
 
-        $model->db->table('usuario_entrada')
-            ->where('rela_usua_id', $this->user->id)
-            ->where('rela_entr_id', $id)
-        ->delete();
         $this->dieMsg();
         echo json_encode(['id'=> $id, 'iduser' => $this->user->id]);
 	}
@@ -165,14 +173,14 @@ class Noticias extends BaseController
         echo json_encode($model->getPoints($data['entr_id'], $data['usua_id']));
     }
 
-    public function misNoticias($page = 1)
+    public function misNoticias2($page = 1)
     {
         $filter = $this->request->getGet('filtro') ?? 'recientes';
         $categ_id = $this->request->getGet('categoria');
         $filters = [
             'filtro' => $filter,
             'categoria' => $categ_id,
-            'user' => session()->get('id'),
+            'user' => $this->user->id,
             'espublico' => false,
             'fecha' => false
         ];
@@ -210,14 +218,38 @@ class Noticias extends BaseController
         $this->ShowContent('index', $data);
         $this->showFooter();
     }
+    public function misnoticias($page = 1)
+    {
+        $model = new NoticiasModel();
+        $data = ['from' => 'Noticias/misnoticias'];
+
+        $filters = [
+            'user' => $this->user->id,
+            'solo_publicos' => false,
+            'fechapub' => false
+        ];
+
+        helper('pagination');
+        $quant_results = $model->countListado($filters);
+        $quant_to_show = 4;
+        $dataPag = setPaginationData($data, $quant_results, $quant_to_show, $page);
+        
+        $data += [
+            'noticias' => $model->getDataListado($filters, $quant_to_show, $dataPag['start_from_page']),
+        ];
+
+        $this->addJs(array(
+            'js/entrada/noticias.js'
+        ));
+        
+        $this->showHeader();
+        $this->ShowContent('misregistros', $data);
+        $this->showFooter();
+    }
   
   public function test3()
   {
-    // $model = new NoticiasModel();
-    // echo '<pre>'; var_dump($model->getPoints(27,11)); echo '</pre>';
-    $a = $this->user->id;
-    var_dump($a);
-    var_dump(!(bool)[]);
-    // echo date('Y-m-d H:i:s');
+      $model = new EntradaModel();
+    echo '<pre>'; var_dump($model->get(300)); echo '</pre>';
   }
 }

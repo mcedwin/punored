@@ -16,7 +16,9 @@ function setPaginationData(?array &$data, $quant_results, $quant_to_show, $page)
 
 function loadPagination(?int $current, ?int $last, ?string $path, ?string $params = null)
 {
-  $html = '';
+  $html = 
+    "<nav aria-label='...''>
+        <ul class='pagination justify-content-center'>";
   $prev =
     "<li class='page-item " . (($current <= 1) ? 'disabled' : '') . "'>
         <a class='page-link' href='$path/" . ($current - 1) . $params . "'>Anterior</a>
@@ -71,6 +73,9 @@ function loadPagination(?int $current, ?int $last, ?string $path, ?string $param
 
   $html .= $next;
 
+  $html .=
+        "</ul>
+    </nav>";
   return $html;
 }
 
