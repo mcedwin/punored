@@ -9,7 +9,7 @@ $(document).ready(function() {
       // if ($(this).attr("id") == "puntosMenos") { }
       $this = $(this);
       $this.myprocess(function (data) {
-        console.log(data);
+        console.log(data.entr_id);
       });
 
       // return false;
