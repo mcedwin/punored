@@ -11,16 +11,13 @@
             <div class="card-body pb-0">
                 <ul class="list-unstyled lista">
                     <?php foreach ($noticias as $noticia) : ?>
-                        <li id="Noticia" data-id="<?php echo $noticia['entr_id'] ?>">
+                        <li id="Noticia">
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <div class="d-flex align-items-start">
                                         <div class="d-flex flex-column">
-                                            <button id="puntosMas" class="btn btn-outline-secondary btn-sm ps-3 pe-3 mb-1" disabled><i class="fa-solid fa-caret-up"></i></button>
-                                            <small class="text-center mb-1"><?php echo $noticia['entr_pmas'] ?></small>
-                                            <button href="#" id="puntosMenos" class=" btn btn-outline-secondary btn-sm" disabled><i class="fa-solid fa-caret-down"></i></button>
                                             <a href="<?php echo base_url('Noticias/editar/' . $noticia['entr_id']) ?>" id="editar" class="text-center"><u>editar</u></a>
-                                            <a href="#" id="eliminar" class="text-center"><u>eliminar</u></a>
+                                            <a href="<?php echo base_url('Noticias/eliminar/' . $noticia['entr_id']) ?>" id="eliminar" class="text-center"><u>eliminar</u></a>
                                         </div>
                                         <div class="w-100 ms-3">
                                             <div class="row">

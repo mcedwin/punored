@@ -17,10 +17,10 @@ $(document).ready(function() {
     return false;
   });
 
-  $("a#eliminar").click(function () {
+  /*$("a#eliminar").click(function () {
     console.log("click");
     const noticia = $(this).closest("#Noticia");
-    const entrada_id = noticia.attr("data-id"); //data.('id')
+    const entrada_id = noticia.attr("data-id"); //data('id')
     if (window.confirm("Desea eliminar el registro?")) {
       eliminar(entrada_id);
       noticia.fadeOut();
@@ -28,7 +28,7 @@ $(document).ready(function() {
     }
     // $.bsAlert.confirm('¿Desea eliminar el registro?', eliminar(entrada_id));
     return false;
-  });
+  });*/
   const puntosAdd = function (entr_id, point) {
     //point just can be 'mas' or 'menos'
     const url = base_url + "/Noticias/setPunto/" + point;
@@ -48,7 +48,7 @@ $(document).ready(function() {
     });
   };
 
-  const eliminar = function (entr_id) {
+/*  const eliminar = function (entr_id) {
     const url = base_url + "/Noticias/eliminar/" + entr_id;
     $.post(
       url,
@@ -61,14 +61,14 @@ $(document).ready(function() {
       "json"
     );
   };
-
-//   $("a#eliminar").click(function () {
-//     $this = $(this);
-//     $.bsAlert.confirm("¿Desea eliminar el registro?", function () {
-//       $this.myprocess(function () {
-//         $this.closest("#Noticia").hide();
-//       });
-//     });
-//     return false;
-//   });
+*/
+   $("a#eliminar").click(function () {
+     $this = $(this);
+     $.bsAlert.confirm("¿Desea eliminar el registro?", function () {
+       $this.myprocess(function () {
+         $this.closest("#Noticia").hide();
+       });
+     });
+     return false;
+  });
 });
