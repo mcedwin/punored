@@ -29,9 +29,9 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
     <article id="Noticia" data-id="<?php echo $noticia['entr_id'] ?>">
         <div class="d-flex align-items-start">
             <div class="d-flex flex-column">
-                <button id="puntosMas" class="btn btn-outline-secondary btn-sm ps-3 pe-3 mb-1" disabled><i class="fa-solid fa-caret-up"></i></button>
+                <button id="puntosMas" class="btn btn-outline-secondary btn-sm ps-3 pe-3 mb-1"><i class="fa-solid fa-caret-up"></i></button>
                 <small class="text-center mb-1"><?php echo $noticia['entr_pmas'] ?></small>
-                <button href="#" id="puntosMenos" class=" btn btn-outline-secondary btn-sm" disabled><i class="fa-solid fa-caret-down"></i></button>
+                <button href="#" id="puntosMenos" class=" btn btn-outline-secondary btn-sm"><i class="fa-solid fa-caret-down"></i></button>
                 <?php //if (isset($misnoticias) && in_array((object)["entr_id" => $noticia['entr_id']], $misnoticias)) : ;?>
                     <!-- <a href="<?php ;//echo base_url('Noticias/editar/' . $noticia['entr_id']) ?>" id="editar" class="mt-auto btn btn-sm btn-outline-secondary">editar</a> -->
                     <!-- <a href="#" id="eliminar" class="btn btn-sm btn-outline-secondary">eliminar</a> -->
