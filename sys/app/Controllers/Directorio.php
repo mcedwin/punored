@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Controllers;
-use App\Models\DirectorioModel;
+use App\Models\EntradaModel;
 
 class Directorio extends BaseController
 {
 	var $model;
 	public function __construct()
 	{
-		$this->model = new DirectorioModel();
+		$this->model = new EntradaModel(3);
 	}
     public function index($page = 1)
 	{
@@ -28,7 +28,7 @@ class Directorio extends BaseController
 
 		$data += [
 			'categorias' => $this->db->table('entrada_categoria')->select(['cate_nombre','cate_id'])->get()->getResult(),
-			'directorios' => $this->model->getDirectorioData($filters, $quant_to_show, $dataPag['start_from_page']),
+			'directorios' => $this->model->getDataListado($filters, $quant_to_show, $dataPag['start_from_page']),
 		];
 
 		if(!empty(session()->get('id')))
@@ -157,7 +157,7 @@ class Directorio extends BaseController
         $dataPag = setPaginationData($data, $quant_results, $quant_to_show, $page);
         
         $data += [
-            'directorios' => $this->model->getDirectorioData($filters, $quant_to_show, $dataPag['start_from_page']),
+            'directorios' => $this->model->getDataListado($filters, $quant_to_show, $dataPag['start_from_page']),
         ];
 
         $this->addJs(array(

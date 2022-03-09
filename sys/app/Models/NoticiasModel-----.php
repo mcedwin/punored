@@ -1,116 +1,79 @@
-<?php 
+<?php
 
 namespace App\Models;
 
 use CodeIgniter\Model;
 
-class DirectorioModel extends Model
+class NoticiasModel extends Model
 {
   protected $table = 'entrada';
-  var $db;
-  var $fields;
-  protected $entr_tipo = 3;
+  
+  protected $entr_tipo = 1;
+
   public function __construct()
   {
     parent::__construct();
-      $this->db = \Config\Database::connect();
-      $this->fields = array(
-        'entr_tipo_id' => array('label' => 'Tipo de entrada', 'type' => 'hidden', 'required' => false),
-        'entr_titulo' => array('label' => 'Titulo'),
-        'entr_resumen' => array('label' => 'Resumen'),
-        'entr_contenido' => array('label' => 'Contenido'),
-        'entr_url' => array('label' => 'Pagina web de referencia', 'required' => false),
-        'entr_dire_logo' => array('label' => 'Logo'),
-        'entr_foto' => array('label' => 'Imagen'),
-        'entr_cate_id' => array('label' => 'Categoria'),
-      );
-  
-    $dfields = $this->db->getFieldData($this->table);
-  
-    foreach ($dfields as $reg) {
-      if (!isset($this->fields[$reg->name])) continue;
-      $this->fields[$reg->name]['type'] = $this->fields[$reg->name]['type'] ?? $reg->type;
-      $this->fields[$reg->name]['name'] = $this->fields[$reg->name]['name'] ?? $reg->name;
-      $this->fields[$reg->name]['max_length'] = $reg->max_length;
-      $this->fields[$reg->name]['value'] = $this->fields[$reg->name]['value'] ?? '';
-      $this->fields[$reg->name]['required'] = $this->fields[$reg->name]['required'] ?? true;
-      $this->fields[$reg->name] = (object)$this->fields[$reg->name];
-    }
   }
-  
-  function getFields($type = 'all')
-  {
-    return $this->fields;
-  }
-  function get($id = '')
-    {
-      $builderEntradaCate = $this->db->table('entrada_categoria');
-    $this->fields['categorias'] = $builderEntradaCate->select('cate_id as `id`, cate_nombre as `text`')->get()->getResult();
 
-    $builderEntrada = $this->db->table($this->table);
-  
-    if (!empty($id)) {
-      $row = $builderEntrada->select()->where('entr_id', $id)->get()->getRow();
-      foreach ($row as $k => $value) {
-        if (!isset($this->fields[$k])) continue;
-        $this->fields[$k]->value =  $value;
-      }
-    }
-      return (object)$this->fields;
-    }
-  public function getDirectorioData($filters = [], $pag_size = 5, $offset = 0)
+  public function getDataListado($filters = [], $pag_size = null, $offset = null)
   {
+    
+    
     $builder = $this->getBuilder();
-    $query = $builder->select([
-        'entr_id',
-        'entr_titulo',
-        'entr_contenido',
-        'entr_foto',
-        'entr_url',
-        'entr_fechapub',
-        'entr_dire_logo',
-        'entr_pmas',
-        'entr_pmenos',
-    ])
-      ->select('usua_nombres')
-      ->select('cate_nombre');
+    $builder->select([
+      'entr_id',
+      'entr_titulo',
+      'entr_contenido',
+      'entr_foto',
+      'entr_url',
+      'entr_fechapub',
+      'entr_pmas',
+      'entr_pmenos',
+    ]);
+    // TODO filrado
     $filter = $filters['filtro'] ?? 'recientes';
-    if($filter == 'recientes'){
+    if ($filter == 'recientes') {
       $builder->orderBy('entr_fechapub', 'DESC');
-    }
-    else if($filter == 'antiguos'){
+    } else if ($filter == 'antiguos') {
       $builder->orderBy('entr_fechapub', 'ASC');
-    }
-    else if ($filter == 'relevantes'){
+    } else if ($filter == 'relevantes') {
       $builder->orderBy('entr_pmas', 'DESC');
     }
+
     $categoria = $filters['categoria'] ?? null;
-    if($categoria){
+    if ($categoria) {
       $builder->where('entr_cate_id', $categoria);
     }
+    
     if (isset($filters['user'])) {
       $builder->where('entr_usua_id', $filters['user']);
     }
-    $espublico = $filters['espublico'] ?? true;
+
+    $espublico = $filters['solo_publicos'] ?? true;
     if ($espublico === true) {
         $builder->where('entr_espublico', 1);
     }
-    $fechaf = $filters['fecha'] ?? true;
+
+    $fechaf = $filters['fechapub'] ?? true;
     if ($fechaf === true) {
         $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'));
     }
+
     $builder
         ->select('usua_nombres')
         ->select('cate_nombre')
-        ->join('usuario', 'usua_id = entr_usua_id', 'inner')
+        ->join('usuario', 'usua_id = entr_usua_id', 'inner')//inner
         ->join('entrada_categoria', 'entr_cate_id = cate_id', 'inner');
+
     if(!is_null($pag_size) && !is_null($offset))
         $builder->limit($pag_size, $offset);
-    
+
     $query = $builder->get();
+    //die($this->db->getLastQuery());
     $result = $query->getResultArray();
     return $result;
   }
+
   function countListado($filters = [])
   {
     $builder = $this->getBuilder();
@@ -130,14 +93,17 @@ class DirectorioModel extends Model
     }
     return $builder->countAllResults();
   }
+
   public function getBuilder() {
     $builder = $this->db->table($this->table);
     $builder->where('entr_tipo_id', $this->entr_tipo);
     return $builder;
   }
+
   public function insertPoint($vdata) {
-    $builderEntrada = $this->db->table($this->table);
+    $builderEntrada = $this->db->table('entrada');
     $builderEntrada->where('entr_id', $vdata['entr_id']);
+    // $builderEntrada = $this->getBuilder()->where('entr_id', $vdata['entr_id']);
     $resultEntrada = $builderEntrada->select(['entr_pmas', 'entr_pmenos'])->get()->getRowArray();
     
     $builderUsuaEntr = $this->getBuilderUsuaEntr($vdata['entr_id'], $vdata['usua_id']);
@@ -186,33 +152,43 @@ class DirectorioModel extends Model
       $builderUsuaEntr2->update();
     }
     return $this->db->affectedRows();
-    }
-    public function getBuilderUsuaEntr($entrId, $usuaId) {
-      $builderUsuaEntr = $this->db->table('usuario_entrada');
-      $builderUsuaEntr
-        ->where('rela_entr_id', $entrId)
-        ->where('rela_usua_id', $usuaId);
-      return $builderUsuaEntr;
-    }
-    public function getPoints($entrId, $usuaId) {
-      $builderEntrada = $this->db->table($this->table);
-      $builderUsuaEntr = $this->getBuilderUsuaEntr($entrId, $usuaId);
+  }
+
+  public function getBuilderUsuaEntr($entrId, $usuaId) {
+    $builderUsuaEntr = $this->db->table('usuario_entrada');
+    $builderUsuaEntr
+      ->where('rela_entr_id', $entrId)
+      ->where('rela_usua_id', $usuaId);
+    return $builderUsuaEntr;
+  }
   
-      $builderEntrada
-        ->select('entr_pmas, entr_pmenos')
-        ->where('entr_id', $entrId);
-      $resultEntrada = $builderEntrada->get()->getRowArray();
-      $builderUsuaEntr
-        ->select('rela_nmas', 'rela_nmenos');
-      $resultUsuaEntr = $builderUsuaEntr->get()->getRowArray();
-      
-      return array(
-        'entr_id' => $entrId,
-        'usua_id' => $usuaId,
-        'pmas_entr' => $resultEntrada['entr_pmas'] ?? null,
-        'pmenos_entr' => $resultEntrada['entr_pmenos'] ?? null,
-        'nmas_rela' => $resultUsuaEntr['rela_nmas'] ?? null,
-        'nmenos_rela' => $resultUsuaEntr['rela_nmenos'] ?? null,
-      );
-    }
+  public function getPoints($entrId, $usuaId) {
+    $builderEntrada = $this->db->table($this->table);
+    $builderUsuaEntr = $this->getBuilderUsuaEntr($entrId, $usuaId);
+
+    $builderEntrada
+      ->select('entr_pmas, entr_pmenos')
+      ->where('entr_id', $entrId);
+    $resultEntrada = $builderEntrada->get()->getRowArray();
+    $builderUsuaEntr
+      ->select(['rela_nmas', 'rela_nmenos']);
+    $resultUsuaEntr = $builderUsuaEntr->get()->getRowArray();
+    
+    return array(
+      'entr_id' => $entrId,
+      'usua_id' => $usuaId,
+      'pmas_entr' => $resultEntrada['entr_pmas'] ?? null,
+      'pmenos_entr' => $resultEntrada['entr_pmenos'] ?? null,
+      'nmas_rela' => $resultUsuaEntr['rela_nmas'] ?? null,
+      'nmenos_rela' => $resultUsuaEntr['rela_nmenos'] ?? null,
+    );
+  }
+
+  public function getLastPoints2()
+  {
+    $builderUsuaEntr = $this->getBuilderUsuaEntr(3, 7);
+    $lastDataUsuaEntr = $builderUsuaEntr->select(['rela_nmas','rela_nmenos'])
+    ->get()->getRowArray();
+    return $lastDataUsuaEntr;
+  }
 }

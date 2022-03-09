@@ -44,7 +44,7 @@ class AnunciosModel extends Model
     function get($id = '')
     {
         $builderEntradaCate = $this->db->table('entrada_categoria');
-        $this->fields['categorias'] = $builderEntradaCate->select('cate_id as `id`, cate_nombre as `text`')->get()->getResult();
+        $this->fields['categorias'] = $builderEntradaCate->select('cate_id as `id`, cate_nombre as `text`')->where('cate_tipo_id',$this->entr_tipo)->get()->getResult();
 
         $builderEntrada = $this->db->table($this->table);
     

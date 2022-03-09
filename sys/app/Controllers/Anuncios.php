@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Controllers;
-use App\Models\AnunciosModel;
+use App\Models\EntradaModel;
 
 class Anuncios extends BaseController
 {
 	var $model;
 	public function __construct()
 	{
-		$this->model = new AnunciosModel();
+		$this->model = new EntradaModel(2);
 	}
 	public function index($page = 1)
 	{
