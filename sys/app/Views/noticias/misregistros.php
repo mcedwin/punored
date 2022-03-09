@@ -11,7 +11,7 @@
             <div class="card-body pb-0">
                 <ul class="list-unstyled lista">
                     <?php foreach ($noticias as $noticia) : ?>
-                        <li id="Noticia">
+                        <li id="Entrada">
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <div class="d-flex align-items-start">

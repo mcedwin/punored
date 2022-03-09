@@ -26,12 +26,12 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
 </div>
 
 <?php foreach ($noticias as $noticia) : ?>
-    <article id="Noticia" data-id="<?php echo $noticia['entr_id'] ?>">
+    <article id="Entrada" data-id="<?php echo $noticia['entr_id'] ?>">
         <div class="d-flex align-items-start">
             <div class="d-flex flex-column">
-                <button id="puntosMas" class="btn btn-outline-secondary btn-sm ps-3 pe-3 mb-1" href="<?php echo base_url('Noticias/setPunto/' . $noticia['entr_id'] . '/' . 'mas') ?>"><i class="fa-solid fa-caret-up"></i></button>
-                <small class="text-center mb-1"><?php echo $noticia['entr_pmas'] ?></small>
-                <button id="puntosMenos" class=" btn btn-outline-secondary btn-sm" href="<?php echo base_url('Noticias/setPunto/' . $noticia['entr_id'] . '/' . 'menos') ?>"><i class="fa-solid fa-caret-down"></i></button>
+                <button id="puntosMas" class="btn btn-outline-secondary btn-sm ps-3 pe-3 mb-1" href="<?php echo base_url('Noticias/setPunto/' . $noticia['entr_id'] . '/mas') ?>"><i class="fa-solid fa-caret-up"></i></button>
+                <small id="points" class="text-center mb-1"><?php echo $noticia['entr_pmas'] ?></small>
+                <button id="puntosMenos" class=" btn btn-outline-secondary btn-sm" href="<?php echo base_url('Noticias/setPunto/' . $noticia['entr_id'] . '/menos') ?>"><i class="fa-solid fa-caret-down"></i></button>
             </div>
             <div class="w-100 ms-3">
                 <div class="row">
@@ -68,13 +68,5 @@ echo loadPagination($current_page, $last_page, base_url($from), $filterPath);
 ?>
 
 <script>
-    const userId = <?php echo session()->get('id') ?? "''"; ?>
+    //const userId = "<?php ;//echo session()->get('id') ?? ''; ?>";
 </script>
-<?php
-// var_dump(session()->get('id'));
-// var_dump(session()->get('user'));
-// var_dump(json_decode(json_encode($misnoticias),true));
-// foreach ($misnoticias as $mis_id) {
-//     var_dump($mis_id);
-// }
-?>

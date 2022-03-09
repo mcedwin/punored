@@ -33,11 +33,8 @@ class Noticias extends BaseController
             'noticias' => $this->model->getDataListado($filters, $quant_to_show, $dataPag['start_from_page']),
         ];
 
-        if (!empty(session()->get('id')))
-            $data['misnoticias'] = $this->model->getBuilder()->where('entr_usua_id', session()->get('id'))->select('entr_id')->get()->getResult();
-
         $this->addJs(array(
-            'js/entrada/noticias.js'
+            'js/entrada/entradas.js'
         ));
 
         $this->showHeader();
@@ -157,10 +154,9 @@ class Noticias extends BaseController
 
         $data = [
             'entr_id' => $entrid,
-            'usua_id' => $this->user->id
+            'usua_id' => $this->user->id,
+            'punto' => $punto,
         ];
-        if ($punto == 'mas') $data['pmas'] = $punto;
-        else if ($punto == 'menos') $data['pmenos'] = $punto;
 
         $this->model->insertPoint($data);
 

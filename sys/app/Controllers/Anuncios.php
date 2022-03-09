@@ -29,11 +29,9 @@ class Anuncios extends BaseController
 			'categorias' => $this->db->table('entrada_categoria')->select(['cate_nombre','cate_id'])->get()->getResult(),
 			'anuncios' => $this->model->getDataListado($filters, $quant_to_show, $dataPag['start_from_page']),
 		];
-		if(!empty(session()->get('id')))
-        	$data['misregistros'] = $this->model->getBuilder()->where('entr_usua_id', session()->get('id'))->select('entr_id')->get()->getResult();
 
 		$this->addJs(array(
-			"js/anuncios/anuncios.js",
+			"js/entrada/entradas.js",
 		));
 		$this->showHeader();
 		$this->showContent('index', $data);
@@ -66,7 +64,7 @@ class Anuncios extends BaseController
 	public function misanuncios($page = 1){
 		$data = ['from' => 'Anuncios/misanuncios'];
         $filters = [
-            'user' => session()->get('id'),
+            'user' => $this->user->id,
             'solo_publicos' => false,
             'fecha' => false
         ];
@@ -149,17 +147,17 @@ class Anuncios extends BaseController
         ->delete();
         $this->dieMsg();
 	}
-	public function setPunto($punto)
+
+	public function setPunto($entrid, $punto)
 	{
 		$this->dieAjax();
 		if (is_null($this->user->id)) return "";
 
 		$data = [
-			'entr_id' => $this->request->getPost('entr_id'),
+			'entr_id' => $entrid,
 			'usua_id' => $this->user->id,
+            'punto' => $punto,
 		];
-		if ($punto == 'mas') $data['pmas'] = $punto;
-		else if ($punto == 'menos') $data['pmenos'] = $punto;
 
 		$this->model->insertPoint($data);
 

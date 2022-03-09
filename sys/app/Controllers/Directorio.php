@@ -31,12 +31,8 @@ class Directorio extends BaseController
 			'directorios' => $this->model->getDataListado($filters, $quant_to_show, $dataPag['start_from_page']),
 		];
 
-		if(!empty(session()->get('id')))
-        	$data['misregistros'] = $this->model->getBuilder()->where('entr_usua_id', session()->get('id'))->select('entr_id')->get()->getResult();
-
 		$this->addJs(array(
-			"js/directorio/directorio.js",
-			
+			"js/entrada/entradas.js",
 		));
 		$this->showHeader();
 		$this->ShowContent('index', $data);
@@ -127,27 +123,28 @@ class Directorio extends BaseController
         $this->dieMsg();
         //echo json_encode(['id'=> $id, 'iduser' => $this->user->id]);
 	}
-	public function setPunto($punto)
+
+	public function setPunto($entrid, $punto)
 	{
 		$this->dieAjax();
 		if (is_null($this->user->id)) return "";
 
 		$data = [
-			'entr_id' => $this->request->getPost('entr_id'),
+			'entr_id' => $entrid,
 			'usua_id' => $this->user->id,
+            'punto' => $punto,
 		];
-		if ($punto == 'mas') $data['pmas'] = $punto;
-		else if ($punto == 'menos') $data['pmenos'] = $punto;
 
 		$this->model->insertPoint($data);
 
 		echo json_encode($this->model->getPoints($data['entr_id'], $data['usua_id']));
 	}
+
 	public function misregistros($page=1)
 	{
 		$data = ['from' => 'Directorio/misregistros'];
         $filters = [
-            'user' => session()->get('id'),
+            'user' => $this->user->id,
             'solo_publicos' => false,
             'fecha' => false
         ];

@@ -362,7 +362,7 @@ jQuery.getScriptA = function(resources, callback) {
             url: $(this).attr('href'),
         }).done(function(data) {
             $.gs_loader.hide();
-            if (onsucces !== undefined) onsucces();
+            if (onsucces !== undefined) onsucces(data);
         }).fail(function(data) {
             $.gs_loader.hide();
             alert("Error en respuesta :" + data.statusText);
