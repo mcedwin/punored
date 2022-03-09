@@ -7,3 +7,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 L.marker([-15.8411,-70.0263]).addTo(map)
   .bindPopup('popup de mapa<br> facil configuración.')
   .openPopup();
+
+document.getElementById("convert").addListener("click", function(){
+  var rslt = 
+});
