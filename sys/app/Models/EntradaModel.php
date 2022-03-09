@@ -76,6 +76,11 @@ class EntradaModel extends Model
     return (object)$this->fields;
   }
 
+  public function getEntrada($id, $fields = '*')
+  {
+    return $this->getBuilder()->where('entr_id', $id)->select($fields)->get()->getRow();
+  }
+
   public function getDataListado($filters = [], $pag_size = null, $offset = null)
   {
 

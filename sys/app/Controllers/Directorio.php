@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 use App\Models\EntradaModel;
+use App\Models\UsuarioModel;
 
 class Directorio extends BaseController
 {
@@ -40,8 +41,16 @@ class Directorio extends BaseController
 	}
 	public function ver($id)
 	{
+        $entr = $this->model->getEntrada($id);
+        $usermod = new UsuarioModel();
+        $user = $usermod->getUser($entr->entr_usua_id);
+        
+        if ($this->model->db->affectedRows() == 0) return redirect()->to(base_url('Directorio'));
+        $data = [
+            'reg' => (object)((array)$entr + (array)$user),
+        ];
 		$this->showHeader();
-		$this->ShowContent('ver');
+		$this->ShowContent('ver', $data);
 		$this->showFooter();
 	}
 	public function crear()

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\EntradaModel;
+use App\Models\UsuarioModel;
 
 class Noticias extends BaseController
 {
@@ -44,10 +45,13 @@ class Noticias extends BaseController
 
     public function ver($id)
     {
-        $res = $this->model->getBuilder()->where('entr_id', $id)->select()->get()->getRow();
+        $entr = $this->model->getEntrada($id);
+        $usermod = new UsuarioModel();
+        $user = $usermod->getUser($entr->entr_usua_id);
+        
         if ($this->model->db->affectedRows() == 0) return redirect()->to(base_url('Noticias'));
         $data = [
-            'reg' => $res
+            'reg' => (object)((array)$entr + (array)$user),
         ];
         $this->showHeader();
         $this->ShowContent('ver', $data);
@@ -189,5 +193,13 @@ class Noticias extends BaseController
         $this->showHeader();
         $this->ShowContent('misregistros', $data);
         $this->showFooter();
+    }
+    public function test() {
+        $usermod = new UsuarioModel();
+        echo '<pre>'; var_dump($re = $this->model->getEntrada(1)); echo '</pre>';
+        echo '<pre>'; var_dump($ro = $usermod->getUser($re->entr_usua_id)); echo '</pre>';
+        echo '<pre>';
+        var_dump((object)((array)$ro + (array)$re));
+        echo '</pre>';
     }
 }

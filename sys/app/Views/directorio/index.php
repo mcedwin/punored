@@ -29,9 +29,9 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
     <article id="Entrada" data-id="<?php echo $directorio['entr_id'] ?>">
         <div class="d-flex align-items-start">
             <div class="d-flex flex-column">
-                <button id="puntosMas" class="btn btn-outline-secondary btn-sm ps-3 pe-3 mb-1" href="<?php echo base_url('Directorio/setPunto/' . $anuncio['entr_id'] . '/mas') ?>"><i class="fa-solid fa-caret-up"></i></button>
+                <button id="puntosMas" class="btn btn-outline-secondary btn-sm ps-3 pe-3 mb-1" href="<?php echo base_url('Directorio/setPunto/' . $directorio['entr_id'] . '/mas') ?>"><i class="fa-solid fa-caret-up"></i></button>
                 <small id="points" class="text-center mb-1"><?php echo $directorio['entr_pmas'] ?></small>
-                <button id="puntosMenos" class=" btn btn-outline-secondary btn-sm" href="<?php echo base_url('Directorio/setPunto/' . $anuncio['entr_id'] . '/menos') ?>"><i class="fa-solid fa-caret-down"></i></button>
+                <button id="puntosMenos" class=" btn btn-outline-secondary btn-sm" href="<?php echo base_url('Directorio/setPunto/' . $directorio['entr_id'] . '/menos') ?>"><i class="fa-solid fa-caret-down"></i></button>
             </div>
             <div class="w-100 ms-3">
                 <div class="row">

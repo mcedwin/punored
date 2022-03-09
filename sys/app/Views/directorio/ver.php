@@ -1,6 +1,3 @@
-<?php
-//echo '<pre>'; var_dump($reg); echo '</pre>';
-?>
 <div class="container">
     <div class="row">
         <div class="col-md-9">

@@ -17,7 +17,7 @@
                                     <div class="d-flex align-items-start">
                                         <div class="d-flex flex-column">
                                             <a href="<?php echo base_url('Directorio/editar/' . $directorio['entr_id']) ?>" id="editar" class="text-center"><u>editar</u></a>
-                                            <a href="<?php echo base_url('Directorio/eliminar/' . $noticia['entr_id']) ?>" id="eliminar" class="text-center"><u>eliminar</u></a>
+                                            <a href="<?php echo base_url('Directorio/eliminar/' . $directorio['entr_id']) ?>" id="eliminar" class="text-center"><u>eliminar</u></a>
                                         </div>
                                         <div class="w-100 ms-3">
                                             <div class="row">
