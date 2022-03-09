@@ -150,13 +150,13 @@ class Noticias extends BaseController
         //echo json_encode(['id'=> $id, 'iduser' => $this->user->id]);
     }
 
-    public function setPunto($punto)
+    public function setPunto($entrid, $punto)
     {
         $this->dieAjax();
         if (is_null($this->user->id)) return "";
 
         $data = [
-            'entr_id' => $this->request->getPost('entr_id'),
+            'entr_id' => $entrid,
             'usua_id' => $this->user->id
         ];
         if ($punto == 'mas') $data['pmas'] = $punto;
