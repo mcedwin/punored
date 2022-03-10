@@ -18,6 +18,7 @@ class EncuestasModel extends Model
     }
     
     public function getEncuesta($id) {
+        //return ['encuesta'=>, 'detalle'=>]
         return $this->builder
             ->select()
             ->where('encu_id', $id)
