@@ -6,8 +6,10 @@ use App\Models\MapaModel;
 class Mapa extends BaseController
 {
 	var $model;
+	var $db;
 	public function __construct()
 	{
+		$this->db = \Config\Database::connect();
 		$this->model = new MapaModel();
 	}
     public function index($rowno = 0)
@@ -19,9 +21,22 @@ class Mapa extends BaseController
 			'lib/leaflet/leaflet.js',
 			'js/mapa/mostrar.js'
 		));
-		$data = [
-            'mapas' => $this->model->getMapaData($filters, $quant_to_show, $dataPag['start_from_page']),
-        ];
+		$builder = $this->db->table('entrada');
+		$query = $builder->select()->get();
+		$results = $query->getResult();
+
+		$locPins=[];
+
+		foreach($results as $value){
+			$locPins[]=[
+				$value->entr_map_lat, 
+				$value->entr_map_lng
+			];
+		}
+
+		$data['locPins']= json_encode($locPins);
+		
+
 		$this->showHeader();
 		$this->ShowContent('index', $data);
 		$this->showFooter();

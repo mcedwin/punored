@@ -16,6 +16,11 @@
         </button>
     </div>
 </div>
+<?php
+   /* echo ("<pre>");
+    var_dump(json_decode($locPins));
+    echo ("</pre>");*/
+?>
 <div class="mapcontainer">
     <div id="map" style="height:500px"></div>
 </div>
@@ -24,3 +29,6 @@
         position: relative;
     }
 </style>
+<script>
+    var markerPins = JSON.parse('<?php echo $locPins ?>');
+</script>

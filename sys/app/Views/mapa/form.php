@@ -35,10 +35,10 @@
                             ?>
                         </div>
                         <div class="form-group col-md-12">
-                                <input class="form-control " style="display:none" id="latitud" name="latitud">
+                                <input class="form-control " style="display:n1one" id="latitud" name="latitud">
                         </div>
                         <div class="form-group col-md-12">
-                                <input class="form-control" style="display:none" id="longitud" name="longitud">
+                                <input class="form-control" style="display:no1ne" id="longitud" name="longitud">
                         </div>
                         <button type="submit" class="btn btn-primary">Guardar</button>
                     </form>
