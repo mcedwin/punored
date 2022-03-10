@@ -2,12 +2,19 @@
 
 namespace App\Controllers;
 
+use App\Models\EntradaModel;
+
 class Portada extends BaseController
 {
-	public function index()
+    var $notiModel;
+    public function __construct()
+    {
+        $this->notiModel = new EntradaModel(1);
+    }
+    public function index()
 	{
-		$datos['miembros'] = $this->db->query("SELECT usua_id,usua_nombres,usua_apellidos,usua_foto FROM usuario")->getResult();
-		$datos['noticias'] = $this->db->query("SELECT * FROM entrada WHERE entr_tipo_id=1 ORDER BY entr_fechapub DESC LIMIT 3")->getResult();
+        $datos['miembros'] = $this->db->query("SELECT usua_id,usua_nombres,usua_apellidos,usua_foto FROM usuario")->getResult();
+        $datos['noticias'] = $this->notiModel->getBuilder()->limit(3)->orderBy('entr_pmas' , 'DESC')->get()->getResult();
 		$datos['anuncios'] = $this->db->query("SELECT * FROM entrada WHERE entr_tipo_id=2 ORDER BY entr_fechapub DESC LIMIT 3")->getResult();
 		$datos['comentarios'] = $this->db->query("SELECT * FROM comentario JOIN usuario ON usua_id=come_usua_id ORDER BY come_fechareg DESC LIMIT 3")->getResult();
 

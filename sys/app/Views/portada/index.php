@@ -6,16 +6,21 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <?php foreach ($noticias as $row) : ?>
-                        <div class="col-sm-4 col-xs-6 d-flex flex-column">
-                            <a href="<?php echo base_url('Noticias/ver/' . $row->entr_id); ?>">
-                                <img src="<?php echo base_url('uploads/noticias/' . $row->entr_foto); ?>" width="310" height="174" class="img-fluid"> </a>
-                            <h3 class="h6 h5-sm h6-lg"><a href="<?php echo base_url('Noticias/ver/' . $row->entr_id); ?>"><?php echo $row->entr_titulo ?></a></h3>
-                            <div class="mt-auto small">
-                                <a href="#"><i class="fa fa-calendar"></i> <?php echo $row->entr_fechapub ?> </a>
-                            </div>
+                    <?php foreach ($noticias as $noticia) :?>
+                    <div class="col-sm-4 col-xs-6 d-flex flex-column">
+                        <a href="<?php echo base_url('Noticias/ver/' . $noticia->entr_id) ?>">
+                            <img src="<?php echo base_url('uploads/noticias/'. $noticia->entr_foto) ?>" width="310" height="174" class="img-fluid"> </a>
+                        <h3 class="h6 h5-sm h6-lg"><a href="<?php echo base_url('Noticias/ver/' . $noticia->entr_id) ?>"><?php echo $noticia->entr_titulo ?></a></h3>
+                        <div class="mt-auto small">
+                            <?php
+                            $datePub = date_create($noticia->entr_fechapub);
+                            $currentDate = date_create(date('Y-m-d'));?>
+                            <a href="#"><i class="fa fa-calendar"></i> <?php echo date_diff($currentDate, $datePub)->format('%a') . 'd' ?> </a>
+                            <!-- <a href="#"><i class="fa fa-eye" aria-hidden="true"></i> 253 </a> -->
+                            <a href="#"><i class="fa fa-arrow-up" aria-hidden="true"></i> <?php echo $noticia->entr_pmas ?> </a>
                         </div>
-                    <?php endforeach; ?>
+                    </div>
+                    <?php endforeach ?>
                 </div>
             </div>
         </div>
