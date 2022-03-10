@@ -2,10 +2,18 @@
 
 namespace App\Controllers;
 
+use App\Models\EntradaModel;
+
 class Portada extends BaseController
 {
+    var $notiModel;
+    public function __construct()
+    {
+        $this->notiModel = new EntradaModel(1);
+    }
     public function index()
 	{
+        $this->datos['noticias'] = $this->notiModel->getBuilder()->limit(3)->orderBy('entr_pmas' , 'DESC')->get()->getResult();
 		$this->showHeader();
 		$this->showContent('index');
 		$this->showFooter();

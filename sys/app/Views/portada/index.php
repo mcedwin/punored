@@ -6,36 +6,22 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                    <?php ;// echo '<pre>'; var_dump($noticias); echo '</pre>'; ?>
+                    <?php foreach ($noticias as $noticia) :?>
                     <div class="col-sm-4 col-xs-6 d-flex flex-column">
-                        <a href="#">
-                            <img src="https://www.lapatria.pe/web/wp-content/uploads/2022/01/Western-310x174.jpg" width="310" height="174" class="img-fluid"> </a>
-                        <h3 class="h6 h5-sm h6-lg"><a href="#">Western o «cine de vaqueros»: ¿Por qué causaban furor en el Perú ?</a></h3>
+                        <a href="<?php echo base_url('Noticias/ver/' . $noticia->entr_id) ?>">
+                            <img src="<?php echo base_url('uploads/noticias/'. $noticia->entr_foto) ?>" width="310" height="174" class="img-fluid"> </a>
+                        <h3 class="h6 h5-sm h6-lg"><a href="<?php echo base_url('Noticias/ver/' . $noticia->entr_id) ?>"><?php echo $noticia->entr_titulo ?></a></h3>
                         <div class="mt-auto small">
-                            <a href="#"><i class="fa fa-calendar"></i> 20 d </a>
-                            <a href="#"><i class="fa fa-share" aria-hidden="true"></i> 53 </a>
-                            <a href="#"><i class="fa fa-eye" aria-hidden="true"></i> 242 </a>
+                            <?php
+                            $datePub = date_create($noticia->entr_fechapub);
+                            $currentDate = date_create(date('Y-m-d'));?>
+                            <a href="#"><i class="fa fa-calendar"></i> <?php echo date_diff($currentDate, $datePub)->format('%a') . 'd' ?> </a>
+                            <!-- <a href="#"><i class="fa fa-share" aria-hidden="true"></i> 53 </a> -->
+                            <a href="#"><i class="fa fa-arrow-up" aria-hidden="true"></i> <?php echo $noticia->entr_pmas ?> </a>
                         </div>
                     </div>
-                    <div class="col-sm-4 col-xs-6 d-flex flex-column">
-                        <a href="#">
-                            <img src="https://www.lapatria.pe/web/wp-content/uploads/2022/01/Cocina-310x174.jpg" width="310" height="174" class="img-fluid"> </a>
-                        <h3 class="h6 h5-sm h6-lg"><a href="#">El humo de leña aumentaría el riesgo de cáncer de pulmón</a></h3>
-                        <div class="mt-auto small">
-                            <a href="#"><i class="fa fa-calendar"></i> 27 d </a>
-                            <a href="#"><i class="fa fa-share" aria-hidden="true"></i> 47 </a>
-                            <a href="#"><i class="fa fa-eye" aria-hidden="true"></i> 388 </a>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 col-xs-6 d-flex flex-column">
-                        <a href="#">
-                            <img src="https://www.lapatria.pe/web/wp-content/uploads/2022/02/lunar-cancer-310x174.jpg" width="310" height="174" class="img-fluid"> </a>
-                        <h3 class="h6 h5-sm h6-lg"><a href="#">¿Es posible detectar a tiempo un lunar peligroso?</a></h3>
-                        <div class="mt-auto small">
-                            <a href="#"><i class="fa fa-calendar"></i> 10 d </a>
-                            <a href="#"><i class="fa fa-share" aria-hidden="true"></i> 28 </a>
-                            <a href="#"><i class="fa fa-eye" aria-hidden="true"></i> 250 </a>
-                        </div>
-                    </div>
+                    <?php endforeach ?>
                 </div>
             </div>
         </div>
