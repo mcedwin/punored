@@ -6,7 +6,6 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <?php ;// echo '<pre>'; var_dump($noticias); echo '</pre>'; ?>
                     <?php foreach ($noticias as $noticia) :?>
                     <div class="col-sm-4 col-xs-6 d-flex flex-column">
                         <a href="<?php echo base_url('Noticias/ver/' . $noticia->entr_id) ?>">
@@ -17,7 +16,7 @@
                             $datePub = date_create($noticia->entr_fechapub);
                             $currentDate = date_create(date('Y-m-d'));?>
                             <a href="#"><i class="fa fa-calendar"></i> <?php echo date_diff($currentDate, $datePub)->format('%a') . 'd' ?> </a>
-                            <!-- <a href="#"><i class="fa fa-share" aria-hidden="true"></i> 53 </a> -->
+                            <!-- <a href="#"><i class="fa fa-eye" aria-hidden="true"></i> 253 </a> -->
                             <a href="#"><i class="fa fa-arrow-up" aria-hidden="true"></i> <?php echo $noticia->entr_pmas ?> </a>
                         </div>
                     </div>
@@ -44,60 +43,36 @@
                             Dejar un mensaje
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="images-tab" data-bs-toggle="tab" role="tab" aria-controls="images" aria-selected="false" href="#images">
-                            Imagen
-                        </a>
-                    </li>
                 </ul>
             </div>
             <div class="card-body">
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade active show" id="posts" role="tabpanel" aria-labelledby="posts-tab">
-                        <div class="form-group">
-                            <label class="sr-only" for="message">post</label>
-                            <textarea class="form-control" id="message" rows="3" placeholder="Escribe el mensaje aquí"></textarea>
-                        </div>
-
-                    </div>
-                    <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
-                        <div class="form-group">
-                            <div class="custom-file">
-                                <input type="file" class="form-control" id="customFile">
+                <form method="post" action="<?php echo base_url("Portada/comentar/"); ?>" id="form" class="form-validate" enctype="multipart/form-data" novalidate>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade active show" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+                            <div class="form-group">
+                                <label class="sr-only" for="mensaje">post</label>
+                                <textarea class="form-control" id="mensaje" name="mensaje" rows="3" placeholder="Escribe el mensaje aquí" required></textarea>
                             </div>
+
                         </div>
-                        <div class="py-4"></div>
                     </div>
-                </div>
-                <div class="text-end mt-2">
-                    <div class="btn-group">
-                        <button type="submit" class="btn btn-primary">Publicar</button>
+                    <div class="text-end mt-2">
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary">Publicar</button>
+                        </div>
                     </div>
-                </div>
+                </form>
                 <hr>
                 <div class="comment-widgets mt-3">
-                    <!-- Comment Row -->
-                    <div class="d-flex flex-row comment-row m-t-0">
-                        <div class="pe-2 pt-2"><img src="https://i.imgur.com/Ur43esv.jpg" alt="user" width="50" class="rounded-circle"></div>
-                        <div class="comment-text w-100">
-                            <h6 class="font-medium">James Thomas</h6> <span class="m-b-15 d-block">This is awesome website. I would love to comeback again. </span>
-                            <div class="comment-footer"> <span class="text-muted float-right">April 14, 2019</span> </div>
+                    <?php foreach ($comentarios as $row) : ?>
+                        <div class="d-flex flex-row comment-row m-t-0">
+                            <div class="pe-2 pt-2"><img src="<?php echo base_url('uploads/usuario/' . $row->usua_foto); ?>" alt="user" width="50" class="rounded-circle"></div>
+                            <div class="comment-text w-100">
+                                <h6 class="font-medium"><?php echo $row->usua_nombres ?></h6> <span class="m-b-15 d-block">This is awesome website. I would love to comeback again. </span>
+                                <div class="comment-footer"> <span class="text-muted float-right"><?php echo $row->come_fechareg; ?></span> </div>
+                            </div>
                         </div>
-                    </div> <!-- Comment Row -->
-                    <div class="d-flex flex-row comment-row">
-                        <div class="pe-2 pt-2"><img src="https://i.imgur.com/8RKXAIV.jpg" alt="user" width="50" class="rounded-circle"></div>
-                        <div class="comment-text active w-100">
-                            <h6 class="font-medium">Michael Hussey</h6> <span class="m-b-15 d-block">Thanks bbbootstrap.com for providing such useful snippets. </span>
-                            <div class="comment-footer"> <span class="text-muted float-right">May 10, 2019</span> </div>
-                        </div>
-                    </div> <!-- Comment Row -->
-                    <div class="d-flex flex-row comment-row">
-                        <div class="pe-2 pt-2"><img src="https://i.imgur.com/J6l19aF.jpg" alt="user" width="50" class="rounded-circle"></div>
-                        <div class="comment-text w-100">
-                            <h6 class="font-medium">Johnathan Doeting</h6> <span class="m-b-15 d-block">Great industry leaders are not the real heroes of stock market. </span>
-                            <div class="comment-footer"> <span class="text-muted float-right">August 1, 2019</span> </div>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div> <!-- Card -->
             </div>
         </div>
@@ -107,32 +82,30 @@
             <div class="card-header">Miembros</div>
             <div class="card-body">
                 <div class="row">
-                    <?php for ($i = 0; $i < 18; $i++) : ?>
+                    <?php foreach ($miembros as $row) : ?>
                         <div class="col-2">
-                            <a href="<?php echo base_url('Miembros/info/1')?>"><img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar<?php echo ($i + 1) % 8 + 1; ?>.png" alt=""></a>
+                            <a href="<?php echo base_url('Miembros/info/' . $row->usua_id) ?>"><img class="img-fluid" src="<?php echo base_url('uploads/usuario/' . $row->usua_foto) ?>" alt=""></a>
                         </div>
-                    <?php endfor; ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
 
         <section class="card mb-3">
             <header class="card-header">
-                Comunicados
+                Anuncios
             </header>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-xs-10 col-sm-11">
-                        <h6><a href="page-sidebar.html">Lorem ipsum dolor sit amet</a></h6>
-                        <p> Lorem ipsum dolor sit amet.</p>
-                    </div>
-                    <div class="col-sm-12">
-                        <hr class="half-margins">
-                    </div>
-                    <div class="col-xs-10 col-sm-11">
-                        <h6><a href="page-sidebar.html">Sed diam nonummy nibh euismod</a></h6>
-                        <p> Lorem ipsum dolor sit amet.</p>
-                    </div>
+                    <?php foreach ($anuncios as $row) : ?>
+                        <div class="col-xs-10 col-sm-11">
+                            <h6><a href="<?php echo base_url('Anuncios/ver/' . $row->entr_id); ?>"><?php echo $row->entr_titulo; ?></a></h6>
+                            <p><?php echo $row->entr_resumen; ?></p>
+                        </div>
+                        <div class="col-sm-12">
+                            <hr class="half-margins">
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </section>

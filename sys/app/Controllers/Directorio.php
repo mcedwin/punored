@@ -41,6 +41,7 @@ class Directorio extends BaseController
 	}
 	public function ver($id)
 	{
+
         $entr = $this->model->getEntrada($id);
         $usermod = new UsuarioModel();
         $user = $usermod->getUser($entr->entr_usua_id);
@@ -52,6 +53,7 @@ class Directorio extends BaseController
 		$this->showHeader();
 		$this->ShowContent('ver', $data);
 		$this->showFooter();
+
 	}
 	public function crear()
 	{
@@ -95,7 +97,7 @@ class Directorio extends BaseController
 			}
 			$this->db->table('entrada')->update($data,"entr_id = '{$id}'");
 		}
-		$this->dieMsg(true,'', base_url('/Directorio/misdirectorios'));
+		$this->dieMsg(true,'', base_url('/Directorio/misregistros'));
 	}
 	public function editar($id)
 	{

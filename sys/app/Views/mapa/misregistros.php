@@ -37,6 +37,8 @@
                                                     </p>
                                                     <small>
                                                         <i class="fa-solid fa-calendar-days"></i> <?php echo $mapa['entr_fechapub'] ?>
+                                                        | <i class="fa-solid fa-calendar-days"></i> <?php echo $mapa['entr_map_lat'] ?>
+                                                        | <i class="fa-solid fa-calendar-days"></i> <?php echo $mapa['entr_map_lng'] ?>
                                                     </small>
                                                 </div>
                                             </div>

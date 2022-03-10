@@ -19,8 +19,11 @@ class Mapa extends BaseController
 			'lib/leaflet/leaflet.js',
 			'js/mapa/mostrar.js'
 		));
+		$data = [
+            'mapas' => $this->model->getMapaData($filters, $quant_to_show, $dataPag['start_from_page']),
+        ];
 		$this->showHeader();
-		$this->ShowContent('index');
+		$this->ShowContent('index', $data);
 		$this->showFooter();
 	}
 
@@ -62,7 +65,7 @@ class Mapa extends BaseController
 		));
 		$this->addJs(array(
 			'lib/leaflet/leaflet.js',
-			'js/mapa/mostrar.js',
+			'js/mapa/mapa.js',
 			"lib/tinymce/tinymce.min.js",
 			"lib/tinymce/jquery.tinymce.min.js",
 			'js/entrada/publicar.js'
@@ -81,6 +84,8 @@ class Mapa extends BaseController
 			$data['entr_fechareg'] = date('Y-m-d H:i:s');
 			$data['entr_fechapub'] = date('Y-m-d H:i:s');
 			$data['entr_tipo_id'] = $this->request->getPost('entr_tipo_id');
+			$data['entr_map_lat'] = $this->request->getPost('latitud');
+			$data['entr_map_lng'] = $this->request->getPost('longitud');
 			$data['entr_usua_id'] = $this->user->id;
 			$this->db->table('entrada')->insert($data);
 			$id = $this->db->insertID();
