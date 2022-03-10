@@ -18,21 +18,9 @@
 </div>
 <div class="mapcontainer">
     <div id="map" style="height:500px"></div>
-    <div id="puntero"></div>
 </div>
 <style>
     .mapcontainer {
         position: relative;
-    }
-
-    #puntero {
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background-color: red;
-        left: 50%;
-        top: 50%;
-        z-index: 10000;
-        transform: translate(-50%, -50%);
     }
 </style>

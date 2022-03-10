@@ -76,6 +76,11 @@ class EntradaModel extends Model
     return (object)$this->fields;
   }
 
+  public function getEntrada($id, $fields = '*')
+  {
+    return $this->getBuilder()->where('entr_id', $id)->select($fields)->get()->getRow();
+  }
+
   public function getDataListado($filters = [], $pag_size = null, $offset = null)
   {
 
@@ -175,10 +180,10 @@ class EntradaModel extends Model
     $lastDataEntrada = 0;
     $lastDataUsuaEntr = 0;
     if ($resultUsuaEntr != null) {
-      if (isset($vdata['pmas'])) {
+      if ($vdata['punto'] == 'mas') {
         $lastDataEntrada = $resultEntrada['entr_pmas'];
         $lastDataUsuaEntr = $resultUsuaEntr['rela_nmas'];
-      } else if (isset($vdata['pmenos'])) {
+      } else if ($vdata['punto'] == 'menos') {
         $lastDataEntrada = $resultEntrada['entr_pmenos'];
         $lastDataUsuaEntr = $resultUsuaEntr['rela_nmenos'];
       } else return -1;
@@ -188,8 +193,8 @@ class EntradaModel extends Model
 
     $builderEntrada2 = $this->db->table($this->table);
     $builderEntrada2->where('entr_id', $vdata['entr_id']);
-    if (isset($vdata['pmas'])) $builderEntrada2->set(['entr_pmas' => (int)$lastDataEntrada + 1]);
-    else if (isset($vdata['pmenos'])) $builderEntrada2->set(['entr_pmenos' => (int)$lastDataEntrada + 1]);
+    if ($vdata['punto'] == 'mas') $builderEntrada2->set(['entr_pmas' => (int)$lastDataEntrada + 1]);
+    else if ($vdata['punto'] == 'menos') $builderEntrada2->set(['entr_pmenos' => (int)$lastDataEntrada + 1]);
     $builderEntrada2->update();
     //Add point or create relation with point
 
@@ -202,13 +207,13 @@ class EntradaModel extends Model
         'rela_nmas' => 0,
         'rela_nmenos' => 0
       ];
-      if (isset($vdata['pmas'])) $data['rela_nmas'] = 1;
-      else if (isset($vdata['pmenos'])) $data['rela_nmenos'] = 1;
+      if ($vdata['punto'] == 'mas') $data['rela_nmas'] = 1;
+      else if ($vdata['punto'] == 'menos') $data['rela_nmenos'] = 1;
       $builderUsuaEntr2->insert($data);
     } else { //ya existe
       $builderUsuaEntr2 = $this->getBuilderUsuaEntr($vdata['entr_id'], $vdata['usua_id']);
-      if (isset($vdata['pmas'])) $builderUsuaEntr2->set(['rela_nmas' => (int)$lastDataUsuaEntr + 1]);
-      else $builderUsuaEntr2->set(['rela_nmenos' => (int)$lastDataUsuaEntr + 1]);
+      if ($vdata['punto'] == 'mas') $builderUsuaEntr2->set(['rela_nmas' => (int)$lastDataUsuaEntr + 1]);
+      else if ($vdata['punto'] == 'menos') $builderUsuaEntr2->set(['rela_nmenos' => (int)$lastDataUsuaEntr + 1]);
       $builderUsuaEntr2->update();
     }
     return $this->db->affectedRows();
@@ -237,8 +242,6 @@ class EntradaModel extends Model
     $resultUsuaEntr = $builderUsuaEntr->get()->getRowArray();
 
     return array(
-      'entr_id' => $entrId,
-      'usua_id' => $usuaId,
       'pmas_entr' => $resultEntrada['entr_pmas'] ?? null,
       'pmenos_entr' => $resultEntrada['entr_pmenos'] ?? null,
       'nmas_rela' => $resultUsuaEntr['rela_nmas'] ?? null,

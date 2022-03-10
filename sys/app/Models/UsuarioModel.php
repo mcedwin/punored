@@ -40,4 +40,9 @@ class UsuarioModel extends Model
         }
         return (object)$this->fields;
     }
+
+    function getUser($id, $fields = '*')
+    {
+        return $this->db->table('usuario')->where('usua_id', $id)->select($fields)->get()->getRow();
+    }
 }

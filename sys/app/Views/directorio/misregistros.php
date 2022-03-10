@@ -9,15 +9,15 @@
                 <a href="<?php echo base_url('Directorio/crear'); ?>" class="btn btn-success btn-sm" style="position:absolute; top:4px; right:4px;"><i class="fas fa-plus"></i> Agregar</a>
             </div>
             <div class="card-body pb-0">
-            <ul class="list-unstyled lista">
+                <ul class="list-unstyled lista">
                     <?php foreach ($directorios as $directorio) : ?>
-                        <li id="Directorio" data-id="<?php echo $directorio['entr_id'] ?>">
+                        <li id="Entrada" data-id="<?php echo $directorio['entr_id'] ?>">
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <div class="d-flex align-items-start">
                                         <div class="d-flex flex-column">
-                                            <a class = "btn btn-outline-secondary btn-sm ps-3 pe-3 mb-1" href="<?php echo base_url('Directorio/editar/' . $directorio['entr_id']) ?>" id="editar" class="text-center"><u>editar</u></a>
-                                            <a class = "btn btn-outline-secondary btn-sm" href="#" id="eliminar" class="text-center"><u>eliminar</u></a>
+                                            <a href="<?php echo base_url('Directorio/editar/' . $directorio['entr_id']) ?>" id="editar" class="text-center"><u>editar</u></a>
+                                            <a href="<?php echo base_url('Directorio/eliminar/' . $directorio['entr_id']) ?>" id="eliminar" class="text-center"><u>eliminar</u></a>
                                         </div>
                                         <div class="w-100 ms-3">
                                             <div class="row">

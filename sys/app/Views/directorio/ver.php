@@ -1,6 +1,4 @@
-<?php
-//echo '<pre>'; var_dump($reg); echo '</pre>';
-?>
+
 <div class="container">
     <div class="row">
         <div class="col-md-9">
@@ -11,6 +9,10 @@
                     <p><?php //echo $reg->skills ?></p>
                     <p><?php echo $reg->entr_fechapub ?></p>
                     <p><?php //echo $reg->ubicacion ?></p>
+
+                    <p>by <?php echo $reg->usua_nombres ?>
+                    | <?php echo $reg->usua_email ?></p>
+
                 </div>
             </div>
         </div>
