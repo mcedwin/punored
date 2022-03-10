@@ -7,10 +7,11 @@ use App\Models\UsuarioModel;
 
 class Miembros extends BaseController
 {
-    public function index($rowno = 0)
-    {
+    public function index()
+    {  
+        $datos['rows'] = $this->db->query("SELECT usua_id,usua_nombres,usua_apellidos,usua_foto FROM usuario")->getResult();
         $this->showHeader();
-        $this->ShowContent('index');
+        $this->ShowContent('index',$datos);
         $this->showFooter();
     }
 
@@ -222,9 +223,9 @@ class Miembros extends BaseController
 
     function info($id)
     {
-
+        $datos['row'] = $this->db->query("SELECT usua_id,usua_nombres,usua_apellidos,usua_foto,usua_descripcion FROM usuario WHERE usua_id='{$id}'")->getRow();
         $this->showHeader(true);
-        $this->showContent('info');
+        $this->showContent('info',$datos);
         $this->showFooter();
     }
 

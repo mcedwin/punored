@@ -42,9 +42,14 @@ class Anuncios extends BaseController
 
 	public function ver($id)
 	{
-		$this->showHeader();
-		$this->ShowContent('ver');
-		$this->showFooter();
+		$res = $this->model->getBuilder()->where('entr_id', $id)->select()->get()->getRow();
+        if ($this->model->db->affectedRows() == 0) return redirect()->to(base_url('Noticias'));
+        $data = [
+            'reg' => $res
+        ];
+        $this->showHeader();
+        $this->ShowContent('ver', $data);
+        $this->showFooter();
 	}
 
 	public function crear()
