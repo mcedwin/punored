@@ -63,6 +63,8 @@ class MapaModel extends Model
             'entr_contenido',
             'entr_foto',
             'entr_fechapub',
+            'entr_map_lat',
+            'entr_map_lng',
         ])->select('usua_nombres')->select('cate_nombre');
         
         $filter = $filters['filtro'] ?? 'recientes';

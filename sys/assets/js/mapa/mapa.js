@@ -1,39 +1,41 @@
 $(document).ready(function() {
+    var map = L.map('map').setView([-15.8411,-70.0263], 15);
 
-    $("a#eliminar").click(function () {
-        console.log("click");
-        const mapa = $(this).closest("#Mapa");
-        const mapa_id = mapa.attr("data-id"); //data.('id')
-        if (window.confirm("Desea eliminar el registro?")) {
-        eliminar(mapa_id);
-        mapa.fadeOut();
-        //   document.location.reload(true);
-        }
-        // $.bsAlert.confirm('¿Desea eliminar el registro?', eliminar(entrada_id));
-        return false;
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    //get coordinat location
+    var latInput = document.querySelector("[name= latitud]");
+    var lngInput = document.querySelector("[name= longitud]");
+
+    var curLocation = [-15.8411,-70.0263];
+
+    map.attributionControl.setPrefix(false);
+
+    var marker = new L.marker(curLocation,{
+    draggable: 'true',
     });
 
-    const eliminar = function (entr_id) {
-        const url = base_url + "/Mapa/eliminar/" + entr_id;
-        $.post(
-        url,
-        {},
-        function (data, textStatus, jqXHR) {
-            console.log(response);
-            console.log(textStatus);
-            console.log(jqXHR);
-        },
-        "json"
-        );
-    };
+    marker.on('dragend', function(event){
+        var position = marker.getLatLng();
+        marker.setLatLng(position,{
+        draggable: 'true',
+        }).bindPopup(position).update();
+        $('#latitud').val(position.lat);
+        $('#longitud').val(position.lng);
+    });
+    map.addLayer(marker);
 
-    //   $("a#eliminar").click(function () {
-    //     $this = $(this);
-    //     $.bsAlert.confirm("¿Desea eliminar el registro?", function () {
-    //       $this.myprocess(function () {
-    //         $this.closest("#Noticia").hide();
-    //       });
-    //     });
-    //     return false;
-    //   });
+    map.on("click", function(e){
+    var lat = e.latlng.lat;
+    var lng = e.latlng.lng;
+    if(!marker){
+        marker = L.marker(e.latlng).addTo(map);
+    }else{
+        marker.setLatLng(e.latlng);
+    }
+    latInput.value = lat;
+    lngInput.value = lng;
+    })
 });
