@@ -41,8 +41,13 @@ class UsuarioModel extends Model
         return (object)$this->fields;
     }
 
-    function getUser($id, $fields = '*')
+    function getUser($id = '0', $fields = '*')
     {
-        return $this->db->table('usuario')->where('usua_id', $id)->select($fields)->get()->getRow();
+        $builder = $this->db->table('usuario')->select($fields);
+        if ($id != '0') {
+            $builder->where('usua_id', $id);
+            return $builder->get()->getRow();
+        }
+        return $builder->get()->getResult();
     }
 }

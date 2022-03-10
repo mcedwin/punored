@@ -187,7 +187,7 @@ class Noticias extends BaseController
         ];
 
         $this->addJs(array(
-            'js/entrada/noticias.js'
+            'js/entrada/entradas.js'
         ));
 
         $this->showHeader();

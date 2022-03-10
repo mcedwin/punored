@@ -126,18 +126,14 @@ class EntradaModel extends Model
     }
 
     $builder
-      ->select('usua_nombres')
-      ->select('cate_nombre')
+      ->select(['usua_nombres','cate_nombre'])
       ->join('usuario', 'usua_id = entr_usua_id', 'inner') //inner
       ->join('entrada_categoria', 'entr_cate_id = cate_id', 'inner');
 
     if (!is_null($pag_size) && !is_null($offset))
       $builder->limit($pag_size, $offset);
 
-    $query = $builder->get();
-    //die($this->db->getLastQuery());
-    $result = $query->getResultArray();
-    return $result;
+    return $builder->get()->getResultArray();
   }
 
   function countListado($filters = [])
