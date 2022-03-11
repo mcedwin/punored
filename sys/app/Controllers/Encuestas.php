@@ -44,6 +44,10 @@ class Encuestas extends BaseController
         
         $data['encuestas'] = $this->model->getListado($filters, $quant_to_show, $dataPag['start_from_page']);
         
+        $this->addJs(
+            'js/encuesta/form.js',
+        );
+        
 		$this->showHeader();
 		$this->ShowContent('misencuestas', $data);
 		$this->showFooter();
@@ -113,7 +117,7 @@ class Encuestas extends BaseController
             $this->model->db->table('encuesta')->where('encu_id', $id)->update($data); //->where('encu_usua_id', $this->user->id)
 
             //detalles update
-            $this->model->db->table('encuesta_detalle')->where(['deta_id >' => 0])->delete();
+            $this->model->db->table('encuesta_detalle')->where('deta_encu_id',$id)->delete();
         }
         //detalles insert
         $dataDet['deta_encu_id'] = $id;
@@ -128,10 +132,13 @@ class Encuestas extends BaseController
 
     public function eliminar($id)
     {
+        $this->dieAjax();
         $encu_user = $this->model->db->table('encuesta')->select('encu_usua_id')->where('encu_id', $id)->get()->getRow()->encu_usua_id;
         if($this->user->id != $encu_user) return ;
-        $this->model->db->table('encuesta_detalle')->where('deta_encu_id', $id)->delete();
-        $this->model->db->table('encuesta')->where('encu_id', $id)->delete();//where('encu_usua_id', $this->user->id);
+        $this->model->builUsuEnc->where('rela_encu_id', $id)->delete();
+        $this->model->builDetail->where('deta_encu_id', $id)->delete();
+        $this->model->builder->where('encu_id', $id)->delete();//where('encu_usua_id', $this->user->id);
+        $this->dieMsg();
     }
 
     public function ver($id)
@@ -148,6 +155,27 @@ class Encuestas extends BaseController
         $this->showFooter();
     }
     
+    public function voto($deta_id)
+    {
+        $this->dieAjax();
+        $encu_id = $this->model->builDetail->select('deta_encu_id')->where('deta_id', $deta_id)->get()->getRow()->deta_encu_id;
+        $rela_exist = $this->model->builUsuEnc->select()->where(['rela_usua_id' => $this->user->id, 'rela_encu_id' => $encu_id])->get()->getRow();
+        //rela_usua_valora = false || no existe(==null)
+        if ($rela_exist != null) return $this->dieMsg();
+
+        $data['rela_usua_id'] = $this->user->id;
+        $data['rela_encu_id'] = $encu_id;
+        $data['rela_deta_id'] = $deta_id;
+        $data['rela_fechareg'] = date('Y-m-d H:i:s');
+        $data['rela_valora'] = true;
+
+        $this->model->builUsuEnc->insert($data);
+        
+        $newPoints = 1 + (int)($this->model->builDetail->select('deta_puntos')->where('deta_id', $deta_id)->get()->getRow()->deta_puntos);
+        $this->model->builDetail->where('deta_id', $deta_id)->set('deta_puntos',$newPoints)->update();
+        echo json_encode($newPoints);
+    }
+
     public function test() {
         // echo '<pre>'; var_dump($a); echo '</pre>';
     }

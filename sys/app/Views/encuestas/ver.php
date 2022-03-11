@@ -2,7 +2,7 @@
     <div class="col-md-8">
         <div class="row justify-content-md-center">
             <div class="col-md-8">
-                <section class="card card-default">
+                <section id="encuesta" class="card card-default">
 
                     <img src="<?php echo base_url('uploads/encuestas/' . $encuesta->encu_foto); ?>" class="card-img-top" alt="No hay imagen">
                     <div class="card-body">
@@ -20,7 +20,7 @@
                                 $porc = number_format(($total > 0 ? $deta->deta_puntos * 100 / $total : 0), 2);
 
                                 ?>
-                                <label for="opt-<?php echo $index; ?>" class="opt-<?php echo $index; ?>">
+                                <label data-id="<?php echo $deta->deta_id ?>" for="opt-<?php echo $index; ?>" class="opt-<?php echo $index; ?>">
                                     <div class="rowi">
                                         <div class="column">
                                             <span class="circle"></span>
@@ -34,7 +34,7 @@
 
                         </div>
                         <div class="text-end">
-                            <button type="submit" class="btn btn-primary">Votar</button>
+                            <button id="votar" type="submit" class="btn btn-primary" href="">Votar</button>
                         </div>
                     </div>
                 </section>

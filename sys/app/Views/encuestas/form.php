@@ -36,20 +36,10 @@
                                     <div id="Alternativas">
                                     <?php if (!isset($detalle)) : ?>
                                         <div id="altern" class="input-group mb-2">
-                                            <!-- <span class="input-group-text">1</span> -->
+                                            <span class="input-group-text">1</span>
                                             <input type="text" class="form-control" maxlength="150" id="alternativa1" name="alternativa1" value="" required="" autocomplete="off">
                                             <button id="delAlt" type="button" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
                                         </div>
-                                        <div id="altern" class="input-group mb-2">
-                                            <!-- <span class="input-group-text">2</span> -->
-                                            <input type="text" class="form-control" maxlength="150" id="alternativa2" name="alternativa2" value="ttttt" required="" autocomplete="off">
-                                            <button id="delAlt" type="button" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
-                                        </div>
-                                        <!-- <div id="altern" class="input-group mb-2"> -->
-                                        <!-- <span class="input-group-text">3</span> -->
-                                        <!-- <input type="text" class="form-control" maxlength="150" id="alternativa3" name="alternativa3" value="" required="" autocomplete="off"> -->
-                                        <!-- <button id="delAlt" type="button" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button> -->
-                                        <!-- </div> -->
                                     <?php else : ?>
                                         <?php foreach ($detalle as $i => $row) : ?>
                                         <div id="altern" class="input-group mb-2">

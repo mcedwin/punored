@@ -13,7 +13,7 @@
             <div class="card-body">
                 <ul class="list-unstyled lista">
                     <?php foreach ($encuestas as $row) : ?>
-                        <li class="Encuesta">
+                        <li id="Encuesta">
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <div class="d-flex align-items-start">

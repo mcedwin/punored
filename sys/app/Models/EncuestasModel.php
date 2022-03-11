@@ -8,8 +8,10 @@ class EncuestasModel extends Model
 {
     protected $table = 'encuesta';
     protected $tabDetail = 'encuesta_detalle';
-    protected $builder;
-    protected $builDetail;
+    protected $tabUsuEnc = 'usuario_encuesta';
+    public $builder;
+    public $builDetail;
+    public $builUsuEnc;
     var $fields = [];
 
     public function __construct()
@@ -17,6 +19,7 @@ class EncuestasModel extends Model
         parent::__construct();
         $this->builder = $this->db->table($this->table);
         $this->builDetail = $this->db->table($this->tabDetail);
+        $this->builUsuEnc = $this->db->table($this->tabUsuEnc);
 
         $this->fields = array(
             'encu_titulo' => array('label' => 'Titulo'),
@@ -37,7 +40,7 @@ class EncuestasModel extends Model
             $row = $builder->select()->where('encu_id', $id)->get()->getRow();
             foreach ($row as $k => $value) {
                 if (!isset($this->fields[$k])) continue;
-                $this->fields[$k]->value =  $value;
+                // $this->fields[$k]->value =  $value;
             }
         }
         return (object)$this->fields;

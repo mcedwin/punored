@@ -26,7 +26,7 @@ $(document).ready(function () {
         $("#Alternativas").append(altern);
         eliminarAltEvent();
         actualizarIndexAlt();
-    })
+    });
     
     function actualizarIndexAlt() {
         $("#Alternativas #altern").each(function (idx, elem) {
@@ -37,12 +37,19 @@ $(document).ready(function () {
             $input.attr('name', `alternativa${vidx}`);
             $span.html(`${vidx}`);
             
-            console.log(idx, elem, $elem);
+            // console.log(idx, elem, $elem);
         });
     }
-    
     eliminarAltEvent();
     actualizarIndexAlt();
     
-    
+    $("a#eliminar").click(function () {
+        $this = $(this);
+        $.bsAlert.confirm("¿Desea eliminar el registro?", function () {
+            $this.myprocess(function () {
+                $this.closest("#Encuesta").fadeOut(300);
+            });
+        });
+        return false;
+    });
 })

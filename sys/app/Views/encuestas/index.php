@@ -1,10 +1,10 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
     <h4 class="mb-0">Encuestas</h4>
     <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group me-2">
+        <!-- <div class="btn-group me-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
             <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-        </div>
+        </div> -->
         <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" aria-hidden="true">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -20,7 +20,7 @@
     <div class="col-md-8">
         <div class="row justify-content-md-center">
             <div class="col-md-8">
-                <section class="card card-default">
+                <section id="encuesta" class="card card-default">
 
                     <img src="<?php echo base_url('uploads/encuestas/' . $encuesta->encu_foto); ?>" class="card-img-top" alt="...">
                     <div class="card-body">
@@ -37,7 +37,7 @@
                                 $porc = number_format(($total > 0 ? $deta->deta_puntos * 100 / $total : 0),2);
 
                                 ?>
-                                <label for="opt-<?php echo $index; ?>" class="opt-<?php echo $index; ?>">
+                                <label data-id="<?php echo $deta->deta_id ?>" for="opt-<?php echo $index; ?>" class="opt-<?php echo $index; ?>">
                                     <div class="rowi">
                                         <div class="column">
                                             <span class="circle"></span>
@@ -51,7 +51,7 @@
 
                         </div>
                         <div class="text-end">
-                            <button type="submit" class="btn btn-primary">Votar</button>
+                            <button id="votar" type="submit" class="btn btn-primary" href="">Votar</button>
                         </div>
                     </div>
                 </section>

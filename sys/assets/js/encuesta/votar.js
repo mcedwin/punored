@@ -15,3 +15,18 @@ for (let i = 0; i < options.length; i++) {
         let getAtt = selectInput.getAttribute("type");
     });
 }
+
+const urlVotar = base_url + '/Encuestas/voto';
+$("section#encuesta label[for^='opt-']").click(function() {
+    $encuesta = $(this).closest('#encuesta');
+    $btnVotar = $encuesta.find("#votar");
+    $btnVotar.attr("href", urlVotar + "/" + $(this).data("id"));
+})
+
+$("button#votar").click(function() {
+    const $this = $(this);
+    if ($this.attr('href') == '') return false;
+    $this.myprocess(function (data) {
+        console.log(data);
+    })
+})
