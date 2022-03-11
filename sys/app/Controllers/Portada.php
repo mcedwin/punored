@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\EncuestasModel;
 use App\Models\EntradaModel;
 use App\Models\UsuarioModel;
 
@@ -10,11 +11,13 @@ class Portada extends BaseController
     var $notiModel;
     var $anunModel;
     var $usuaModel;
+    var $encuModel;
     public function __construct()
     {
         $this->notiModel = new EntradaModel(1);
         $this->anunModel = new EntradaModel(2);
         $this->usuaModel = new UsuarioModel();
+        $this->encuModel = new EncuestasModel();
     }
     public function index()
 	{
@@ -22,9 +25,13 @@ class Portada extends BaseController
         $datos['noticias'] = $this->notiModel->getBuilder()->limit(3)->orderBy('entr_pmas' , 'DESC')->get()->getResult();
 		$datos['anuncios'] = $this->anunModel->getBuilder()->limit(3)->orderBy('entr_pmas' , 'DESC')->get()->getResult();
 		$datos['comentarios'] = $this->db->query("SELECT * FROM comentario JOIN usuario ON usua_id=come_usua_id ORDER BY come_fechareg DESC LIMIT 3")->getResult();
+        $datos['encuesta'] = $this->encuModel->builder->select()->limit(1)->where('encu_actual', true)->get()->getRow();
+        $datos['detalle'] = $this->encuModel->getEncuDetalle($datos['encuesta']->encu_id);
+
 
 		$this->addJs(array(
 			"js/portada/publicar.js",
+            'js/encuesta/votar.js',
 		));
 
 		$this->showHeader();
