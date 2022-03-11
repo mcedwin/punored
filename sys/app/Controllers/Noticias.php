@@ -25,7 +25,7 @@ class Noticias extends BaseController
         helper("pagination");
         //Paginacion
         $quant_results = $this->model->countListado($filters);
-        $quant_to_show = 3;
+        $quant_to_show = 5;
         $dataPag = setPaginationData($data, $quant_results, $quant_to_show, $page);
 
         //data
@@ -162,7 +162,7 @@ class Noticias extends BaseController
             'punto' => $punto,
         ];
 
-        $this->model->insertPoint($data);
+        $this->model->insertPoint((object)$data);
 
         echo json_encode($this->model->getPoints($data['entr_id'], $data['usua_id']));
     }
@@ -195,11 +195,10 @@ class Noticias extends BaseController
         $this->showFooter();
     }
     public function test() {
-        $usermod = new UsuarioModel();
-        echo '<pre>'; var_dump($re = $this->model->getEntrada(1)); echo '</pre>';
-        echo '<pre>'; var_dump($ro = $usermod->getUser($re->entr_usua_id)); echo '</pre>';
-        echo '<pre>';
-        var_dump((object)((array)$ro + (array)$re));
-        echo '</pre>';
+        // echo '<pre>';
+        // var_dump((-1+1));
+        // echo '</pre>';
+        // $this->dieMsg(true, $this->model->getPoints(1, 5));
+        echo json_encode($this->model->getPoints(1, 5));
     }
 }

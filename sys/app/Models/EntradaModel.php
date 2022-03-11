@@ -7,7 +7,11 @@ use CodeIgniter\Model;
 class EntradaModel extends Model
 {
   protected $table = 'entrada';
+  protected $tabUsuEntr = 'usuario_entrada';
   protected $entr_tipo = 1;
+
+  public $builder;
+  public $builUsuEntr;
   var $fields;
 
   public function __construct($tipo)
@@ -15,6 +19,8 @@ class EntradaModel extends Model
     parent::__construct();
 
     $this->entr_tipo = $tipo;
+    $this->builder = $this->db->table($this->table);
+    $this->builUsuEntr = $this->db->table($this->tabUsuEntr);
 
     if ($this->entr_tipo == 1) {
       $this->fields = array(
@@ -96,7 +102,6 @@ class EntradaModel extends Model
       'entr_pmas',
       'entr_pmenos',
     ]);
-    // TODO filrado
     $filter = $filters['filtro'] ?? 'recientes';
     if ($filter == 'recientes') {
       $builder->orderBy('entr_fechapub', 'DESC');
@@ -165,63 +170,62 @@ class EntradaModel extends Model
 
   public function insertPoint($vdata)
   {
-    $builderEntrada = $this->db->table('entrada');
-    $builderEntrada->where('entr_id', $vdata['entr_id']);
-    // $builderEntrada = $this->getBuilder()->where('entr_id', $vdata['entr_id']);
-    $resultEntrada = $builderEntrada->select(['entr_pmas', 'entr_pmenos'])->get()->getRowArray();
+    if ($vdata->punto != 'mas' && $vdata->punto != 'menos') return -1;
+    //determine existency of usua_entrada
+    $dataUsuaEntr = $this->getBuilderUsuaEntr($vdata->entr_id, $vdata->usua_id)->select()->get()->getRow();
+    $fieldPoint = ($vdata->punto == 'mas')? 'entr_pmas': 'entr_pmenos';
+    if ($dataUsuaEntr == null) {//if doesn't exist relation, create usua_entrada register(db) and put 1 point more at the entrada(db)
+      //creating relation
+      $data['rela_entr_id'] = $vdata->entr_id;
+      $data['rela_usua_id'] = $vdata->usua_id;
+      $data['rela_nmas'] = ($vdata->punto == 'mas') ? 1 : 0;//? true : false;
+      $data['rela_nmenos'] = ($vdata->punto == 'menos') ? 1 : 0;//? true : false;
+      $data['rela_like'] = false;
+      $data['rela_fechareg'] = date('Y-m-d H:i:s');
 
-    $builderUsuaEntr = $this->getBuilderUsuaEntr($vdata['entr_id'], $vdata['usua_id']);
-    $resultUsuaEntr = $builderUsuaEntr->select(['rela_nmas', 'rela_nmenos'])->get()->getRowArray();
-    //Getting last punctuations
-    $lastDataEntrada = 0;
-    $lastDataUsuaEntr = 0;
-    if ($resultUsuaEntr != null) {
-      if ($vdata['punto'] == 'mas') {
-        $lastDataEntrada = $resultEntrada['entr_pmas'];
-        $lastDataUsuaEntr = $resultUsuaEntr['rela_nmas'];
-      } else if ($vdata['punto'] == 'menos') {
-        $lastDataEntrada = $resultEntrada['entr_pmenos'];
-        $lastDataUsuaEntr = $resultUsuaEntr['rela_nmenos'];
-      } else return -1;
+      $this->builUsuEntr->insert($data);
+      //Adding point
+      $newPoints = 1 + (int)($this->getBuilder()->select($fieldPoint)->where('entr_id', $vdata->entr_id)->get()->getRowArray()[$fieldPoint]);
+      $this->getBuilder()->where('entr_id', $vdata->entr_id)->set($fieldPoint, $newPoints)->update();
+    } else {//if exist point(mas or menos) just can modify by his counter(mas by menos, or menos by mas)
+    //and put 1 point more o r 1 point minus at the same time
+      $relaFieldPoint = ($vdata->punto == 'mas') ? 'rela_nmas' : 'rela_nmenos';
+      if ($dataUsuaEntr->rela_nmas == 0 && $dataUsuaEntr->rela_nmenos == 0) {
+        $this->getBuilderUsuaEntr($vdata->entr_id, $vdata->usua_id)->update([
+          'rela_nmas' => ($vdata->punto == 'mas') ? 1 : 0,
+          'rela_nmenos' => ($vdata->punto == 'menos') ? 1 : 0,
+        ]);
+        $newPoints = 1 + (int)($this->getBuilder()->select($fieldPoint)->where('entr_id', $vdata->entr_id)->get()->getRowArray()[$fieldPoint]);
+        $this->getBuilder()->where('entr_id', $vdata->entr_id)->set($fieldPoint, $newPoints)->update();
+      }
+      else if ($dataUsuaEntr->rela_nmas == 1 && $dataUsuaEntr->rela_nmenos == 0) {
+        if ($vdata->punto == 'menos') {
+          $this->getBuilderUsuaEntr($vdata->entr_id, $vdata->usua_id)->update(['rela_nmas' => 0, 'rela_nmenos' => 1]);
+
+          $oldEncu = $this->getBuilder()->select(['entr_pmas', 'entr_pmenos'])->where('entr_id', $vdata->entr_id)->get()->getRow();
+          $data['entr_pmas'] = -1 + (int)($oldEncu->entr_pmas);
+          $data['entr_pmenos'] = 1 + (int)($oldEncu->entr_pmenos);
+          $this->getBuilder()->where('entr_id', $vdata->entr_id)->update($data);
+        }
+        else return -1;
+      }
+      else if ($dataUsuaEntr->rela_nmas == 0 && $dataUsuaEntr->rela_nmenos == 1) {
+        if ($vdata->punto == 'mas') {
+          $this->getBuilderUsuaEntr($vdata->entr_id, $vdata->usua_id)->update(['rela_nmas' => 1, 'rela_nmenos' => 0]);
+
+          $oldEncu = $this->getBuilder()->select(['entr_pmas', 'entr_pmenos'])->where('entr_id', $vdata->entr_id)->get()->getRow();
+          $data['entr_pmas'] = 1 + (int)($oldEncu->entr_pmas);
+          $data['entr_pmenos'] = -1 + (int)($oldEncu->entr_pmenos);
+          $this->getBuilder()->where('entr_id', $vdata->entr_id)->update($data);
+        }
+      }
     }
-    if ($lastDataUsuaEntr >= 5) return -1;
-    //Add point to Entrada
 
-    $builderEntrada2 = $this->db->table($this->table);
-    $builderEntrada2->where('entr_id', $vdata['entr_id']);
-    if ($vdata['punto'] == 'mas') $builderEntrada2->set(['entr_pmas' => (int)$lastDataEntrada + 1]);
-    else if ($vdata['punto'] == 'menos') $builderEntrada2->set(['entr_pmenos' => (int)$lastDataEntrada + 1]);
-    $builderEntrada2->update();
-    //Add point or create relation with point
-
-    if ($resultUsuaEntr == null) { //no existe registro Usua_Entr
-      $builderUsuaEntr2 = $this->db->table('usuario_entrada');
-      $data = [
-        'rela_usua_id' => $vdata['usua_id'],
-        'rela_entr_id' => $vdata['entr_id'],
-        'rela_like' => 0,
-        'rela_nmas' => 0,
-        'rela_nmenos' => 0
-      ];
-      if ($vdata['punto'] == 'mas') $data['rela_nmas'] = 1;
-      else if ($vdata['punto'] == 'menos') $data['rela_nmenos'] = 1;
-      $builderUsuaEntr2->insert($data);
-    } else { //ya existe
-      $builderUsuaEntr2 = $this->getBuilderUsuaEntr($vdata['entr_id'], $vdata['usua_id']);
-      if ($vdata['punto'] == 'mas') $builderUsuaEntr2->set(['rela_nmas' => (int)$lastDataUsuaEntr + 1]);
-      else if ($vdata['punto'] == 'menos') $builderUsuaEntr2->set(['rela_nmenos' => (int)$lastDataUsuaEntr + 1]);
-      $builderUsuaEntr2->update();
-    }
-    return $this->db->affectedRows();
   }
 
   public function getBuilderUsuaEntr($entrId, $usuaId)
   {
-    $builderUsuaEntr = $this->db->table('usuario_entrada');
-    $builderUsuaEntr
-      ->where('rela_entr_id', $entrId)
-      ->where('rela_usua_id', $usuaId);
-    return $builderUsuaEntr;
+    return  $this->builUsuEntr->where([ 'rela_entr_id' => $entrId, 'rela_usua_id' => $usuaId ]);
   }
 
   public function getPoints($entrId, $usuaId)
