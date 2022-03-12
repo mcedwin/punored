@@ -123,6 +123,7 @@ class Encuestas extends BaseController
         $dataDet['deta_encu_id'] = $id;
         for ($i = 1; isset($_POST["alternativa$i"]); $i++) {
             $dataDet['deta_alternativa'] = $this->request->getPost("alternativa$i");
+            $dataDet['deta_puntos'] = 0;
             if (empty($dataDet['deta_alternativa'])) continue;
             $this->model->db->table('encuesta_detalle')->insert($dataDet);
         }
@@ -158,22 +159,27 @@ class Encuestas extends BaseController
     public function voto($deta_id)
     {
         $this->dieAjax();
+        if (is_null($this->user->id)) return '';
+        
         $encu_id = $this->model->builDetail->select('deta_encu_id')->where('deta_id', $deta_id)->get()->getRow()->deta_encu_id;
         $rela_exist = $this->model->builUsuEnc->select()->where(['rela_usua_id' => $this->user->id, 'rela_encu_id' => $encu_id])->get()->getRow();
         //rela_usua_valora = false || no existe(==null)
-        if ($rela_exist != null) return $this->dieMsg();
+        if ($rela_exist == null) {//ya existe registro
 
-        $data['rela_usua_id'] = $this->user->id;
-        $data['rela_encu_id'] = $encu_id;
-        $data['rela_deta_id'] = $deta_id;
-        $data['rela_fechareg'] = date('Y-m-d H:i:s');
-        $data['rela_valora'] = true;
+            $data['rela_usua_id'] = $this->user->id;
+            $data['rela_encu_id'] = $encu_id;
+            $data['rela_deta_id'] = $deta_id;
+            $data['rela_fechareg'] = date('Y-m-d H:i:s');
+            $data['rela_valora'] = true;
 
-        $this->model->builUsuEnc->insert($data);
-        
-        $newPoints = 1 + (int)($this->model->builDetail->select('deta_puntos')->where('deta_id', $deta_id)->get()->getRow()->deta_puntos);
-        $this->model->builDetail->where('deta_id', $deta_id)->set('deta_puntos',$newPoints)->update();
-        echo json_encode($newPoints);
+            $this->model->builUsuEnc->insert($data);
+            
+            $newPoints = 1 + (int)($this->model->builDetail->select('deta_puntos')->where('deta_id', $deta_id)->get()->getRow()->deta_puntos);
+            $this->model->builDetail->where('deta_id', $deta_id)->set('deta_puntos',$newPoints)->update();
+            $this->dieMsg(true,$newPoints);
+        } else {//Vota por otro
+
+        }
     }
 
     public function test() {

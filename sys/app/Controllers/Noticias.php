@@ -195,10 +195,8 @@ class Noticias extends BaseController
         $this->showFooter();
     }
     public function test() {
-        // echo '<pre>';
-        // var_dump((-1+1));
-        // echo '</pre>';
-        // $this->dieMsg(true, $this->model->getPoints(1, 5));
-        echo json_encode($this->model->getPoints(1, 5));
+        $a = null;
+        var_dump(([] ?? true));
+        // $this->dieMsg(true, $this->model->getPoints(1, 5)); ===// echo json_encode($this->model->getPoints(1, 5));
     }
 }

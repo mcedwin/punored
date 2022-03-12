@@ -111,27 +111,23 @@ class EntradaModel extends Model
       $builder->orderBy('entr_pmas', 'DESC');
     }
 
-    $categoria = $filters['categoria'] ?? null;
-    if ($categoria) {
-      $builder->where('entr_cate_id', $categoria);
+    if (isset($filters['categoria'])) {
+      $builder->where('entr_cate_id', $filters['categoria']);
     }
 
     if (isset($filters['user'])) {
       $builder->where('entr_usua_id', $filters['user']);
     }
 
-    $espublico = $filters['solo_publicos'] ?? true;
-    if ($espublico === true) {
-      $builder->where('entr_espublico', 1);
+    if ($filters['solo_publicos'] ?? true) {
+      $builder->where('entr_espublico', true);
     }
 
-    $fechaf = $filters['fechapub'] ?? true;
-    if ($fechaf === true) {
+    if ($filters['fechapub'] ?? true) {
       $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'));
     }
 
-    $builder
-      ->select(['usua_nombres','cate_nombre'])
+    $builder->select(['usua_nombres','cate_nombre'])
       ->join('usuario', 'usua_id = entr_usua_id', 'inner') //inner
       ->join('entrada_categoria', 'entr_cate_id = cate_id', 'inner');
 
@@ -144,8 +140,7 @@ class EntradaModel extends Model
   function countListado($filters = [])
   {
     $builder = $this->getBuilder();
-    $fechaf = $filters['fechapub'] ?? true;
-    if ($fechaf === true) {
+    if ($filters['fechapub'] ?? true) {
       $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'));
     }
     if (isset($filters['categoria'])) {
@@ -154,9 +149,8 @@ class EntradaModel extends Model
     if (isset($filters['user'])) {
       $builder->where('entr_usua_id', $filters['user']);
     }
-    $espublico = $filters['solo_publicos'] ?? true;
-    if ($espublico === true) {
-      $builder->where('entr_espublico', 1);
+    if ($filters['solo_publicos'] ?? true) {
+      $builder->where('entr_espublico', true);
     }
     return $builder->countAllResults();
   }
@@ -218,6 +212,7 @@ class EntradaModel extends Model
           $data['entr_pmenos'] = -1 + (int)($oldEncu->entr_pmenos);
           $this->getBuilder()->where('entr_id', $vdata->entr_id)->update($data);
         }
+        else return -1;
       }
     }
 
@@ -233,12 +228,9 @@ class EntradaModel extends Model
     $builderEntrada = $this->db->table($this->table);
     $builderUsuaEntr = $this->getBuilderUsuaEntr($entrId, $usuaId);
 
-    $builderEntrada
-      ->select('entr_pmas, entr_pmenos')
-      ->where('entr_id', $entrId);
+    $builderEntrada->select('entr_pmas, entr_pmenos')->where('entr_id', $entrId);
     $resultEntrada = $builderEntrada->get()->getRowArray();
-    $builderUsuaEntr
-      ->select(['rela_nmas', 'rela_nmenos']);
+    $builderUsuaEntr->select(['rela_nmas', 'rela_nmenos']);
     $resultUsuaEntr = $builderUsuaEntr->get()->getRowArray();
 
     return array(
@@ -252,8 +244,7 @@ class EntradaModel extends Model
   public function getLastPoints2()
   {
     $builderUsuaEntr = $this->getBuilderUsuaEntr(3, 7);
-    $lastDataUsuaEntr = $builderUsuaEntr->select(['rela_nmas', 'rela_nmenos'])
-      ->get()->getRowArray();
+    $lastDataUsuaEntr = $builderUsuaEntr->select(['rela_nmas', 'rela_nmenos'])->get()->getRowArray();
     return $lastDataUsuaEntr;
   }
 }
