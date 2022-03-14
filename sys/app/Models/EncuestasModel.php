@@ -53,7 +53,7 @@ class EncuestasModel extends Model
     }
 
     public function getEncuesta($id) {
-        return $this->builder->select()->where('encu_id', $id)->where('encu_actual', true)->get()->getRow();
+        return $this->builder->select()->where('encu_id', $id)->get()->getRow();
     }
 
     public function getEncuDetalle($id)

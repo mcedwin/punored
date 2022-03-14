@@ -21,7 +21,7 @@ class Portada extends BaseController
     }
     public function index()
 	{
-        $datos['miembros'] = $this->usuaModel->getUser('0',['usua_id', 'usua_nombres', 'usua_apellidos', 'usua_foto']);
+        $datos['miembros'] = $this->usuaModel->getUser('0', ['usua_id', 'usua_nombres', 'usua_apellidos', 'usua_foto']);
         $datos['noticias'] = $this->notiModel->getBuilder()->limit(3)->orderBy('entr_pmas' , 'DESC')->get()->getResult();
 		$datos['anuncios'] = $this->anunModel->getBuilder()->limit(3)->orderBy('entr_pmas' , 'DESC')->get()->getResult();
 		$datos['comentarios'] = $this->db->query("SELECT * FROM comentario JOIN usuario ON usua_id=come_usua_id ORDER BY come_fechareg DESC LIMIT 3")->getResult();

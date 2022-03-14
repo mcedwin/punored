@@ -4,7 +4,7 @@
             <div class="col-md-8">
                 <section id="encuesta" class="card card-default">
 
-                    <img src="<?php echo base_url('uploads/encuestas/' . $encuesta->encu_foto); ?>" class="card-img-top" alt="No hay imagen">
+                    <img src="<?php echo base_url('uploads/encuestas/' . $encuesta->encu_foto ?? ''); ?>" class="card-img-top" alt="No hay imagen">
                     <div class="card-body">
                         <?php echo $encuesta->encu_titulo; ?>
                         <div class="poll-area mt-2">
@@ -33,9 +33,11 @@
                             <?php endforeach; ?>
 
                         </div>
+                        <?php if ($encuesta->encu_actual == true) : ?>
                         <div class="text-end">
                             <button id="votar" type="submit" class="btn btn-primary" href="">Votar</button>
                         </div>
+                        <?php endif ?>
                     </div>
                 </section>
             </div>

@@ -4,14 +4,17 @@ namespace App\Controllers;
 
 use App\Models\EncuestasModel;
 use App\Models\EntradaModel;
+use App\Models\UsuarioModel;
 
 class Encuestas extends BaseController
 {
     var $model;
+    var $usuaModel;
     
     public function __construct()
     {
         $this->model = new EncuestasModel();
+        $this->usuaModel = new UsuarioModel();
     }
     
     public function index($rowno = 0)
@@ -19,14 +22,17 @@ class Encuestas extends BaseController
 		// $sql = "SELECT * FROM encuesta WHERE encu_actual=true LIMIT 1";
 		// $this->datos['encuesta'] = $row = $this->db->query($sql)->getRow();
 		// $this->datos['detalle'] = $this->db->query("SELECT * FROM encuesta_detalle WHERE deta_encu_id='{$row->encu_id}'")->getResult();
-        $this->datos['encuesta'] = $row = $this->model->getEncuesta(1);
-        $this->datos['detalle'] = $this->model->getEncuDetalle($row->encu_id);
+        $data['encuesta'] = $row = $this->model->builder->select()->limit(1)->where('encu_actual', true)->get()->getRow();
+        $data['detalle'] = $this->model->getEncuDetalle($row->encu_id);
+        $data['activas'] = $this->model->builder->select()->limit(3)->where('encu_actual', true)->get()->getResult();
+        $data['anteriores'] = $this->model->builder->select()->limit(3)->where('encu_actual', false)->get()->getResult();
+        $data['miembros'] = $this->usuaModel->getUser('0', ['usua_id', 'usua_nombres', 'usua_apellidos', 'usua_foto']);
 
 		$this->addJs(array(
 			'js/encuesta/votar.js'
 		));
 		$this->showHeader();
-		$this->ShowContent('index');
+		$this->ShowContent('index', $data);
 		$this->showFooter();
 	}
 
@@ -116,16 +122,21 @@ class Encuestas extends BaseController
             }
             $this->model->db->table('encuesta')->where('encu_id', $id)->update($data); //->where('encu_usua_id', $this->user->id)
 
-            //detalles update
-            $this->model->db->table('encuesta_detalle')->where('deta_encu_id',$id)->delete();
         }
+        //FIXME al editar se eliminan los registros
+        $dataDeta = $this->model->builDetail->select()->where('deta_encu_id', $id)->get()->getResult();
+        $quant = count($dataDeta);
         //detalles insert
         $dataDet['deta_encu_id'] = $id;
         for ($i = 1; isset($_POST["alternativa$i"]); $i++) {
             $dataDet['deta_alternativa'] = $this->request->getPost("alternativa$i");
-            $dataDet['deta_puntos'] = 0;
-            if (empty($dataDet['deta_alternativa'])) continue;
-            $this->model->db->table('encuesta_detalle')->insert($dataDet);
+            if($i <= $quant){
+                $this->model->builDetail->where('deta_id', $dataDeta[$i - 1]->deta_id)->update(['deta_alternativa' => $dataDet['deta_alternativa']]);
+            } else {
+                $dataDet['deta_puntos'] = 0;
+                if (empty($dataDet['deta_alternativa'])) continue;
+                $this->model->db->table('encuesta_detalle')->insert($dataDet);
+            }
         }
         
         $this->dieMsg(true, '', base_url('/Encuestas/misencuestas'));
@@ -194,11 +205,27 @@ class Encuestas extends BaseController
     public function finalizar($id)
     {
         $this->dieAjax();
+
         if (is_null($this->user->id)) return '';
-        $this->model->builder();
+        
+        $this->model->builder->where(['encu_id' => $id, 'encu_usua_id' => $this->user->id])->update(['encu_actual' => false]);
+
+        $this->dieMsg();
+    }
+
+    public function activar($id)
+    {
+        $this->dieAjax();
+
+        if (is_null($this->user->id)) return '';
+
+        $this->model->builder->where(['encu_id' => $id, 'encu_usua_id' => $this->user->id])->update(['encu_actual' => true]);
+
+        $this->dieMsg();
     }
 
     public function test() {
-        // echo '<pre>'; var_dump($a); echo '</pre>';
+        $a = $this->model->db->table('encuesta')->where(['encu_id' => 1, 'encu_usua_id' => $this->user->id])->set(['encu_actual' => false])->getCompiledUpdate();
+        echo '<pre>'; var_dump($a); echo '</pre>';
     }
 }

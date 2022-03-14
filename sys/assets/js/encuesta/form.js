@@ -56,7 +56,8 @@ $(document).ready(function () {
         const $this = $(this);
         $.bsAlert.confirm("¿Desea finalizar la encuesta?", function () {
             $this.myprocess(function (data) {
-                console.log(data)
+                // console.log(data)
+                location.reload();
             });
         });
         return false;

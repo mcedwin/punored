@@ -26,7 +26,8 @@
                     <div class="card-body">
                         <?php echo $encuesta->encu_titulo; ?>
                         <div class="poll-area mt-2">
-                            <?php $total = 0; foreach ($detalle as $index => $deta) : ?>
+                            <?php $total = 0;
+                            foreach ($detalle as $index => $deta) : ?>
                                 <?php
                                 $total += $deta->deta_puntos;
                                 ?>
@@ -34,7 +35,7 @@
                             <?php endforeach; ?>
                             <?php foreach ($detalle as $index => $deta) : ?>
                                 <?php
-                                $porc = number_format(($total > 0 ? $deta->deta_puntos * 100 / $total : 0),2);
+                                $porc = number_format(($total > 0 ? $deta->deta_puntos * 100 / $total : 0), 2);
 
                                 ?>
                                 <label data-id="<?php echo $deta->deta_id ?>" for="opt-<?php echo $index; ?>" class="opt-<?php echo $index; ?>">
@@ -50,9 +51,12 @@
                             <?php endforeach; ?>
 
                         </div>
-                        <div class="text-end">
-                            <button id="votar" type="submit" class="btn btn-primary" href="">Votar</button>
-                        </div>
+
+                        <?php if ($encuesta->encu_actual == true) : ?>
+                            <div class="text-end">
+                                <button id="votar" type="submit" class="btn btn-primary" href="">Votar</button>
+                            </div>
+                        <?php endif ?>
                     </div>
                 </section>
             </div>
@@ -63,11 +67,22 @@
             <div class="card-header">Encuestas activas</div>
             <div class="card-body">
                 <div class="row">
-                    <?php for ($i = 0; $i < 18; $i++) : ?>
+                    <!-- <?php for ($i = 0; $i < 18; $i++) : ?>
                         <div class="col-2">
                             <a href="<?php echo base_url('Miembros/info/1') ?>"><img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar<?php echo ($i + 1) % 8 + 1; ?>.png" alt=""></a>
                         </div>
-                    <?php endfor; ?>
+                    <?php endfor; ?> -->
+                    <?php foreach ($activas as $i => $row) : ?>
+                    <div class="col-xs-10 col-sm-11">
+                        <h6><a href="<?php echo base_url('Encuestas/ver/' . $row->encu_id); ?>"><?php echo $row->encu_titulo; ?></a></h6>
+                        <p><?php echo $row->encu_descripcion; ?></p>
+                    </div>
+                    <?php if ($i < count($activas) - 1) : ?>
+                    <div class="col-sm-12">
+                        <hr class="half-margins">
+                    </div>
+                    <?php endif ?>
+                    <?php endforeach ?>
                 </div>
             </div>
         </div>
@@ -75,11 +90,17 @@
             <div class="card-header">Encuestas anteriores</div>
             <div class="card-body">
                 <div class="row">
-                    <?php for ($i = 0; $i < 18; $i++) : ?>
-                        <div class="col-2">
-                            <a href="<?php echo base_url('Miembros/info/1') ?>"><img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar<?php echo ($i + 1) % 8 + 1; ?>.png" alt=""></a>
-                        </div>
-                    <?php endfor; ?>
+                    <?php foreach ($anteriores as $i => $row) : ?>
+                    <div class="col-xs-10 col-sm-11">
+                        <h6><a href="<?php echo base_url('Encuestas/ver/' . $row->encu_id); ?>"><?php echo $row->encu_titulo; ?></a></h6>
+                        <p><?php echo $row->encu_descripcion; ?></p>
+                    </div>
+                    <?php if ($i < count($anteriores) - 1) : ?>
+                    <div class="col-sm-12">
+                        <hr class="half-margins">
+                    </div>
+                    <?php endif ?>
+                    <?php endforeach ?>
                 </div>
             </div>
         </div>
@@ -87,11 +108,11 @@
             <div class="card-header">Miembros</div>
             <div class="card-body">
                 <div class="row">
-                    <?php for ($i = 0; $i < 18; $i++) : ?>
+                    <?php foreach ($miembros as $row) : ?>
                         <div class="col-2">
-                            <a href="<?php echo base_url('Miembros/info/1') ?>"><img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar<?php echo ($i + 1) % 8 + 1; ?>.png" alt=""></a>
+                            <a href="<?php echo base_url('Miembros/info/' . $row->usua_id) ?>"><img class="img-fluid" src="<?php echo base_url('uploads/usuario/' . $row->usua_foto) ?>" alt=""></a>
                         </div>
-                    <?php endfor; ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
