@@ -33,6 +33,18 @@ class Noticias extends BaseController
             'categorias' => $this->model->getCategorias(),
             'noticias' => $this->model->getDataListado($filters, $quant_to_show, $dataPag['start_from_page']),
         ];
+        //Setting relation
+        $puntos = $this->model->builUsuEntr->select(['rela_entr_id', 'rela_nmas', 'rela_nmenos'])->where('rela_usua_id', $this->user->id)->get()->getResult();
+        foreach ($data['noticias'] as $i => $noti) {
+            $data['noticias'][$i]['rela_nmas'] = '0';
+            $data['noticias'][$i]['rela_nmenos'] = '0';
+            foreach ($puntos as $p) {
+                if ($p->rela_entr_id == $noti['entr_id']) {
+                    $data['noticias'][$i]['rela_nmas'] = $p->rela_nmas;
+                    $data['noticias'][$i]['rela_nmenos'] = $p->rela_nmenos;
+                }
+            }
+        }
 
         $this->addJs(array(
             'js/entrada/entradas.js'
@@ -198,6 +210,24 @@ class Noticias extends BaseController
         // $a = null;
         // var_dump(([] ?? true));
         // $this->dieMsg(true, $this->model->getPoints(1, 5)); ===// echo json_encode($this->model->getPoints(1, 5));
-        echo '<pre>'; var_dump($this->db->table('entrada_categoria')->select()->where('cate_tipo_id', 1)->get()->getResultArray()[0]['cate_id']); echo '</pre>';
+        // echo '<pre>'; var_dump($this->db->table('entrada_categoria')->select()->where('cate_tipo_id', 1)->get()->getResultArray()[0]['cate_id']); echo '</pre>';
+        $name = array(
+            [
+                'id' =>1,
+                'nmas' => 1,
+                'nmenos' => 0
+            ],
+            [
+                'id' => 2,
+                'nmas' => 0,
+                'nmenos' => 1
+            ]
+        );
+
+        if (in_array(['id' => 2], $name)) {
+            echo "found \n";
+        } else {
+            echo "not found \n";
+        }
     }
 }
