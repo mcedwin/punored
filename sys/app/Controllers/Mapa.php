@@ -37,11 +37,14 @@ class Mapa extends BaseController
 				$value->entr_map_lat, 
 				$value->entr_map_lng,
 				$value->entr_titulo,
+				//base_url("uploads/anuncios/" . $anuncio['entr_foto'])
 			];
 		}
-		var_dump(json_encode($locPins));
+		//var_dump(json_encode($locPins));
 		$data['categorias'] = $this->model->getCategorias();
 		$data['locPins']= json_encode($locPins);
+
+		
 		
 		$this->showHeader();
 		$this->ShowContent('index', $data);

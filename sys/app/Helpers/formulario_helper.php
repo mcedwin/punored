@@ -35,7 +35,7 @@ function dateToUser($date)
     if (preg_match('/ /', $date)) return preg_replace('#(\d{4})-(\d{1,2})-(\d{1,2})\s(.*)#', '$3/$2/$1 $4', $date);
     return preg_replace('#(\d{4})-(\d{1,2})-(\d{1,2})#', '$3/$2/$1', $date);
 }
-
+// m = edwin calderon // campos = [titulo,resumen,contenido]
 function GetQS($_m, $campos)
 {
     $_m = preg_replace("/[ \t]+/i", " ", trim($_m));
