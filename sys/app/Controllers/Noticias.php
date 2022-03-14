@@ -30,7 +30,7 @@ class Noticias extends BaseController
 
         //data
         $data += [
-            'categorias' => $this->db->table('entrada_categoria')->select(['cate_nombre', 'cate_id'])->get()->getResult(),
+            'categorias' => $this->model->getCategorias(),
             'noticias' => $this->model->getDataListado($filters, $quant_to_show, $dataPag['start_from_page']),
         ];
 
@@ -195,8 +195,9 @@ class Noticias extends BaseController
         $this->showFooter();
     }
     public function test() {
-        $a = null;
-        var_dump(([] ?? true));
+        // $a = null;
+        // var_dump(([] ?? true));
         // $this->dieMsg(true, $this->model->getPoints(1, 5)); ===// echo json_encode($this->model->getPoints(1, 5));
+        echo '<pre>'; var_dump($this->db->table('entrada_categoria')->select()->where('cate_tipo_id', 1)->get()->getResultArray()[0]['cate_id']); echo '</pre>';
     }
 }

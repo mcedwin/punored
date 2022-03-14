@@ -8,8 +8,9 @@ class EntradaModel extends Model
 {
   protected $table = 'entrada';
   protected $tabUsuEntr = 'usuario_entrada';
-  protected $entr_tipo = 1;
-
+  protected $entr_tipo;
+  
+  public $entr_cate;
   public $builder;
   public $builUsuEntr;
   var $fields;
@@ -19,6 +20,8 @@ class EntradaModel extends Model
     parent::__construct();
 
     $this->entr_tipo = $tipo;
+    //TODO colocar filtro de categoria(ya esta con foreach(para los where($->cate_id,$)))
+    $this->entr_cate = $this->db->table('entrada_categoria')->select(['cate_id', 'cate_nombre'])->where('cate_tipo_id', $tipo)->get()->getResult();
     $this->builder = $this->db->table($this->table);
     $this->builUsuEntr = $this->db->table($this->tabUsuEntr);
 
@@ -68,7 +71,7 @@ class EntradaModel extends Model
   function get($id = '')
   {
     $builderEntradaCate = $this->db->table('entrada_categoria');
-        $this->fields['categorias'] = $builderEntradaCate->select('cate_id as `id`, cate_nombre as `text`')->where('cate_tipo_id',$this->entr_tipo)->get()->getResult();
+    $this->fields['categorias'] = $builderEntradaCate->select('cate_id as `id`, cate_nombre as `text`')->where('cate_tipo_id',$this->entr_tipo)->get()->getResult();
 
     $builderEntrada = $this->db->table($this->table);
 
@@ -89,8 +92,6 @@ class EntradaModel extends Model
 
   public function getDataListado($filters = [], $pag_size = null, $offset = null)
   {
-
-
     $builder = $this->getBuilder();
     $builder->select([
       'entr_id',
@@ -110,23 +111,9 @@ class EntradaModel extends Model
     } else if ($filter == 'relevantes') {
       $builder->orderBy('entr_pmas', 'DESC');
     }
-
-    if (isset($filters['categoria'])) {
-      $builder->where('entr_cate_id', $filters['categoria']);
-    }
-
-    if (isset($filters['user'])) {
-      $builder->where('entr_usua_id', $filters['user']);
-    }
-
-    if ($filters['solo_publicos'] ?? true) {
-      $builder->where('entr_espublico', true);
-    }
-
-    if ($filters['fechapub'] ?? true) {
-      $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'));
-    }
-
+    
+    $this->builderFiltered($builder, $filters);
+    
     $builder->select(['usua_nombres','cate_nombre'])
       ->join('usuario', 'usua_id = entr_usua_id', 'inner') //inner
       ->join('entrada_categoria', 'entr_cate_id = cate_id', 'inner');
@@ -140,10 +127,18 @@ class EntradaModel extends Model
   function countListado($filters = [])
   {
     $builder = $this->getBuilder();
-    if ($filters['fechapub'] ?? true) {
-      $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'));
-    }
-    if (isset($filters['categoria'])) {
+    $this->builderFiltered($builder, $filters);
+    return $builder->countAllResults();
+  }
+
+  public function getBuilder()
+  {
+    return $this->db->table($this->table)->where('entr_tipo_id', $this->entr_tipo);
+  }
+
+  public function builderFiltered(&$builder, $filters)
+  {
+    if(isset($filters['categoria'])) {
       $builder->where('entr_cate_id', $filters['categoria']);
     }
     if (isset($filters['user'])) {
@@ -152,14 +147,9 @@ class EntradaModel extends Model
     if ($filters['solo_publicos'] ?? true) {
       $builder->where('entr_espublico', true);
     }
-    return $builder->countAllResults();
-  }
-
-  public function getBuilder()
-  {
-    $builder = $this->db->table($this->table);
-    $builder->where('entr_tipo_id', $this->entr_tipo);
-    return $builder;
+    if ($filters['fechapub'] ?? true) {
+      $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'));
+    }
   }
 
   public function insertPoint($vdata)
@@ -168,8 +158,7 @@ class EntradaModel extends Model
     //determine existency of usua_entrada
     $dataUsuaEntr = $this->getBuilderUsuaEntr($vdata->entr_id, $vdata->usua_id)->select()->get()->getRow();
     $fieldPoint = ($vdata->punto == 'mas')? 'entr_pmas': 'entr_pmenos';
-    if ($dataUsuaEntr == null) {//if doesn't exist relation, create usua_entrada register(db) and put 1 point more at the entrada(db)
-      //creating relation
+    if ($dataUsuaEntr == null) {
       $data['rela_entr_id'] = $vdata->entr_id;
       $data['rela_usua_id'] = $vdata->usua_id;
       $data['rela_nmas'] = ($vdata->punto == 'mas') ? 1 : 0;//? true : false;
@@ -178,11 +167,10 @@ class EntradaModel extends Model
       $data['rela_fechareg'] = date('Y-m-d H:i:s');
 
       $this->builUsuEntr->insert($data);
-      //Adding point
+
       $newPoints = 1 + (int)($this->getBuilder()->select($fieldPoint)->where('entr_id', $vdata->entr_id)->get()->getRowArray()[$fieldPoint]);
       $this->getBuilder()->where('entr_id', $vdata->entr_id)->set($fieldPoint, $newPoints)->update();
-    } else {//if exist point(mas or menos) just can modify by his counter(mas by menos, or menos by mas)
-    //and put 1 point more o r 1 point minus at the same time
+    } else {
       $relaFieldPoint = ($vdata->punto == 'mas') ? 'rela_nmas' : 'rela_nmenos';
       if ($dataUsuaEntr->rela_nmas == 0 && $dataUsuaEntr->rela_nmenos == 0) {
         $this->getBuilderUsuaEntr($vdata->entr_id, $vdata->usua_id)->update([
@@ -215,7 +203,6 @@ class EntradaModel extends Model
         else return -1;
       }
     }
-
   }
 
   public function getBuilderUsuaEntr($entrId, $usuaId)
@@ -239,6 +226,11 @@ class EntradaModel extends Model
       'nmas_rela' => $resultUsuaEntr['rela_nmas'] ?? null,
       'nmenos_rela' => $resultUsuaEntr['rela_nmenos'] ?? null,
     );
+  }
+
+  public function getCategorias()
+  {
+    return $this->entr_cate;
   }
 
   public function getLastPoints2()

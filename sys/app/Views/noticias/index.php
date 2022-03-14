@@ -1,6 +1,7 @@
 <?php //✅TODO usar ?=
 //predefined filter is recents
-$filterPath = (isset($filtros['filtro']) && ($filtros['filtro'] != 'recientes' || isset($filtros['categoria']))) ? '?filtro=' . $filtros['filtro'] : '';
+$filtros['filtro'] == $filtros['filtro'] ?? 'recientes';
+$filterPath = ($filtros['filtro'] != 'recientes' || isset($filtros['categoria'])) ? '?filtro=' . $filtros['filtro'] : '';
 $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categoria']) : '';
 ?>
 
@@ -66,7 +67,3 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
 <?php
 echo loadPagination($current_page, $last_page, base_url($from), $filterPath);
 ?>
-
-<script>
-    //const userId = "<?php ;//echo session()->get('id') ?? ''; ?>";
-</script>

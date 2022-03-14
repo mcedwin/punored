@@ -68,7 +68,7 @@
                         <div class="d-flex flex-row comment-row m-t-0">
                             <div class="pe-2 pt-2"><img src="<?php echo base_url('uploads/usuario/' . $row->usua_foto); ?>" alt="user" width="50" class="rounded-circle"></div>
                             <div class="comment-text w-100">
-                                <h6 class="font-medium"><?php echo $row->usua_nombres ?></h6> <span class="m-b-15 d-block">This is awesome website. I would love to comeback again. </span>
+                                <h6 class="font-medium"><?php echo $row->usua_nombres ?></h6> <span class="m-b-15 d-block"><?php echo $row->come_mensaje; ?></span>
                                 <div class="comment-footer"> <span class="text-muted float-right"><?php echo $row->come_fechareg; ?></span> </div>
                             </div>
                         </div>

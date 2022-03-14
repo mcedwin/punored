@@ -3,7 +3,14 @@ $(document).ready(function () {
         $this = $(this);
         $this.myprocess(function (data) {
             // console.log(data);
-            $this.closest("#Entrada").find("#points").html(data.pmas_entr);
+            $entrada = $this.closest("#Entrada");
+            $entrada.find("#points").html(data.pmas_entr);
+            // if (data.nmas_rela == 1) {
+            //     $entrada.find('#puntosMenos').removeClass('active');
+            // } else if (data.nmenos_rela == 1) {
+            //     $entrada.find('#puntosMas').removeClass('active');
+            // }
+            // $this.addClass('active');
         });
         // return false;
     });

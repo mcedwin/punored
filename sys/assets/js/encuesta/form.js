@@ -44,7 +44,7 @@ $(document).ready(function () {
     actualizarIndexAlt();
     
     $("a#eliminar").click(function () {
-        $this = $(this);
+        const $this = $(this);
         $.bsAlert.confirm("¿Desea eliminar el registro?", function () {
             $this.myprocess(function () {
                 $this.closest("#Encuesta").fadeOut(300);
@@ -52,4 +52,13 @@ $(document).ready(function () {
         });
         return false;
     });
+    $("a#finalizar").click(function () {
+        const $this = $(this);
+        $.bsAlert.confirm("¿Desea finalizar la encuesta?", function () {
+            $this.myprocess(function (data) {
+                console.log(data)
+            });
+        });
+        return false;
+    })
 })

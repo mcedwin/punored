@@ -16,7 +16,7 @@ class Anuncios extends BaseController
 		$data = ['from' => 'Anuncios/index/'];
 
 		$filter = $this->request->getGet('filtro') ?? 'recientes';
-		$categ_id = $this->request->getGet('categoria');
+		$categ_id = $this->request->getGet('categoria') ?? null;
 		$filters = ['filtro' => $filter, 'categoria' => $categ_id];
 		$data['filtros'] = $filters;
 
@@ -27,7 +27,7 @@ class Anuncios extends BaseController
 		$dataPag = setPaginationData($data, $quant_results, $quant_to_show, $page);
 
 		$data += [
-			'categorias' => $this->db->table('entrada_categoria')->select(['cate_nombre','cate_id'])->get()->getResult(),
+			'categorias' => $this->model->getCategorias(),
 			'anuncios' => $this->model->getDataListado($filters, $quant_to_show, $dataPag['start_from_page']),
 		];
 

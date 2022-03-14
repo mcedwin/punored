@@ -27,6 +27,7 @@ $("button#votar").click(function() {
     const $this = $(this);
     if ($this.attr('href') == '') return false;
     $this.myprocess(function (data) {
-        console.log(data);
+        // console.log(data);
+        location.reload()
     })
 })

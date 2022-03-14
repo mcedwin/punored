@@ -40,17 +40,16 @@ class EncuestasModel extends Model
             $row = $builder->select()->where('encu_id', $id)->get()->getRow();
             foreach ($row as $k => $value) {
                 if (!isset($this->fields[$k])) continue;
-                // $this->fields[$k]->value =  $value;
+                $this->fields[$k]->value =  $value;
             }
         }
         return (object)$this->fields;
     }
     
     public function getFullEncuesta($id) {
-        return [
-            'encuesta' => $this->getEncuesta($id),
-            'detalle' => $this->getEncuDetalle($id),
-        ];
+        $arr['encuesta'] = $row = $this->getEncuesta($id);
+        $arr['detalle'] = $this->getEncuDetalle($row->encu_id ?? 0);
+        return $arr;
     }
 
     public function getEncuesta($id) {

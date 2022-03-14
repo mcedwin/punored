@@ -38,8 +38,8 @@ class Encuestas extends BaseController
         ];
         
         helper('pagination');
-        $quant_results = $this->model->countListado('*', $filters);
-        $quant_to_show = 3;
+        $quant_results = $this->model->countListado($filters);
+        $quant_to_show = 5;
         $dataPag = setPaginationData($data, $quant_results, $quant_to_show, $page);
         
         $data['encuestas'] = $this->model->getListado($filters, $quant_to_show, $dataPag['start_from_page']);
@@ -161,25 +161,41 @@ class Encuestas extends BaseController
         $this->dieAjax();
         if (is_null($this->user->id)) return '';
         
-        $encu_id = $this->model->builDetail->select('deta_encu_id')->where('deta_id', $deta_id)->get()->getRow()->deta_encu_id;
-        $rela_exist = $this->model->builUsuEnc->select()->where(['rela_usua_id' => $this->user->id, 'rela_encu_id' => $encu_id])->get()->getRow();
-        //rela_usua_valora = false || no existe(==null)
-        if ($rela_exist == null) {//ya existe registro
-
+        $dataDeta = $this->model->builDetail->select()->where('deta_id', $deta_id)->get()->getRow();//aumenta punto
+        $dataUsuEnc = $this->model->builUsuEnc->select()->where(['rela_usua_id' => $this->user->id, 'rela_encu_id' => $dataDeta->deta_encu_id])->get()->getRow();//reaccion usuario
+        $dataEncu = $this->model->builder->select('encu_actual')->where('encu_id', $dataDeta->deta_encu_id)->get()->getRow();
+        
+        if ($dataEncu->encu_actual == false) return $this->dieMsg(false, ['failed'], 'Encuestas');
+        
+        if ($dataUsuEnc == null) {//no existe registro
             $data['rela_usua_id'] = $this->user->id;
-            $data['rela_encu_id'] = $encu_id;
+            $data['rela_encu_id'] = $dataDeta->deta_encu_id;
             $data['rela_deta_id'] = $deta_id;
             $data['rela_fechareg'] = date('Y-m-d H:i:s');
             $data['rela_valora'] = true;
-
             $this->model->builUsuEnc->insert($data);
             
             $newPoints = 1 + (int)($this->model->builDetail->select('deta_puntos')->where('deta_id', $deta_id)->get()->getRow()->deta_puntos);
             $this->model->builDetail->where('deta_id', $deta_id)->set('deta_puntos',$newPoints)->update();
-            $this->dieMsg(true,$newPoints);
-        } else {//Vota por otro
-
+        } else {
+            if ($dataUsuEnc->rela_deta_id != $deta_id) {//vota por otro
+                $this->model->builUsuEnc->where(['rela_usua_id' => $this->user->id, 'rela_encu_id' => $dataDeta->deta_encu_id])->update(['rela_deta_id' => $deta_id]);
+                
+                $newPointPlus = 1 + (int)($this->model->builDetail->select('deta_puntos')->where('deta_id', $deta_id)->get()->getRow()->deta_puntos ?? 0);
+                $this->model->builDetail->where('deta_id', $deta_id)->update(['deta_puntos' => $newPointPlus]);
+                
+                $newPointMinus = -1 + (int)($this->model->builDetail->select('deta_puntos')->where('deta_id', $dataUsuEnc->rela_deta_id)->get()->getRow()->deta_puntos ?? 0);
+                $this->model->builDetail->where('deta_id', $dataUsuEnc->rela_deta_id)->update(['deta_puntos' => $newPointMinus]);
+            }
         }
+        $this->dieMsg(true,[$dataDeta,$dataUsuEnc, $deta_id]);
+    }
+
+    public function finalizar($id)
+    {
+        $this->dieAjax();
+        if (is_null($this->user->id)) return '';
+        $this->model->builder();
     }
 
     public function test() {
