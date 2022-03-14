@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controllers;
-use App\Models\MapaModel;
+use App\Models\EntradaModel;
 
 class Mapa extends BaseController
 {
@@ -10,19 +10,24 @@ class Mapa extends BaseController
 	public function __construct()
 	{
 		$this->db = \Config\Database::connect();
-		$this->model = new MapaModel();
+		$this->model = new EntradaModel(4);
 	}
-    public function index($rowno = 0)
-	{
+    public function index()
+	{	
+		$data = ['from' => 'Mapa/index/'];
 		$this->addCss(array(
 			'lib/leaflet/leaflet.css'
 		));
 		$this->addJs(array(
 			'lib/leaflet/leaflet.js',
-			'js/mapa/mostrar.js'
+			'js/mapa/mostrar.js',
 		));
-		$builder = $this->db->table('entrada');
-		$query = $builder->select()->get();
+		$filter = $this->request->getGet('filtro') ?? 'recientes';
+        $categ_id = $this->request->getGet('categoria') ?? null;
+        $filters = ['filtro' => $filter, 'categoria' => $categ_id];
+        $data['filtros'] = $filters;
+
+		$query = $this->db->query("SELECT * FROM entrada WHERE entr_tipo_id = 4");
 		$results = $query->getResult();
 
 		$locPins=[];
@@ -30,13 +35,17 @@ class Mapa extends BaseController
 		foreach($results as $value){
 			$locPins[]=[
 				$value->entr_map_lat, 
-				$value->entr_map_lng
+				$value->entr_map_lng,
+				$value->entr_titulo,
+				//base_url("uploads/anuncios/" . $anuncio['entr_foto'])
 			];
 		}
-
+		//var_dump(json_encode($locPins));
+		$data['categorias'] = $this->model->getCategorias();
 		$data['locPins']= json_encode($locPins);
-		
 
+		
+		
 		$this->showHeader();
 		$this->ShowContent('index', $data);
 		$this->showFooter();
@@ -46,7 +55,7 @@ class Mapa extends BaseController
 
 		$data = ['from' => 'Mapa/misregistros'];
 		$filters = [
-            'user' => session()->get('id'),
+            'user' => $this->user->id,
             'solo_publicos' => false,
             'fecha' => false
         ];
@@ -57,10 +66,10 @@ class Mapa extends BaseController
         $dataPag = setPaginationData($data, $quant_results, $quant_to_show, $page);
         
         $data += [
-            'mapas' => $this->model->getMapaData($filters, $quant_to_show, $dataPag['start_from_page']),
+            'mapas' => $this->model->getDataListado($filters, $quant_to_show, $dataPag['start_from_page']),
         ];
 		$this->addJs(array(
-            'js/mapa/mapa.js'
+    	    'js/mapa/mapa.js'
         ));
 		$this->showHeader();
 		$this->ShowContent('misregistros', $data);
@@ -90,7 +99,7 @@ class Mapa extends BaseController
 		$this->showFooter();
 	}
 
-	public function guardar()
+	public function guardar($id = '')
 	{
 		$data = $this->validar($this->model->getFields());
 		unset($data['usua_foto']);
@@ -99,8 +108,8 @@ class Mapa extends BaseController
 			$data['entr_fechareg'] = date('Y-m-d H:i:s');
 			$data['entr_fechapub'] = date('Y-m-d H:i:s');
 			$data['entr_tipo_id'] = $this->request->getPost('entr_tipo_id');
-			$data['entr_map_lat'] = $this->request->getPost('latitud');
-			$data['entr_map_lng'] = $this->request->getPost('longitud');
+			$data['entr_map_lat'] = $this->request->getPost('entr_map_lat');
+			$data['entr_map_lng'] = $this->request->getPost('entr_map_lng');
 			$data['entr_usua_id'] = $this->user->id;
 			$this->db->table('entrada')->insert($data);
 			$id = $this->db->insertID();
@@ -125,7 +134,7 @@ class Mapa extends BaseController
 		));
 		$this->addJs(array(
 			'lib/leaflet/leaflet.js',
-			'js/mapa/mostrar.js',
+			'js/mapa/mapa.js',
 			"lib/tinymce/tinymce.min.js",
 			"lib/tinymce/jquery.tinymce.min.js",
 			'js/entrada/publicar.js'
@@ -153,7 +162,7 @@ class Mapa extends BaseController
         $builder
             ->where('entr_id', $id)
             ->where('entr_usua_id', $this->user->id)
-        ->delete();
+        	->delete();
         $this->dieMsg();
 	}
 }
