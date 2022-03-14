@@ -189,7 +189,12 @@ class EntradaModel extends Model
           $data['entr_pmenos'] = 1 + (int)($oldEncu->entr_pmenos);
           $this->getBuilder()->where('entr_id', $vdata->entr_id)->update($data);
         }
-        else return -1;
+        else {
+          $this->getBuilderUsuaEntr($vdata->entr_id, $vdata->usua_id)->update(['rela_nmas' => 0, 'rela_nmenos' => 0]);
+          $oldEncu = $this->getBuilder()->select(['entr_pmas', 'entr_pmenos'])->where('entr_id', $vdata->entr_id)->get()->getRow();
+          $data['entr_pmas'] = -1 + (int)($oldEncu->entr_pmas);
+          $this->getBuilder()->where('entr_id', $vdata->entr_id)->update($data);
+        };
       }
       else if ($dataUsuaEntr->rela_nmas == 0 && $dataUsuaEntr->rela_nmenos == 1) {
         if ($vdata->punto == 'mas') {
@@ -200,7 +205,12 @@ class EntradaModel extends Model
           $data['entr_pmenos'] = -1 + (int)($oldEncu->entr_pmenos);
           $this->getBuilder()->where('entr_id', $vdata->entr_id)->update($data);
         }
-        else return -1;
+        else {
+          $this->getBuilderUsuaEntr($vdata->entr_id, $vdata->usua_id)->update(['rela_nmas' => 0, 'rela_nmenos' => 0]);
+          $oldEncu = $this->getBuilder()->select(['entr_pmas', 'entr_pmenos'])->where('entr_id', $vdata->entr_id)->get()->getRow();
+          $data['entr_pmenos'] = -1 + (int)($oldEncu->entr_pmenos);
+          $this->getBuilder()->where('entr_id', $vdata->entr_id)->update($data);
+        }
       }
     }
   }

@@ -24,7 +24,7 @@ class Encuestas extends BaseController
 		// $this->datos['detalle'] = $this->db->query("SELECT * FROM encuesta_detalle WHERE deta_encu_id='{$row->encu_id}'")->getResult();
         $data['encuesta'] = $row = $this->model->builder->select()->limit(1)->where('encu_actual', true)->get()->getRow();
         $data['detalle'] = $this->model->getEncuDetalle($row->encu_id);
-        $data['activas'] = $this->model->builder->select()->limit(3)->where('encu_actual', true)->get()->getResult();
+        $data['activas'] = $this->model->builder->select()->limit(3,1)->where('encu_actual', true)->get()->getResult();
         $data['anteriores'] = $this->model->builder->select()->limit(3)->where('encu_actual', false)->get()->getResult();
         $data['miembros'] = $this->usuaModel->getUser('0', ['usua_id', 'usua_nombres', 'usua_apellidos', 'usua_foto']);
 

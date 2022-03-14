@@ -146,7 +146,7 @@ class Directorio extends BaseController
             'punto' => $punto,
 		];
 
-		$this->model->insertPoint($data);
+		$this->model->insertPoint((object)$data);
 
 		echo json_encode($this->model->getPoints($data['entr_id'], $data['usua_id']));
 	}
