@@ -20,10 +20,13 @@ class MapaModel extends Model
             'entr_titulo' => array('label' => 'Titulo'),
             'entr_contenido' => array('label' => 'Contenido'),
             'entr_foto' => array('label' => 'Imagen'),
+            'entr_cate_id' => array('label' => 'Categoria'),
+            'entr_map_lat' => array('label' => 'latitud', 'required' => false),
+            'entr_map_lng' => array('label' => 'longitud', 'required' => false)
         );
 
         $dfields = $this->db->getFieldData($this->table);
-        
+
         foreach ($dfields as $reg) {
             if (!isset($this->fields[$reg->name])) continue;
             $this->fields[$reg->name]['type'] = $this->fields[$reg->name]['type'] ?? $reg->type;
@@ -44,17 +47,17 @@ class MapaModel extends Model
         $this->fields['categorias'] = $builderEntradaCate->select('cate_id as `id`, cate_nombre as `text`')->get()->getResult();
 
         $builderEntrada = $this->db->table($this->table);
-    
+
         if (!empty($id)) {
-        $row = $builderEntrada->select()->where('entr_id', $id)->get()->getRow();
-        foreach ($row as $k => $value) {
-            if (!isset($this->fields[$k])) continue;
-            $this->fields[$k]->value =  $value;
-        }
+            $row = $builderEntrada->select()->where('entr_id', $id)->get()->getRow();
+            foreach ($row as $k => $value) {
+                if (!isset($this->fields[$k])) continue;
+                $this->fields[$k]->value =  $value;
+            }
         }
         return (object)$this->fields;
     }
-    public function getMapaData($filters = [], $pag_size = 5, $offset = 0)
+    public function getDataListado($filters = [], $pag_size = 5, $offset = 0)
     {
         $builder = $this->getBuilder();
         $query = $builder->select([
@@ -62,23 +65,26 @@ class MapaModel extends Model
             'entr_titulo',
             'entr_contenido',
             'entr_foto',
+            'entr_url',
             'entr_fechapub',
+            'entr_dire_logo',
+            'entr_pmas',
+            'entr_pmenos',
             'entr_map_lat',
-            'entr_map_lng',
-        ])->select('usua_nombres')->select('cate_nombre');
-        
+            'entr_map_lng'
+        ])
+            ->select('usua_nombres')
+            ->select('cate_nombre');
         $filter = $filters['filtro'] ?? 'recientes';
-        if($filter == 'recientes'){
+        if ($filter == 'recientes') {
             $builder->orderBy('entr_fechapub', 'DESC');
-        }
-        else if($filter == 'antiguos'){
+        } else if ($filter == 'antiguos') {
             $builder->orderBy('entr_fechapub', 'ASC');
-        }
-        else if ($filter == 'relevantes'){
+        } else if ($filter == 'relevantes') {
             $builder->orderBy('entr_pmas', 'DESC');
         }
         $categoria = $filters['categoria'] ?? null;
-        if($categoria){
+        if ($categoria) {
             $builder->where('entr_cate_id', $categoria);
         }
         if (isset($filters['user'])) {
@@ -92,15 +98,14 @@ class MapaModel extends Model
         if ($fechaf === true) {
             $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'));
         }
-
         $builder
             ->select('usua_nombres')
             ->select('cate_nombre')
             ->join('usuario', 'usua_id = entr_usua_id', 'inner')
             ->join('entrada_categoria', 'entr_cate_id = cate_id', 'inner');
-        if(!is_null($pag_size) && !is_null($offset))
+        if (!is_null($pag_size) && !is_null($offset))
             $builder->limit($pag_size, $offset);
-        
+
         $query = $builder->get();
         $result = $query->getResultArray();
         return $result;
@@ -113,10 +118,10 @@ class MapaModel extends Model
             $builder->where('entr_fechapub <=', date('Y-m-d H:i:s'));
         }
         if (isset($filters['categoria'])) {
-        $builder->where('entr_cate_id', $filters['categoria']);
+            $builder->where('entr_cate_id', $filters['categoria']);
         }
-        if(isset($filters['user'])){
-        $builder->where('entr_usua_id', $filters['user']);
+        if (isset($filters['user'])) {
+            $builder->where('entr_usua_id', $filters['user']);
         }
         $espublico = $filters['solo_publicos'] ?? true;
         if ($espublico === true) {
@@ -124,7 +129,8 @@ class MapaModel extends Model
         }
         return $builder->countAllResults();
     }
-    public function getBuilder() {
+    public function getBuilder()
+    {
         $builder = $this->db->table($this->table);
         $builder->where('entr_tipo_id', $this->entr_tipo);
         return $builder;

@@ -56,6 +56,17 @@ class EntradaModel extends Model
         'entr_foto' => array('label' => 'Imagen'),
         'entr_cate_id' => array('label' => 'Categoria'),
       );
+    } else if ($this->entr_tipo == 4){
+      
+      $this->fields = array(
+        'entr_tipo_id' => array('label' => 'Tipo de entrada', 'type' => 'hidden', 'required' => false),
+        'entr_titulo' => array('label' => 'Titulo'),
+        'entr_contenido' => array('label' => 'Contenido'),
+        'entr_foto' => array('label' => 'Imagen'),
+        'entr_cate_id' => array('label' => 'Categoria'),
+        'entr_map_lat' => array('label' => 'latitud', 'required' => false),
+        'entr_map_lng' => array('label' => 'longitud', 'required' => false)
+      );
     }
 
     helper('funciones');
@@ -102,6 +113,8 @@ class EntradaModel extends Model
       'entr_fechapub',
       'entr_pmas',
       'entr_pmenos',
+      'entr_map_lat',
+      'entr_map_lng'
     ]);
     $filter = $filters['filtro'] ?? 'recientes';
     if ($filter == 'recientes') {
