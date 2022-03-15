@@ -170,7 +170,7 @@ class Encuestas extends BaseController
     public function voto($deta_id)
     {
         $this->dieAjax();
-        if (is_null($this->user->id)) return '';
+        $this->diePermiso($this->user->id);
         
         $dataDeta = $this->model->builDetail->select()->where('deta_id', $deta_id)->get()->getRow();//aumenta punto
         $dataUsuEnc = $this->model->builUsuEnc->select()->where(['rela_usua_id' => $this->user->id, 'rela_encu_id' => $dataDeta->deta_encu_id])->get()->getRow();//reaccion usuario

@@ -362,10 +362,13 @@ jQuery.getScriptA = function(resources, callback) {
             url: $(this).attr('href'),
         }).done(function(data) {
             $.gs_loader.hide();
-            if (onsucces !== undefined) onsucces(data);
+            console.log(data)
+            if(data.mensaje=='user'&&data.redirect.length>0) window.location.href = data.redirect;
+            else if (onsucces !== undefined) onsucces(data);
         }).fail(function(data) {
             $.gs_loader.hide();
             alert("Error en respuesta :" + data.statusText);
+
         });
     }
 
