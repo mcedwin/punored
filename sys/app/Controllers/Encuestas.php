@@ -60,6 +60,7 @@ class Encuestas extends BaseController
 	}
 
 	public function crear(){
+        if($permiso = $this->diePermiso($this->user->id)) return $permiso;
         helper("formulario");
         $this->addJs(array(
             "lib/tinymce/tinymce.min.js",
@@ -80,6 +81,7 @@ class Encuestas extends BaseController
 
     public function editar($id)
     {
+        if($permiso = $this->diePermiso($this->user->id)) return $permiso;
         helper("formulario");
         $this->addJs(array(
             "lib/tinymce/tinymce.min.js",
