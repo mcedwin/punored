@@ -7,7 +7,7 @@
             <div class="d-flex align-items-start">
                 <a href="<?php echo base_url('Miembros/info/'.$row->usua_id) ?>"><img src="<?php echo base_url('uploads/usuario/'.$row->usua_foto)?>" alt="" width="50"></a>
                 <div class="w-100 ms-2">
-                    <a href="#"><?php echo $row->usua_nombres; ?></a>
+                    <a href="<?php echo base_url('Miembros/info/'.$row->usua_id) ?>"><?php echo $row->usua_nombres; ?></a>
                     <p><?php echo $row->usua_apellidos; ?></p>
                 </div>
             </div>

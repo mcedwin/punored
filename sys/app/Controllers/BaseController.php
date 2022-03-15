@@ -43,6 +43,7 @@ class BaseController extends Controller
     public $jss = [];
     public $frontVersion = 1;
     public $user;
+    public $sizes;
     protected $datos = [];
 
     /**
@@ -67,7 +68,21 @@ class BaseController extends Controller
             $this->user->photo = $row->usua_foto;
         }
 
-        $this->datos['user'] = $this->user;;
+        $this->datos['user'] = $this->user;
+
+
+        $this->sizes = array(
+            'Pequeño' => (object) array(
+                'ancho' => 64,
+                'alto' => 64,
+                'sufijo' => 'thumb',
+            ),
+            'Mediano' => (object) array(
+                'ancho' => 250,
+                'alto' => 350,
+                'sufijo' => 'small',
+            ),
+        );
 
         parent::initController($request, $response, $logger);
 
@@ -134,25 +149,21 @@ class BaseController extends Controller
     function resize_user($folder, $full_path, $fname)
     {
         $result = true;
-        $sizes = array(
-            'Pequeño' => (object) array(
-                'ancho' => 64,
-                'alto' => 64,
-                'sufijo' => 'thumb',
-            ),
-            'Mediano' => (object) array(
-                'ancho' => 250,
-                'alto' => 350,
-                'sufijo' => 'small',
-            ),
-        );
-        foreach ($sizes as $size) {
+
+        foreach ($this->sizes as $size) {
             $image = \Config\Services::image()
                 ->withFile($full_path)
-                ->crop($size->ancho, $size->alto, 0,0,true)
+                ->crop($size->ancho, $size->alto, 0, 0, true)
                 ->save($folder . '/' . str_replace('small', $size->sufijo, $fname));
         }
         return $result;
+    }
+
+    function borrar_imagen($folder,$name)
+    {
+        foreach ($this->sizes as $size) {
+        unlink($folder . '/' . str_replace('small', $size->sufijo, $name));
+        }
     }
 
     public function dieAjax()
@@ -201,29 +212,29 @@ class BaseController extends Controller
         ];
         // }
 
-       
+
         $this->datos['menu_left'] = [
             [
-                'title'=>'Contenidos',
-                'menu'=>[
-                    ['url' => 'Noticias', 'base' => 'noticias', 'name' => 'Noticias','ico'=>'fas fa-rss'],
-                    ['url' => 'Anuncios', 'base' => 'anuncios', 'name' => 'Anuncios','ico'=>'far fa-list-alt'],
-                    ['url' => 'Directorio', 'base' => 'directorio', 'name' => 'Directorio','ico'=>'far fa-building'],
-                    ['url' => 'Portada/crear', 'base' => 'portada', 'name' => 'Publicar','ico'=>'far fa-plus-square'],
+                'title' => 'Contenidos',
+                'menu' => [
+                    ['url' => 'Noticias', 'base' => 'noticias', 'name' => 'Noticias', 'ico' => 'fas fa-rss'],
+                    ['url' => 'Anuncios', 'base' => 'anuncios', 'name' => 'Anuncios', 'ico' => 'far fa-list-alt'],
+                    ['url' => 'Directorio', 'base' => 'directorio', 'name' => 'Directorio', 'ico' => 'far fa-building'],
+                    ['url' => 'Portada/crear', 'base' => 'portada', 'name' => 'Publicar', 'ico' => 'far fa-plus-square'],
                 ],
             ],
             [
-                'title'=>'Aplicaciones',
-                'menu'=>[
-                    ['url' => 'Encuestas', 'base' => 'encuestas', 'name' => 'Encuestas','ico'=>'far fa-chart-bar'],
-                    ['url' => 'Mapa', 'base' => 'mapa', 'name' => 'Mapa','ico'=>'fas fa-map-marker-alt'],
+                'title' => 'Aplicaciones',
+                'menu' => [
+                    ['url' => 'Encuestas', 'base' => 'encuestas', 'name' => 'Encuestas', 'ico' => 'far fa-chart-bar'],
+                    ['url' => 'Mapa', 'base' => 'mapa', 'name' => 'Mapa', 'ico' => 'fas fa-map-marker-alt'],
                 ],
             ],
             [
-                'title'=>'Colaboradores',
-                'menu'=>[
-                    ['url' => 'Miembros', 'base' => 'miembros', 'name' => 'Todos','ico'=>'fas fa-users'],
-                    ['url' => 'Miembros/registrar', 'base' => 'miembros', 'name' => 'Registrarse','ico'=>'fas fa-user-plus'],
+                'title' => 'Colaboradores',
+                'menu' => [
+                    ['url' => 'Miembros', 'base' => 'miembros', 'name' => 'Todos', 'ico' => 'fas fa-users'],
+                    ['url' => 'Miembros/registrar', 'base' => 'miembros', 'name' => 'Registrarse', 'ico' => 'fas fa-user-plus'],
                 ],
             ],
         ];
@@ -253,7 +264,7 @@ class BaseController extends Controller
 
     public function showContent($path, $response = [])
     {
-        echo view(strtolower($this->controller) . '/' . $path, array_merge($this->datos,$response));
+        echo view(strtolower($this->controller) . '/' . $path, array_merge($this->datos, $response));
     }
     public function showFooter()
     {

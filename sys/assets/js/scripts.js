@@ -372,8 +372,22 @@ jQuery.getScriptA = function(resources, callback) {
 })(jQuery);
 
 $(document).ready(function() {
+
+    $('.onmenu').click(function() {
+        if ($('.modal-menu').children().length == 0)
+            $('.sticky-top').appendTo('.modal-menu');
+        else
+            $('.sticky-top').appendTo('.sidebar');
+        return false;
+    })
+
     baseurl = $('#baseurl').val();
     nameurl = $('#nameurl').val();
 });
 
-
+$(window).on('resize',function(){
+    if($(this).width() > 576){
+        if ($('.modal-menu').children().length > 0)
+            $('.sticky-top').appendTo('.sidebar');
+    }
+});
