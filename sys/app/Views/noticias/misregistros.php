@@ -29,7 +29,7 @@
                                                 <div class="col-md-9">
                                                     <h3 class="fs-5"><?php echo $noticia['entr_titulo'] ?></h3>
                                                     <p>
-                                                        <?php echo $noticia['entr_contenido'] ?>
+                                                        <?php echo resumen($noticia['entr_contenido']) ?>
                                                         <br>
                                                         <a class=" ?>" href="<?php echo base_url('Noticias/ver/' . $noticia['entr_id']) ?>">Más</a>
                                                     </p>

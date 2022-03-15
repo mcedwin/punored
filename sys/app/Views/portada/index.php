@@ -15,9 +15,9 @@
                                 <?php
                                 $datePub = date_create($noticia->entr_fechapub);
                                 $currentDate = date_create(date('Y-m-d')); ?>
-                                <a href="#"><i class="fa fa-calendar"></i> <?php echo date_diff($currentDate, $datePub)->format('%a') . 'd' ?> </a>
-                                <!-- <a href="#"><i class="fa fa-eye" aria-hidden="true"></i> 253 </a> -->
-                                <a href="#"><i class="fa fa-arrow-up" aria-hidden="true"></i> <?php echo $noticia->entr_pmas ?> </a>
+                                <i class="fa fa-calendar"></i> <?php echo date_diff($currentDate, $datePub)->format('%a') . 'd' ?>
+                                <!--<i class="fa fa-eye" aria-hidden="true"></i> 253 -->
+                                <i class="fa fa-arrow-up" aria-hidden="true"></i> <?php echo $noticia->entr_pmas ?>
                             </div>
                         </div>
                     <?php endforeach ?>

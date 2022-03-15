@@ -108,6 +108,11 @@ $(document).ready(function() {
             editor.on('change', function() {
                 $("#entr_contenido").text(pre_wpautop(editor.getContent()));
                 // editor.save();
+                console.log("changed")
+            });
+            editor.on('init', function() {
+                $("#entr_contenido").text(pre_wpautop(editor.getContent()));
+                // editor.save();
             });
         }
     });

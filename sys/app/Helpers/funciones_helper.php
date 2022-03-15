@@ -12,3 +12,7 @@ function iniFields($fields, &$tfields)
         $tfields[$reg->name] = (object) $tfields[$reg->name];
     }
 }
+
+function resumen($contenido){
+    return substr($contenido,0,255)."...";
+}

@@ -45,6 +45,7 @@ class Noticias extends BaseController
 
     public function ver($id)
     {
+        helper('formulario');
         $entr = $this->model->getEntrada($id);
         $usermod = new UsuarioModel();
         $user = $usermod->getUser($entr->entr_usua_id);
@@ -132,20 +133,21 @@ class Noticias extends BaseController
         $builder = $this->model->getBuilder();
         $this->dieAjax();
 
-        $this->db->table('usuario_entrada')
+        /*$this->db->table('usuario_entrada')
             ->where('rela_usua_id', $this->user->id)
             ->where('rela_entr_id', $id)
-            ->delete();
+            ->delete();*/
+        $row = $this->db->query("SELECT * FROM entrada WHERE entr_id='{$id}' AND entr_usua_id='{$this->user->id}'")->getRow();
 
         $builder
             ->where('entr_id', $id)
             ->where('entr_usua_id', $this->user->id)
             ->delete();
-        // if($model->db->affectedRows() === 0) return 0;
-        // helper('filesystem');
-        // $file = new \CodeIgniter\Files\File("uploads/noticias/img_$id.small.jpg", true);
-        // $file->move('uploads/trash/noticias', $file->getBasename(), true);
-        // delete_files('uploads/trash/noticias/');
+
+
+        if($this->model->db->affectedRows() === 0) return 0;
+
+        $this->borrar_imagen('uploads/noticias',$row->entr_foto);
 
         $this->dieMsg();
         //echo json_encode(['id'=> $id, 'iduser' => $this->user->id]);
