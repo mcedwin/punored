@@ -11,7 +11,7 @@
 
     
     <link href="<?php echo base_url('sys/assets/css/style.css') ?>" rel="stylesheet" media="all">
-    <?php echo isset($css) ? $css : ""; ?>
+    <?php echo $css ?? '' ?>
 
 
 

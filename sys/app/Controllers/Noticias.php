@@ -217,23 +217,22 @@ class Noticias extends BaseController
         // var_dump(([] ?? true));
         // $this->dieMsg(true, $this->model->getPoints(1, 5)); ===// echo json_encode($this->model->getPoints(1, 5));
         // echo '<pre>'; var_dump($this->db->table('entrada_categoria')->select()->where('cate_tipo_id', 1)->get()->getResultArray()[0]['cate_id']); echo '</pre>';
-        $name = array(
-            [
-                'id' =>1,
-                'nmas' => 1,
-                'nmenos' => 0
-            ],
-            [
-                'id' => 2,
-                'nmas' => 0,
-                'nmenos' => 1
-            ]
-        );
 
-        if (in_array(['id' => 2], $name)) {
-            echo "found \n";
-        } else {
-            echo "not found \n";
-        }
+        // helper('formulario');
+        // $a = GetQS('anuncio convocatoria', ['encu_titulo','encu_descripcion','encu_id']);
+        // echo '<pre>'; var_dump($a); echo '</pre>';
+        // $b = $this->model->db->table('entrada')->like('encu_titulo', 'anuncios')->getCompiledSelect();
+        // echo '<pre>'; var_dump($b); echo '</pre>';
+        
+        $_m = 'as            ds po -';
+
+        $_m = preg_replace("/[ \t]+/i", " ", trim($_m));
+
+        echo '<pre>'; var_dump($_m); echo '</pre>';
+
+        echo '<pre>'; var_dump(explode(" ", 'asd as as')); echo '</pre>';
+        echo '<pre>'; var_dump(implode(" OR ", ['asd', 'as', 'as'])); echo '</pre>';
+        // ->get()->getResult()
+        ;
     }
 }

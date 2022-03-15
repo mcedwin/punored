@@ -58,7 +58,8 @@
         <script>
             var base_url = '<?php echo base_url() ?>';
         </script>
-        <?php echo isset($js) ? $js : ""; ?>
+        <script type="text/javascript" src="<?php echo base_url('sys/assets/js/buscar/busqueda.js') ?>"></script>
+        <?php echo $js ?? ""; ?>
         </body>
 
         </html>

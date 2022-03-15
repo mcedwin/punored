@@ -22,14 +22,16 @@
                 ?>
 
             </ul>
-            <form class="d-block w-100 mx-4">
+
+            <form id="searchForm" action="<?php echo base_url('buscar/') ?>" class="d-block w-100 mx-4" method="GET">
                 <div class="input-group">
-                    <input class="form-control border-end-0 border" type="search" value="Buscar">
-                    <button class="btn btn-outline-secondary border bg-light text-secondary" type="button">
+                    <input class="form-control border-end-0 border" type="search" id="q" name="q" placeholder="Buscar" value="">
+                    <button class="btn btn-outline-secondary border bg-light text-secondary" type="submit">
                         <i class="fa fa-search"></i>
                     </button>
                 </div>
             </form>
+
             <?php if (empty(session()->get('id'))) : ?>
                 <ul class="navbar-nav">
                     <li class="nav-item">
