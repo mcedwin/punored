@@ -41,6 +41,7 @@ class Portada extends BaseController
 
 	public function comentar()
 	{
+        $this->diePermiso($this->user->id);
 		$mensaje = $this->request->getPost('mensaje');
 		if (empty($mensaje)) $this->dieMsg(false, "Campo de mensaje es requerido.");
 

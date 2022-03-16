@@ -47,7 +47,7 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
                 <div class="card-footer">
                     <div class="">
                         <small>
-                            <i class="fa-solid fa-user"></i> <a href="#"><?php echo $anuncio['usua_nombres'] ?></a>
+                            <i class="fa-solid fa-user"></i> <a href="<?php echo base_url('Miembros/info/' . $anuncio['usua_id']) ?>"><?php echo $anuncio['usua_nombres'] ?></a>
                             | <i class="fa-solid fa-calendar-days"></i> <?php echo $anuncio['entr_fechapub'] ?>
                         </small>
                         <button id="puntosMas" class="btn btn-outline-secondary btn-sm <?php echo ($anuncio['rela_nmas'] ?? 0 != 0) ? ' active' : '' ?>" href="<?php echo base_url('Anuncios/setPunto/' . $anuncio['entr_id'] . '/mas') ?>"><i class="fa-solid fa-caret-up"></i></button>

@@ -49,7 +49,7 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
                             <a class="" href="<?php echo base_url('Noticias/ver/' . $noticia['entr_id']) ?>">Más</a>
                         </p>
                         <small>
-                            <i class="fa-solid fa-user"></i> Por <a href="#"><?php echo $noticia['usua_nombres'] ?></a>
+                            <i class="fa-solid fa-user"></i> Por <a href="<?php echo base_url('Miembros/info/' . $noticia['usua_id']) ?>"><?php echo $noticia['usua_nombres'] ?></a>
                             | <i class="fa-solid fa-calendar-days"></i> <?php echo $noticia['entr_fechapub'] ?>
                             | <i class="fa-solid"></i> #<?php echo $noticia['cate_nombre'] ?>
                         </small>

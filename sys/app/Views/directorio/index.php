@@ -48,7 +48,7 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
                             <a class="" href="<?php echo base_url('Directorio/ver/' . $directorio['entr_id']) ?>">Más</a>
                         </p>
                         <small>
-                            <i class="fa-solid fa-user"></i> Por <a href="#"><?php echo $directorio['usua_nombres'] ?></a>
+                            <i class="fa-solid fa-user"></i> Por <a href="<?php echo base_url('Miembros/info/' . $directorio['usua_id']) ?>"><?php echo $directorio['usua_nombres'] ?></a>
                             | <i class="fa-solid fa-calendar-days"></i> <?php echo $directorio['entr_fechapub'] ?>
                             | <i class="fa-solid"></i> #<?php echo $directorio['cate_nombre'] ?>
                         </small>
