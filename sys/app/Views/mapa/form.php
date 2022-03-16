@@ -30,7 +30,7 @@
                             </div>
                             
                             <?php
-                            echo myinput($fields->entr_contenido, '12', '', 'rows=10');
+                            echo myinput($fields->entr_resumen, '12', '', 'rows=10');
                             echo myinput($fields->entr_cate_id, '12', '', '', $fields->categorias);
                             $fields->entr_tipo_id->value = 4;
                             echo myinput($fields->entr_tipo_id, '12 d-none');

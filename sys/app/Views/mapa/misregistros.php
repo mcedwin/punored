@@ -31,7 +31,7 @@
                                                 <div class="col-md-9">
                                                     <h3 class="fs-5"><?php echo $mapa['entr_titulo'] ?></h3>
                                                     <p>
-                                                        <?php echo $mapa['entr_contenido'] ?>
+                                                        <?php echo $mapa['entr_resumen'] ?>
                                                         <br>
                                                         <a class=" ?>" href="<?php echo base_url('Mapa/ver/' . $mapa['entr_id']) ?>">Más</a>
                                                     </p>

@@ -61,7 +61,7 @@ class EntradaModel extends Model
       $this->fields = array(
         'entr_tipo_id' => array('label' => 'Tipo de entrada', 'type' => 'hidden', 'required' => false),
         'entr_titulo' => array('label' => 'Titulo'),
-        'entr_contenido' => array('label' => 'Contenido'),
+        'entr_resumen' => array('label' => 'Resumen'),
         'entr_foto' => array('label' => 'Imagen'),
         'entr_cate_id' => array('label' => 'Categoria'),
         'entr_map_lat' => array('label' => 'latitud', 'required' => false),
@@ -108,6 +108,7 @@ class EntradaModel extends Model
       'entr_id',
       'entr_titulo',
       'entr_contenido',
+      'entr_resumen',
       'entr_foto',
       'entr_url',
       'entr_fechapub',

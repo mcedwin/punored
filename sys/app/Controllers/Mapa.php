@@ -34,14 +34,23 @@ class Mapa extends BaseController
 
 		foreach($results as $value){
 			$locPins[]=[
-				$value->entr_map_lat, 
-				$value->entr_map_lng,
-				$value->entr_titulo,
-				//base_url("uploads/anuncios/" . $anuncio['entr_foto'])
+				"lat" => $value->entr_map_lat, 
+				"lng" => $value->entr_map_lng,
+				"titulo" => $value->entr_titulo,
+				"resumen"=>$value->entr_resumen,
+				"foto" => $value->entr_foto = base_url("uploads/mapa/" . $value->entr_foto),
+				"pmas" => $value->entr_pmas,
+				"pmenos" => $value->entr_pmenos,
 			];
 		}
+		
 		//var_dump(json_encode($locPins));
 		$data['categorias'] = $this->model->getCategorias();
+		$data['pathpts'] = base_url("mapa/setpunto");
+		// $data = ['data' = [
+		// 	"pathpts" => base_url("mapa/setpunto"),
+
+		// ]] 
 		$data['locPins']= json_encode($locPins);
 
 		
@@ -166,4 +175,20 @@ class Mapa extends BaseController
         	->delete();
         $this->dieMsg();
 	}
+	public function setPunto($entrid, $punto)
+    {
+        $this->dieAjax();
+        $this->diePermiso($this->user->id);
+
+        $data = [
+            'entr_id' => $entrid,
+            'usua_id' => $this->user->id,
+            'punto' => $punto,
+        ];
+
+        $this->model->insertPoint((object)$data);
+
+        echo json_encode($this->model->getPoints($data['entr_id'], $data['usua_id']));
+    }
+
 }

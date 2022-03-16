@@ -31,8 +31,15 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
     .mapcontainer {
         position: relative;
     }
+    .leaflet-popup-content{ 
+        margin-bottom: 13 !important;
+        margin-left: 0 !important;
+        margin-top: 0 !important;
+        margin-right: 0 !important; 
+    }
+
 </style>
 <script>
-    
+    var pathpts = '<?php echo $pathpts?>';
     var markerPins = JSON.parse('<?php echo $locPins ?>');
 </script>
