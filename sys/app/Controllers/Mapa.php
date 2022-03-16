@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 use App\Models\EntradaModel;
+use App\Models\UsuarioModel;
+
 
 class Mapa extends BaseController
 {
@@ -34,6 +36,7 @@ class Mapa extends BaseController
 
 		foreach($results as $value){
 			$locPins[]=[
+				"id" => $value->entr_id,
 				"lat" => $value->entr_map_lat, 
 				"lng" => $value->entr_map_lng,
 				"titulo" => $value->entr_titulo,
@@ -47,6 +50,7 @@ class Mapa extends BaseController
 		//var_dump(json_encode($locPins));
 		$data['categorias'] = $this->model->getCategorias();
 		$data['pathpts'] = base_url("mapa/setpunto");
+		$data['pathsee'] = base_url("mapa/ver");
 		// $data = ['data' = [
 		// 	"pathpts" => base_url("mapa/setpunto"),
 
@@ -190,5 +194,20 @@ class Mapa extends BaseController
 
         echo json_encode($this->model->getPoints($data['entr_id'], $data['usua_id']));
     }
+
+	public function ver($id){
+		helper('formulario');
+        $entr = $this->model->getEntrada($id);
+        $usermod = new UsuarioModel();
+        $user = $usermod->getUser($entr->entr_usua_id);
+        
+        if ($this->model->db->affectedRows() == 0) return redirect()->to(base_url('Mapa'));
+        $data = [
+            'reg' => (object)((array)$entr + (array)$user),
+        ];
+        $this->showHeader();
+        $this->ShowContent('ver', $data);
+        $this->showFooter();
+	}
 
 }

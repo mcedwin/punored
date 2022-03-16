@@ -41,5 +41,6 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
 </style>
 <script>
     var pathpts = '<?php echo $pathpts?>';
+    var pathsee = '<?php echo $pathsee?>';
     var markerPins = JSON.parse('<?php echo $locPins ?>');
 </script>
