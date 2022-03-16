@@ -35,29 +35,16 @@ class Mapa extends BaseController
 		$locPins=[];
 
 		foreach($results as $value){
-			$locPins[]=[
+			$locPins[] = [
 				"id" => $value->entr_id,
 				"lat" => $value->entr_map_lat, 
 				"lng" => $value->entr_map_lng,
-				"titulo" => $value->entr_titulo,
-				"resumen"=>$value->entr_resumen,
-				"foto" => $value->entr_foto = base_url("uploads/mapa/" . $value->entr_foto),
-				"pmas" => $value->entr_pmas,
-				"pmenos" => $value->entr_pmenos,
 			];
 		}
 		
 		//var_dump(json_encode($locPins));
 		$data['categorias'] = $this->model->getCategorias();
-		$data['pathpts'] = base_url("mapa/setpunto");
-		$data['pathsee'] = base_url("mapa/ver");
-		// $data = ['data' = [
-		// 	"pathpts" => base_url("mapa/setpunto"),
-
-		// ]] 
-		$data['locPins']= json_encode($locPins);
-
-		
+		$data['locPins'] = json_encode($locPins);
 		
 		$this->showHeader();
 		$this->ShowContent('index', $data);
@@ -209,5 +196,19 @@ class Mapa extends BaseController
         $this->ShowContent('ver', $data);
         $this->showFooter();
 	}
+
+    public function getData($id)
+    {
+        $this->dieAjax();
+        $this->diePermiso($this->user->id);
+
+        $entr = $this->db->query("SELECT * FROM entrada WHERE entr_id={$id}")->getRow();
+        $row = $this->model->getBuilderUsuaEntr($id, $this->user->id)->select()->get()->getRow();
+
+        $entr->rmas = $row->rela_nmas ?? 0;
+        $entr->rmenos = $row->rela_nmenos ?? 0;
+        
+        echo json_encode($entr);
+    }
 
 }

@@ -50,7 +50,8 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
                         </p>
                         <small>
                             <i class="fa-solid fa-user"></i> Por <a href="<?php echo base_url('Miembros/info/' . $noticia['usua_id']) ?>"><?php echo $noticia['usua_nombres'] ?></a>
-                            | <i class="fa-solid fa-calendar-days"></i> <?php echo $noticia['entr_fechapub'] ?>
+                            <?php $fmt = datefmt_create('es_MX', IntlDateFormatter::RELATIVE_LONG, IntlDateFormatter::NONE, null, IntlDateFormatter::GREGORIAN); ?>
+                            | <i class="fa-solid fa-calendar-days"></i> <?php echo datefmt_format($fmt, new DateTime($noticia['entr_fechapub'])) ?>
                             | <i class="fa-solid"></i> #<?php echo $noticia['cate_nombre'] ?>
                         </small>
                     </div>

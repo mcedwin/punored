@@ -48,7 +48,8 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
                     <div class="">
                         <small>
                             <i class="fa-solid fa-user"></i> <a href="<?php echo base_url('Miembros/info/' . $anuncio['usua_id']) ?>"><?php echo $anuncio['usua_nombres'] ?></a>
-                            | <i class="fa-solid fa-calendar-days"></i> <?php echo $anuncio['entr_fechapub'] ?>
+                            <?php $fmt = datefmt_create('es_MX', IntlDateFormatter::MEDIUM, IntlDateFormatter::NONE, null, IntlDateFormatter::GREGORIAN); ?>
+                            | <i class="fa-solid fa-calendar-days"></i> <?php echo datefmt_format($fmt, new DateTime($anuncio['entr_fechapub'])) ?>
                         </small>
                         <button id="puntosMas" class="btn btn-outline-secondary btn-sm <?php echo ($anuncio['rela_nmas'] ?? 0 != 0) ? ' active' : '' ?>" href="<?php echo base_url('Anuncios/setPunto/' . $anuncio['entr_id'] . '/mas') ?>"><i class="fa-solid fa-caret-up"></i></button>
                         <small id="points" class="text-center mb-1"><?php echo $anuncio['entr_pmas'] - $anuncio['entr_pmenos'] ?></small>
