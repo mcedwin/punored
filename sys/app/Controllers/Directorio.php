@@ -71,6 +71,7 @@ class Directorio extends BaseController
 	}
 	public function crear()
 	{
+		if($permiso = $this->diePermiso($this->user->id)) return $permiso;
 		helper('formulario');
 		$datos = [
 			'id' => 0,
@@ -115,6 +116,7 @@ class Directorio extends BaseController
 	}
 	public function editar($id)
 	{
+		if($permiso = $this->diePermiso($this->user->id)) return $permiso;
         helper("formulario");
 		$this->addJs(array(
 			"lib/tinymce/tinymce.min.js",
@@ -152,7 +154,7 @@ class Directorio extends BaseController
 	public function setPunto($entrid, $punto)
 	{
 		$this->dieAjax();
-		if (is_null($this->user->id)) return "";
+        $this->diePermiso($this->user->id);
 
 		$data = [
 			'entr_id' => $entrid,

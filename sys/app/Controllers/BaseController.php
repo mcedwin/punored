@@ -159,10 +159,10 @@ class BaseController extends Controller
         return $result;
     }
 
-    function borrar_imagen($folder,$name)
+    function borrar_imagen($folder, $name)
     {
         foreach ($this->sizes as $size) {
-        unlink($folder . '/' . str_replace('small', $size->sufijo, $name));
+            unlink($folder . '/' . str_replace('small', $size->sufijo, $name));
         }
     }
 
@@ -175,6 +175,20 @@ class BaseController extends Controller
             return true;
         }
         $this->dieMsg(false, "No es ajax.");
+    }
+
+    public function diePermiso($user)
+    {
+
+        if (is_null($user) || empty($user)) {
+            
+            if ($this->isAjax()) {
+                $this->dieMsg(true, "user", base_url('Login'));
+            } else {
+                return redirect()->to('/Login');
+            }
+        }
+        return false;
     }
 
     public function isAjax()

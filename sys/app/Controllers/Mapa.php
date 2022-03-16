@@ -77,7 +77,7 @@ class Mapa extends BaseController
 	}
 
 	public function crear(){
-
+		if($permiso = $this->diePermiso($this->user->id)) return $permiso;
 		helper('formulario');
 		$data = [
 			'id'=> 0,
@@ -128,6 +128,7 @@ class Mapa extends BaseController
 	}
 
 	public function editar($id){
+		if($permiso = $this->diePermiso($this->user->id)) return $permiso;
 		helper('formulario');
 		$this->addCss(array(
 			'lib/leaflet/leaflet.css'
