@@ -29,10 +29,10 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
 <?php foreach ($noticias as $noticia) : ?>
     <article id="Entrada" data-id="<?php echo $noticia['entr_id'] ?>">
         <div class="d-flex align-items-start">
-            <div class="d-flex flex-column">
-                <button id="puntosMas" class="btn btn-outline-secondary btn-sm ps-3 pe-3 mb-1<?php echo ($noticia['rela_nmas'] ?? 0 != 0) ? ' active' : '' ?>" href="<?php echo base_url('Noticias/setPunto/' . $noticia['entr_id'] . '/mas') ?>"><i class="fa-solid fa-caret-up"></i></button>
+            <div class="d-flex flex-column puntos">
+                <button id="puntosMas" class="btn btn-outline-success btn-sm mb-1<?php echo ($noticia['rela_nmas'] ?? 0 != 0) ? ' active' : '' ?>" href="<?php echo base_url('Noticias/setPunto/' . $noticia['entr_id'] . '/mas') ?>"><i class="fa-solid fa-caret-up"></i></button>
                 <small id="points" class="text-center mb-1"><?php echo $noticia['entr_pmas'] - $noticia['entr_pmenos'] ?></small>
-                <button id="puntosMenos" class=" btn btn-outline-secondary btn-sm<?php echo ($noticia['rela_nmenos'] ?? 0 != 0) ? ' active' : '' ?>" href="<?php echo base_url('Noticias/setPunto/' . $noticia['entr_id'] . '/menos') ?>"><i class="fa-solid fa-caret-down"></i></button>
+                <button id="puntosMenos" class=" btn btn-outline-success btn-sm<?php echo ($noticia['rela_nmenos'] ?? 0 != 0) ? ' active' : '' ?>" href="<?php echo base_url('Noticias/setPunto/' . $noticia['entr_id'] . '/menos') ?>"><i class="fa-solid fa-caret-down"></i></button>
             </div>
             <div class="w-100 ms-3">
                 <div class="row">
@@ -42,7 +42,7 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
                         </a>
                     </div>
                     <div class="col-md-9">
-                        <h3 class="fs-5"><?php echo $noticia['entr_titulo'] ?></h3>
+                        <a class="" href="<?php echo base_url('Noticias/ver/' . $noticia['entr_id']) ?>"><h3 class="fs-5"><?php echo $noticia['entr_titulo'] ?></h3></a>
                         <p>
                             <?php echo resumen($noticia['entr_contenido']) ?>
                             <br>

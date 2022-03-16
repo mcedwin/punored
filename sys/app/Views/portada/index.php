@@ -20,7 +20,7 @@
                                 <i class="fa fa-arrow-up" aria-hidden="true"></i> <?php echo $noticia->entr_pmas ?>
                             </div>
                         </div>
-                    <?php endforeach ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>

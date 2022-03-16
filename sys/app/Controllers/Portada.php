@@ -61,4 +61,11 @@ class Portada extends BaseController
 		$this->showContent('acerca');
 		$this->showFooter();
 	}
+	
+	public function crear()
+	{
+		$this->showHeader();
+		$this->showContent('crear');
+		$this->showFooter();
+	}
 }
