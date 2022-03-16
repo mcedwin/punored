@@ -33,25 +33,18 @@ class Noticias extends BaseController
             'categorias' => $this->model->getCategorias(),
             'noticias' => $this->model->getDataListado($filters, $quant_to_show, $dataPag['start_from_page']),
         ];
+
         //Setting relation
         if (!empty($this->user->id)) {
-            $puntos = $this->model->builUsuEntr->select(['rela_entr_id', 'rela_nmas', 'rela_nmenos'])->where('rela_usua_id', $this->user->id)->get()->getResult();
             foreach ($data['noticias'] as $i => $noti) {
-                $data['noticias'][$i]['rela_nmas'] = '0';
-                $data['noticias'][$i]['rela_nmenos'] = '0';
-                foreach ($puntos as $p) {
-                    if ($p->rela_entr_id == $noti['entr_id']) {
-                        $data['noticias'][$i]['rela_nmas'] = $p->rela_nmas;
-                        $data['noticias'][$i]['rela_nmenos'] = $p->rela_nmenos;
-                    }
+                $row = $this->model->getBuilderUsuaEntr($noti['entr_id'], $this->user->id)->select()->get()->getRow();
+                if (($row->rela_entr_id ?? $noti['entr_id']) == $noti['entr_id']) {
+                    $data['noticias'][$i]['rela_nmas'] = $row->rela_nmas ?? 0;
+                    $data['noticias'][$i]['rela_nmenos'] = $row->rela_nmenos ?? 0;
                 }
-                // $pts = $this->model->getBuilderUsuaEntr($noti['entr_id'] ,$this->usua->id)->select()->get()->getRow();
-                // if ($pts->rela_entr_id == $noti['entr_id']) {
-                //     $data['noticias'][$i]['rela_nmas'] = $pts->rela_nmas ?? 0;
-                //     $data['noticias'][$i]['rela_nmenos'] = $p->rela_nmenos ?? 0;
-                // }
             }
         }
+        
         $this->addJs(array(
             'js/entrada/entradas.js'
         ));

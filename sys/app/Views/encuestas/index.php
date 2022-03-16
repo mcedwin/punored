@@ -37,7 +37,7 @@
 
                         </div>
 
-                        <?php if ($encuesta->encu_actual == true) : ?>
+                        <?php if (!$encuesta->encu_finalizado) : ?>
                             <div class="text-end">
                                 <button id="votar" type="submit" class="btn btn-primary" href="">Votar</button>
                             </div>

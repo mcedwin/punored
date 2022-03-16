@@ -20,8 +20,8 @@
                                         <div class="d-flex flex-column">
                                             <a href="<?php echo base_url('Encuestas/editar/' . $row->encu_id) ?>" id="editar" class="text-center">editar</a>
                                             <a href="<?php echo base_url('Encuestas/eliminar/' . $row->encu_id) ?>" id="eliminar" class="text-center">eliminar</a>
-                                            <?php if ($row->encu_actual == true) : ?>
-                                                <a href="<?php echo base_url('Encuestas/finalizar/' . $row->encu_id) ?>" id="finalizar" class="text-center">finalizar</a>
+                                            <?php if (!$row->encu_finalizado) : ?>
+                                            <a href="<?php echo base_url('Encuestas/finalizar/' . $row->encu_id) ?>" id="finalizar" class="text-center">finalizar</a>
                                             <?php endif ?>
                                         </div>
                                         <div class="w-100 ms-3">
@@ -46,7 +46,7 @@
 
                                         </div>
                                     </div>
-                                    <?php if ($row->encu_actual == false) : ?>
+                                    <?php if ($row->encu_finalizado) : ?>
                                     <div class="position-absolute end-0 bottom-0 text-danger border-top mx-2">Encuesta finalizada</div>
                                     <?php endif ?>
                                 </div>

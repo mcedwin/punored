@@ -19,9 +19,6 @@ class Encuestas extends BaseController
     
     public function index($rowno = 0)
 	{
-		// $sql = "SELECT * FROM encuesta WHERE encu_actual=true LIMIT 1";
-		// $this->datos['encuesta'] = $row = $this->db->query($sql)->getRow();
-		// $this->datos['detalle'] = $this->db->query("SELECT * FROM encuesta_detalle WHERE deta_encu_id='{$row->encu_id}'")->getResult();
         $data['encuesta'] = $row = $this->model->builder->select()->limit(1)->where('encu_actual', true)->get()->getRow();
         $data['detalle'] = $this->model->getEncuDetalle($row->encu_id);
         $data['activas'] = $this->model->builder->select()->limit(3,1)->where('encu_actual', true)->get()->getResult();
@@ -123,7 +120,6 @@ class Encuestas extends BaseController
             $this->model->db->table('encuesta')->where('encu_id', $id)->update($data); //->where('encu_usua_id', $this->user->id)
 
         }
-        //FIXME al editar se eliminan los registros
         $dataDeta = $this->model->builDetail->select()->where('deta_encu_id', $id)->get()->getResult();
         $quant = count($dataDeta);
         //detalles insert
@@ -208,7 +204,7 @@ class Encuestas extends BaseController
 
         if (is_null($this->user->id)) return '';
         
-        $this->model->builder->where(['encu_id' => $id, 'encu_usua_id' => $this->user->id])->update(['encu_actual' => false]);
+        $this->model->builder->where(['encu_id' => $id, 'encu_usua_id' => $this->user->id])->update(['encu_finalizado' => true]);
 
         $this->dieMsg();
     }
@@ -219,13 +215,11 @@ class Encuestas extends BaseController
 
         if (is_null($this->user->id)) return '';
 
-        $this->model->builder->where(['encu_id' => $id, 'encu_usua_id' => $this->user->id])->update(['encu_actual' => true]);
+        $this->model->builder->where(['encu_id' => $id, 'encu_usua_id' => $this->user->id])->update(['encu_finalizado' => false]);
 
         $this->dieMsg();
     }
 
     public function test() {
-        $a = $this->model->db->table('encuesta')->where(['encu_id' => 1, 'encu_usua_id' => $this->user->id])->set(['encu_actual' => false])->getCompiledUpdate();
-        echo '<pre>'; var_dump($a); echo '</pre>';
     }
 }

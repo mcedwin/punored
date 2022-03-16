@@ -127,7 +127,7 @@ class EntradaModel extends Model
     
     $this->builderFiltered($builder, $filters);
     
-    $builder->select(['usua_nombres','cate_nombre'])
+    $builder->select(['usua_id', 'usua_nombres','cate_nombre'])
       ->join('usuario', 'usua_id = entr_usua_id', 'inner') //inner
       ->join('entrada_categoria', 'entr_cate_id = cate_id', 'inner');
 
