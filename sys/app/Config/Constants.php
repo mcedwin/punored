@@ -80,7 +80,7 @@ defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125); // highest auto
 
 
 define('GP_CLIENT_ID','176346838180-q20l18ga75nnvdgn0u5fjca56ghrlj17.apps.googleusercontent.com');
-define('GP_CLIENT_SECRET','yUW5egL6AZhUiuDAnWhiw9Mi');
+define('GP_CLIENT_SECRET','yUW5egL6AZhUiuDAnWhiw9Mi1111111111111111111111111');
 define('GP_REDIRECT_URL','oauth/goo');
 
 define('FB_APP_ID','292788515471005');
