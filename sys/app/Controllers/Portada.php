@@ -25,8 +25,9 @@ class Portada extends BaseController
         $datos['noticias'] = $this->notiModel->getBuilder()->limit(3)->orderBy('entr_pmas' , 'DESC')->get()->getResult();
 		$datos['anuncios'] = $this->anunModel->getBuilder()->limit(3)->orderBy('entr_pmas' , 'DESC')->get()->getResult();
 		$datos['comentarios'] = $this->db->query("SELECT * FROM comentario JOIN usuario ON usua_id=come_usua_id ORDER BY come_fechareg DESC LIMIT 10")->getResult();
-       // $datos['encuesta'] = $this->encuModel->builder->select()->limit(1)->where('encu_actual', true)->get()->getRow();
-       // $datos['detalle'] = $this->encuModel->getEncuDetalle($datos['encuesta']->encu_id);
+        $datos['encuesta'] = $this->encuModel->builder->select()->limit(1)->where('encu_actual', true)->get()->getRow();
+        if(isset($datos['encuesta']->encu_id))
+		$datos['detalle'] = $this->encuModel->getEncuDetalle($datos['encuesta']->encu_id);
 
 
 		$this->addJs(array(

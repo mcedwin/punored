@@ -31,26 +31,26 @@
                 Mapa de incidencias en la Región de Puno
             </div>
             <div class="card-body">
-            <div class="mapcontainer">
-    <div id="map" style="height:500px"></div>
-</div>
-<style>
-    .mapcontainer {
-        position: relative;
-    }
-    .leaflet-popup-content{ 
-        margin-bottom: 13 !important;
-        margin-left: 0 !important;
-        margin-top: 0 !important;
-        margin-right: 0 !important; 
-    }
+                <div class="mapcontainer">
+                    <div id="map" style="height:500px"></div>
+                </div>
+                <style>
+                    .mapcontainer {
+                        position: relative;
+                    }
 
-</style>
-<script>
-    var pathpts = '<?php echo $pathpts?>';
-    var pathsee = '<?php echo $pathsee?>';
-    var markerPins = JSON.parse('<?php echo $locPins ?>');
-</script>
+                    .leaflet-popup-content {
+                        margin-bottom: 13 !important;
+                        margin-left: 0 !important;
+                        margin-top: 0 !important;
+                        margin-right: 0 !important;
+                    }
+                </style>
+                <script>
+                    var pathpts = '<?php echo $pathpts ?>';
+                    var pathsee = '<?php echo $pathsee ?>';
+                    var markerPins = JSON.parse('<?php echo $locPins ?>');
+                </script>
             </div>
         </div>
 
@@ -100,10 +100,10 @@
     </div>
     <div class="col-md-4">
 
-    <div class="card side-miembros mb-2">
+        <div class="card side-miembros mb-2">
             <div class="card-body">
                 <div class="row">
-                   <a href="<?php echo base_url('Portada/publicar'); ?>" class="btn btn-success"><i class="fa-solid fa-plus"></i> Publicar</a>
+                    <a href="<?php echo base_url('Portada/publicar'); ?>" class="btn btn-success"><i class="fa-solid fa-plus"></i> Publicar</a>
                 </div>
             </div>
         </div>
@@ -139,44 +139,45 @@
                 </div>
             </div>
         </section>
+        <?php if (isset($encuesta->encu_id)) : ?>
+            <section id="encuesta" class="card card-default">
 
-        <section id="encuesta" class="card card-default">
+                <a href="<?php echo base_url('Encuestas/ver/' . $encuesta->encu_id) ?>"><img src="<?php echo base_url('uploads/encuestas/' . $encuesta->encu_foto); ?>" class="card-img-top" alt="..."></a>
+                <div class="card-body">
+                    <?php echo $encuesta->encu_titulo; ?>
+                    <div class="poll-area mt-2">
+                        <?php $total = 0;
+                        foreach ($detalle as $index => $deta) : ?>
+                            <?php
+                            $total += $deta->deta_puntos;
+                            ?>
+                            <input type="radio" name="poll" id="opt-<?php echo $index; ?>">
+                        <?php endforeach; ?>
+                        <?php foreach ($detalle as $index => $deta) : ?>
+                            <?php
+                            $porc = number_format(($total > 0 ? $deta->deta_puntos * 100 / $total : 0), 2);
 
-            <a href="<?php echo base_url('Encuestas/ver/' . $encuesta->encu_id) ?>"><img src="<?php echo base_url('uploads/encuestas/' . $encuesta->encu_foto); ?>" class="card-img-top" alt="..."></a>
-            <div class="card-body">
-                <?php echo $encuesta->encu_titulo; ?>
-                <div class="poll-area mt-2">
-                    <?php $total = 0;
-                    foreach ($detalle as $index => $deta) : ?>
-                        <?php
-                        $total += $deta->deta_puntos;
-                        ?>
-                        <input type="radio" name="poll" id="opt-<?php echo $index; ?>">
-                    <?php endforeach; ?>
-                    <?php foreach ($detalle as $index => $deta) : ?>
-                        <?php
-                        $porc = number_format(($total > 0 ? $deta->deta_puntos * 100 / $total : 0), 2);
-
-                        ?>
-                        <label data-id="<?php echo $deta->deta_id ?>" for="opt-<?php echo $index; ?>" class="opt-<?php echo $index; ?>">
-                            <div class="rowi">
-                                <div class="column">
-                                    <span class="circle"></span>
-                                    <span class="text"><?php echo $deta->deta_alternativa; ?></span>
+                            ?>
+                            <label data-id="<?php echo $deta->deta_id ?>" for="opt-<?php echo $index; ?>" class="opt-<?php echo $index; ?>">
+                                <div class="rowi">
+                                    <div class="column">
+                                        <span class="circle"></span>
+                                        <span class="text"><?php echo $deta->deta_alternativa; ?></span>
+                                    </div>
+                                    <span class="percent"><?php echo $porc; ?> % </span>
                                 </div>
-                                <span class="percent"><?php echo $porc; ?> % </span>
-                            </div>
-                            <div class="progress" style='--w:<?php echo $porc; ?>;'></div>
-                        </label>
-                    <?php endforeach; ?>
+                                <div class="progress" style='--w:<?php echo $porc; ?>;'></div>
+                            </label>
+                        <?php endforeach; ?>
 
-                </div>
-                <?php if (!$encuesta->encu_finalizado) : ?>
-                    <div class="text-end">
-                        <button id="votar" type="submit" class="btn btn-primary" href="">Votar</button>
                     </div>
-                <?php endif ?>
-            </div>
-        </section>
+                    <?php if (!$encuesta->encu_finalizado) : ?>
+                        <div class="text-end">
+                            <button id="votar" type="submit" class="btn btn-primary" href="">Votar</button>
+                        </div>
+                    <?php endif ?>
+                </div>
+            </section>
+        <?php endif; ?>
     </div>
 </div>
