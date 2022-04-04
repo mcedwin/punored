@@ -45,7 +45,7 @@ class Oauth extends BaseController
 
 			$path = 'img_' . $id . '.small.jpg';
 
-			if (copy($foto, APPPATH.'../uploads/usuario/' . $path)) {
+			if (copy($foto, APPPATH.'../../uploads/usuario/' . $path)) {
 				$this->db->table('usuario')->update(array('usua_foto' => $path), array('usua_id' => $id));
 			}
 			$row = $this->db->query("SELECT * FROM usuario WHERE usua_id='{$id}'")->getRow();

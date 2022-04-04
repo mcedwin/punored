@@ -171,7 +171,7 @@ class BaseController extends Controller
         $img = $this->request->getFile('foto');
 
         if (!$img->hasMoved()) {
-            $this->resize_image(APPPATH.'../' . $folder, WRITEPATH . 'uploads/' . $img->store(), $name);
+            $this->resize_image(APPPATH.'../../' . $folder, WRITEPATH . 'uploads/' . $img->store(), $name);
         } else {
             $this->dieMsg(false, 'Archivo movido');
         }
@@ -211,7 +211,7 @@ class BaseController extends Controller
         if (preg_match('/usuario/', $folder)) $sizes = $this->usizes;
 
         foreach ($sizes as $size) {
-            unlink(APPPATH.$folder . '/' . str_replace('normal', $size->sufijo, $name));
+            unlink(APPPATH.'../../'.$folder . '/' . str_replace('normal', $size->sufijo, $name));
         }
     }
 
