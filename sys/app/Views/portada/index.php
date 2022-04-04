@@ -88,6 +88,8 @@
                             <div class="pe-2 pt-2"><img src="<?php echo base_url('uploads/usuario/' . $row->usua_foto); ?>" alt="user" width="50" class="rounded-circle"></div>
                             <div class="comment-text w-100">
                                 <h6 class="font-medium"><?php echo $row->usua_nombres ?></h6> <span class="m-b-15 d-block"><?php echo $row->come_mensaje; ?></span>
+                                <?php $fmt = datefmt_create('es_MX', IntlDateFormatter::RELATIVE_LONG, IntlDateFormatter::NONE, null, IntlDateFormatter::GREGORIAN); ?>
+                                <div class="comment-footer"> <span class="text-muted float-right"><?php echo datefmt_format($fmt, new DateTime($row->come_fechareg)); ?></span> </div>
                                 <div class="comment-footer"> <span class="text-muted float-right"><?php echo $row->come_fechareg; ?></span> </div>
                             </div>
                         </div>
@@ -170,9 +172,9 @@
 
                 </div>
                 <?php if (!$encuesta->encu_finalizado) : ?>
-                <div class="text-end">
-                    <button id="votar" type="submit" class="btn btn-primary" href="">Votar</button>
-                </div>
+                    <div class="text-end">
+                        <button id="votar" type="submit" class="btn btn-primary" href="">Votar</button>
+                    </div>
                 <?php endif ?>
             </div>
         </section>

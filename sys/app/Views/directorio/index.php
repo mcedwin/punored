@@ -17,7 +17,6 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
             Categorias
         </button>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownTipoCategoria">
-            <!-- ✅TODO tipo de categorias -->
             <?php foreach ($categorias as $categoria) : ?>
                 <li><a class="dropdown-item" href="<?php echo base_url($from . '1' . '?filtro=' . $filtros['filtro'] . '&categoria=' . $categoria->cate_id) ?>"><?php echo $categoria->cate_nombre ?></a></li>
             <?php endforeach; ?>
@@ -49,7 +48,8 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
                         </p>
                         <small>
                             <i class="fa-solid fa-user"></i> Por <a href="<?php echo base_url('Miembros/info/' . $directorio['usua_id']) ?>"><?php echo $directorio['usua_nombres'] ?></a>
-                            | <i class="fa-solid fa-calendar-days"></i> <?php echo $directorio['entr_fechapub'] ?>
+                            <?php $fmt = datefmt_create('es_MX', IntlDateFormatter::RELATIVE_LONG, IntlDateFormatter::NONE, null, IntlDateFormatter::GREGORIAN); ?>
+                            | <i class="fa-solid fa-calendar-days"></i> <?php echo datefmt_format($fmt, new DateTime($directorio['entr_fechapub'])) ?>
                             | <i class="fa-solid"></i> #<?php echo $directorio['cate_nombre'] ?>
                         </small>
                     </div>
