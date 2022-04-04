@@ -19,6 +19,14 @@ class Portada extends BaseController
         $this->usuaModel = new UsuarioModel();
         $this->encuModel = new EncuestasModel();
     }
+
+
+	public function facebook(){
+		$this->meta->title = "Políticas";
+		$this->showHeader();
+		$this->showContent('facebook');
+		$this->showFooter();
+	}
     public function index()
 	{
         $datos['miembros'] = $this->usuaModel->getUser('0', ['usua_id', 'usua_nombres', 'usua_apellidos', 'usua_foto']);
