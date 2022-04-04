@@ -82,7 +82,6 @@ class Oauth extends BaseController
 			$response = $facebook->get('me?locale=en_US&fields=name,first_name,last_name,email');
 			$responsePicture = $facebook->get('/me/picture?redirect=false&height=300'); //getting user picture
 			$userPicture = $responsePicture->getGraphUser();
-			die(var_dump($userPicture));
 			$userProfile = $response->getGraphUser();
 			
 			return $this->iniciar($userProfile["email"], $userPicture["url"], $userProfile["first_name"], $userProfile["last_name"]);
