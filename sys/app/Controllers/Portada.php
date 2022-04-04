@@ -31,11 +31,6 @@ class Portada extends BaseController
 		$datos['detalle'] = $this->encuModel->getEncuDetalle($datos['encuesta']->encu_id);
 
 
-		$this->addJs(array(
-			"js/portada/publicar.js",
-            'js/encuesta/votar.js',
-		));
-
 		/** MAPA */
 		$mapamodel = new EntradaModel(4);
 		$data = ['from' => 'Mapa/index/'];
@@ -43,6 +38,8 @@ class Portada extends BaseController
 			'lib/leaflet/leaflet.css'
 		));
 		$this->addJs(array(
+			"js/portada/publicar.js",
+            'js/encuesta/votar.js',
 			'lib/leaflet/leaflet.js',
 			'js/mapa/mostrar.js',
 		));

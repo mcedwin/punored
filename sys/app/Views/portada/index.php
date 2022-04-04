@@ -65,7 +65,7 @@
                 </ul>
             </div>
             <div class="card-body">
-                <form method="post" id="form" action="<?php echo base_url("Portada/comentar/"); ?>" id="form" class="form-validate" enctype="multipart/form-data" novalidate>
+                <form method="post" action="<?php echo base_url("Portada/comentar/"); ?>" id="form" class="form-validate" enctype="multipart/form-data" novalidate>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade active show" id="posts" role="tabpanel" aria-labelledby="posts-tab">
                             <div class="form-group mb-2">
