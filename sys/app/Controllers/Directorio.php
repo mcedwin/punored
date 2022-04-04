@@ -13,6 +13,7 @@ class Directorio extends BaseController
 	}
     public function index($page = 1)
 	{
+		$this->meta->title = "Directorio";
 		$data = ['from' => 'Directorio/index/'];
 
 		//filtroa
@@ -55,7 +56,6 @@ class Directorio extends BaseController
 	}
 	public function ver($id)
 	{
-
         $entr = $this->model->getEntrada($id);
         $usermod = new UsuarioModel();
         $user = $usermod->getUser($entr->entr_usua_id);
@@ -64,6 +64,10 @@ class Directorio extends BaseController
         $data = [
             'reg' => (object)((array)$entr + (array)$user),
         ];
+
+		$this->meta->title = $entr->entr_titulo;
+        $this->meta->image = get_image('noticias',$entr->entr_foto,'normal');
+
 		$this->showHeader();
 		$this->ShowContent('ver', $data);
 		$this->showFooter();
@@ -71,6 +75,7 @@ class Directorio extends BaseController
 	}
 	public function crear()
 	{
+		$this->meta->title = "Crear registro en directorio";
 		if($permiso = $this->diePermiso($this->user->id)) return $permiso;
 		helper('formulario');
 		$datos = [
@@ -82,7 +87,6 @@ class Directorio extends BaseController
 			"lib/tinymce/tinymce.min.js",
 			"lib/tinymce/jquery.tinymce.min.js",
 			"js/directorio/form.js",
-			
 		));
 		
 		$this->showHeader();
@@ -169,6 +173,7 @@ class Directorio extends BaseController
 
 	public function misregistros($page=1)
 	{
+		$this->meta->title = "Mis registros";
 		$data = ['from' => 'Directorio/misregistros'];
         $filters = [
             'user' => $this->user->id,

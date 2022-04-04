@@ -12,6 +12,7 @@ class Buscar extends BaseController
     
     public function index($page = 1)
     {
+        $this->meta->title = "Buscar en Punored";
         $data = ['from' => 'buscar/index'];
         
         $q = $this->request->getGet('q') ?? null;

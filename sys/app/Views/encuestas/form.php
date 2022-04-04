@@ -12,9 +12,9 @@
             <div class="card-body">
 
                 <form method="post" action="<?php echo base_url("Encuestas/guardar/" . $id); ?>" id="form" class="form-validate" enctype="multipart/form-data" novalidate>
-                    <div class="form-row">
+                    <div class="row">
                         <?php echo myinput($fields->encu_titulo, '12'); ?>
-                        <div class="form-group col-md-12">
+                        <div class="form-group mb-2 col-md-12">
                             <label for="">Imagen</label>
                             <div class="card">
                                 <div class="card-body text-center">
@@ -31,7 +31,7 @@
                     <div class="card mt-3">
                         <div class="card-body">
                             <div class="row">
-                                <div class="form-group col-md-12">
+                                <div class="form-group mb-2 col-md-12">
                                     <label for="">Alternativas <strong class="text-danger">*</strong></label>
                                     <div id="Alternativas">
                                     <?php if (!isset($detalle)) : ?>

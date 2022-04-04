@@ -72,7 +72,7 @@ function myinput($reg, $col, $class = '', $params = '', $data = array())
     if ($col != '0') {
         $label = "<label for='{$reg->name}'>{$reg->label} {$add}</label>";
         $html .= <<<EOT
-            <div class="form-group col-md-{$col}">
+            <div class="form-group mb-2 col-md-{$col}">
 EOT;
     }
 

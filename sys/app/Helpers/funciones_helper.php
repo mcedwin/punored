@@ -16,3 +16,7 @@ function iniFields($fields, &$tfields)
 function resumen($contenido){
     return substr($contenido,0,255)."...";
 }
+
+function get_image($folder,$fname,$size){
+    return base_url('uploads/'.$folder.'/' . str_replace('normal', $size, $fname));
+}

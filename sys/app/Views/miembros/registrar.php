@@ -11,7 +11,7 @@
                         <a href="<?php echo base_url("Oauth/facebook") ?>" class="rs btn btn-outline-secondary btn-block"><i class="fab fa-facebook-f"></i> Continuar con facebook</a>
                         <a href="<?php echo base_url("Oauth/google") ?>" class="rs btn btn-outline-secondary btn-block"><i class="fab fa-google"></i> Continuar con google</a>
                         <hr>
-                        <div class="form-row">
+                        <div class="row">
                             <?php
                             $fields->usua_password->required = true;
                             $fields->usua_password->type = 'password';

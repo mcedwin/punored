@@ -8,11 +8,11 @@
                 <div class="card-body">
 
                     <form action="<?php echo base_url("Login/proc_cambiar/{$password2}") ?>" class="needs-validation mr-2" id="frm-login" method="post" novalidate>
-                        <div class="form-group">
+                        <div class="form-group mb-2">
                             <label for="">Email</label>
                             <input type="text" class="form-control" name="email" value="<?php echo $email?>" readonly>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-2">
                             <label for="">Contraseña</label>
                             <input type="password" class="form-control" name="password" required>
                         </div>

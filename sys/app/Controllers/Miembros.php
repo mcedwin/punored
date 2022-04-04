@@ -9,6 +9,7 @@ class Miembros extends BaseController
 {
     public function index()
     {  
+        $this->meta->title = "Miembros";
         $datos['rows'] = $this->db->query("SELECT usua_id,usua_nombres,usua_apellidos,usua_foto FROM usuario")->getResult();
         $this->showHeader();
         $this->ShowContent('index',$datos);
@@ -17,6 +18,7 @@ class Miembros extends BaseController
 
     public function perfil()
     {
+        $this->meta->title = "Perfil de miembro";
         helper("formulario");
         $model = new UsuarioModel();
         $this->datos['from'] = 'Miembros/perfil/';
@@ -47,6 +49,7 @@ class Miembros extends BaseController
 
     function registrar()
     {
+        $this->meta->title = "Registrar nuevo usuario";
         helper("formulario");
         $model = new UsuarioModel();
         $this->datos['fields'] = $model->get();
@@ -110,6 +113,7 @@ class Miembros extends BaseController
 
     function cambiar($email, $password2)
     {
+        $this->meta->title = "Cambiar contraseña";
         $this->addJs(array("js/login/login.js"));
         $this->datos['password2'] = $password2;
         $this->datos['email'] = urldecode($email);
@@ -224,6 +228,7 @@ class Miembros extends BaseController
     function info($id)
     {
         $datos['row'] = $this->db->query("SELECT usua_id,usua_nombres,usua_apellidos,usua_foto,usua_descripcion FROM usuario WHERE usua_id='{$id}'")->getRow();
+        $this->meta->title = "Información de Miembro ".$datos['row']->usua_nombres;
         $this->showHeader(true);
         $this->showContent('info',$datos);
         $this->showFooter();

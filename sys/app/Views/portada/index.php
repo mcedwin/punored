@@ -28,10 +28,29 @@
 
         <div class="card mb-3">
             <div class="card-header">
-                Mapa de incidencias
+                Mapa de incidencias en la Región de Puno
             </div>
             <div class="card-body">
-                <img src="<?php echo base_url('sys/assets/img/mapa.jpg') ?>" class="img-fluid">
+            <div class="mapcontainer">
+    <div id="map" style="height:500px"></div>
+</div>
+<style>
+    .mapcontainer {
+        position: relative;
+    }
+    .leaflet-popup-content{ 
+        margin-bottom: 13 !important;
+        margin-left: 0 !important;
+        margin-top: 0 !important;
+        margin-right: 0 !important; 
+    }
+
+</style>
+<script>
+    var pathpts = '<?php echo $pathpts?>';
+    var pathsee = '<?php echo $pathsee?>';
+    var markerPins = JSON.parse('<?php echo $locPins ?>');
+</script>
             </div>
         </div>
 
@@ -49,7 +68,7 @@
                 <form method="post" action="<?php echo base_url("Portada/comentar/"); ?>" id="form" class="form-validate" enctype="multipart/form-data" novalidate>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade active show" id="posts" role="tabpanel" aria-labelledby="posts-tab">
-                            <div class="form-group">
+                            <div class="form-group mb-2">
                                 <label class="sr-only" for="mensaje">post</label>
                                 <textarea class="form-control" id="mensaje" name="mensaje" rows="3" placeholder="Escribe el mensaje aquí" required></textarea>
                             </div>
@@ -78,6 +97,15 @@
         </div>
     </div>
     <div class="col-md-4">
+
+    <div class="card side-miembros mb-2">
+            <div class="card-body">
+                <div class="row">
+                   <a href="<?php echo base_url('Portada/publicar'); ?>" class="btn btn-success"><i class="fa-solid fa-plus"></i> Publicar</a>
+                </div>
+            </div>
+        </div>
+
         <div class="card side-miembros mb-2">
             <div class="card-header">Miembros</div>
             <div class="card-body">

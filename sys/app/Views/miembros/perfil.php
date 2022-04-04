@@ -13,7 +13,7 @@
                 <form class="formu form-horizontal needs-validation" action="<?php echo base_url('/Miembros/guardar/')?>" method="post" enctype="multipart/form-data" novalidate>
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="form-group text-center">
+                            <div class="form-group mb-2 text-center">
                                 <div class="mb-2 text-center">
                                     <img class="img-fluid img-thumbnail" width="200" src="<?php echo $fields->usua_foto->value; ?>" id="viewfoto">
                                 </div>
@@ -22,7 +22,7 @@
                             </div>
                         </div>
                         <div class="col-md-8">
-                            <div class="form-row">
+                            <div class="row">
                                 <?php
                                 echo myinput($fields->usua_nombres, '6');
                                 echo myinput($fields->usua_email, '6');

@@ -8,8 +8,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-row">
-                    <div class="form-group col-md-12">
+                <div class="row">
+                    <div class="form-group mb-2 col-md-12">
                         <label for="email">Ingrese su correo <strong class="text-danger">*</strong></label>
                         <input type="text" class="form-control" maxlength="100" id="email" name="email" value="" required="" autocomplete="off">
                     </div>

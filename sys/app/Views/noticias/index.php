@@ -6,7 +6,7 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
 ?>
 
 
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap pb-2 mb-3 border-bottom">
     <h4 class="mb-0">Noticias</h4>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-3">
@@ -50,7 +50,7 @@ $filterPath .= (isset($filtros['categoria'])) ? ('&categoria=' . $filtros['categ
                         </p>
                         <small>
                             <i class="fa-solid fa-user"></i> Por <a href="<?php echo base_url('Miembros/info/' . $noticia['usua_id']) ?>"><?php echo $noticia['usua_nombres'] ?></a>
-                            | <i class="fa-solid fa-calendar-days"></i> <?php echo $noticia['entr_fechapub'] ?>
+                            | <i class="fa-solid fa-calendar-days"></i> <?php echo dateToUser($noticia['entr_fechapub']) ?>
                             | <i class="fa-solid"></i> #<?php echo $noticia['cate_nombre'] ?>
                         </small>
                     </div>

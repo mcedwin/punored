@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-md-9">
         <h1><?php echo $reg->entr_titulo ?></h1>
-        <img src="<?php echo base_url('uploads/noticias/' . $reg->entr_foto) ?>" class="img-fluid">
+        <img src="<?php echo get_image('noticias',$reg->entr_foto,'normal'); ?>" class="img-fluid">
         <p><?php echo wpautop($reg->entr_contenido) ?></p>
         <p><?php //echo $reg->skills 
             ?></p>

@@ -6,6 +6,7 @@ class Login extends BaseController
 {
     function index()
     {
+        $this->meta->title = "Iniciar Sesión";
         $this->addJs(array("js/login/login.js"));
         $this->showHeader(true);
         $this->showContent('index');

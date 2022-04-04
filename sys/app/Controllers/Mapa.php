@@ -16,6 +16,7 @@ class Mapa extends BaseController
 	}
     public function index()
 	{	
+		$this->meta->title = "Registros en Mapa";
 		$data = ['from' => 'Mapa/index/'];
 		$this->addCss(array(
 			'lib/leaflet/leaflet.css'
@@ -65,7 +66,7 @@ class Mapa extends BaseController
 	}
 
 	public function misregistros($page = 1){
-
+		$this->meta->title = "Mis registros";
 		$data = ['from' => 'Mapa/misregistros'];
 		$filters = [
             'user' => $this->user->id,
@@ -90,6 +91,7 @@ class Mapa extends BaseController
 	}
 
 	public function crear(){
+		$this->meta->title = "Crear registro en mapa";
 		if($permiso = $this->diePermiso($this->user->id)) return $permiso;
 		helper('formulario');
 		$data = [
@@ -141,6 +143,7 @@ class Mapa extends BaseController
 	}
 
 	public function editar($id){
+		$this->meta->title = "Editar registros en Mapa";
 		if($permiso = $this->diePermiso($this->user->id)) return $permiso;
 		helper('formulario');
 		$this->addCss(array(
@@ -196,6 +199,7 @@ class Mapa extends BaseController
     }
 
 	public function ver($id){
+		$this->meta->title = "Ver mapa";
 		helper('formulario');
         $entr = $this->model->getEntrada($id);
         $usermod = new UsuarioModel();

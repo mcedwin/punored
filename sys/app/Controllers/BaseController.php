@@ -43,7 +43,10 @@ class BaseController extends Controller
     public $jss = [];
     public $frontVersion = 1;
     public $user;
-    public $sizes;
+    public $usizes;
+    public $esizes;
+    public $meta;
+    public $title;
     protected $datos = [];
 
     /**
@@ -70,19 +73,49 @@ class BaseController extends Controller
 
         $this->datos['user'] = $this->user;
 
+        
+        $this->title = 'PunoRed - Información de la Región de Puno';
+        $this->meta = (object) array(
+            'title'=>$this->title,
+            'description'=>'Portal de información de la Región de Puno',
+            'image'=>'',
+            'url'=>current_url(),
+            'site_name'=>'PunoRed'
+        );
 
-        $this->sizes = array(
-            'Pequeño' => (object) array(
+
+        $this->usizes = array(
+            'mini' => (object) array(
                 'ancho' => 64,
                 'alto' => 64,
                 'sufijo' => 'thumb',
             ),
-            'Mediano' => (object) array(
+            'small' => (object) array(
                 'ancho' => 250,
                 'alto' => 350,
                 'sufijo' => 'small',
+            )
+        );
+
+        $this->esizes = array(
+            'medium' => (object) array(
+                'ancho' => 300,
+                'alto' => 300,
+                'sufijo' => 'medium',
+            ),
+            'normal' => (object) array(
+                'ancho' => 800,
+                'alto' => 800,
+                'sufijo' => 'normal',
+            ),
+             'full' => (object) array(
+                'ancho' => 0,
+                'alto' => 0,
+                'sufijo' => 'full',
             ),
         );
+
+        helper('funciones');
 
         parent::initController($request, $response, $logger);
 
@@ -126,7 +159,7 @@ class BaseController extends Controller
                     . '|is_image[foto]'
                     . '|mime_in[foto,image/jpg,image/jpeg,image/gif,image/png,image/webp]'
                     . '|max_size[foto,1000]'
-                    . '|max_dims[foto,2024,2768]',
+                    //. '|max_dims[foto,2024,2768]',
             ],
         ];
 
@@ -138,7 +171,7 @@ class BaseController extends Controller
         $img = $this->request->getFile('foto');
 
         if (!$img->hasMoved()) {
-            $this->resize_user('./' . $folder, WRITEPATH . 'uploads/' . $img->store(), $name);
+            $this->resize_image('./' . $folder, WRITEPATH . 'uploads/' . $img->store(), $name);
         } else {
             $this->dieMsg(false, 'Archivo movido');
         }
@@ -146,23 +179,39 @@ class BaseController extends Controller
         return true;
     }
 
-    function resize_user($folder, $full_path, $fname)
+    function get_image($folder, $fname, $size)
+    {
+        return base_url('uploads/' . $folder . '/' . str_replace('normal', $size, $fname));
+    }
+
+    function resize_image($folder, $full_path, $fname)
     {
         $result = true;
+        $sizes = $this->esizes;
+        if (preg_match('/usuario/', $folder)) $sizes = $this->usizes;
 
-        foreach ($this->sizes as $size) {
-            $image = \Config\Services::image()
-                ->withFile($full_path)
-                ->crop($size->ancho, $size->alto, 0, 0, true)
-                ->save($folder . '/' . str_replace('small', $size->sufijo, $fname));
+        foreach ($sizes as $size) {
+            if ($size->sufijo == 'full') {
+                copy($full_path,$folder . '/' . str_replace('full', $size->sufijo, $fname));
+            } else {
+                $image = \Config\Services::image()
+                    ->withFile($full_path)
+                    ->crop($size->ancho, $size->alto, 0, 0, true)
+                    ->save($folder . '/' . str_replace('normal', $size->sufijo, $fname));
+            }
         }
+
         return $result;
     }
 
     function borrar_imagen($folder, $name)
     {
-        foreach ($this->sizes as $size) {
-            unlink($folder . '/' . str_replace('small', $size->sufijo, $name));
+        if(empty($name)) return;
+        $sizes = $this->esizes;
+        if (preg_match('/usuario/', $folder)) $sizes = $this->usizes;
+
+        foreach ($sizes as $size) {
+            unlink($folder . '/' . str_replace('normal', $size->sufijo, $name));
         }
     }
 
@@ -181,7 +230,7 @@ class BaseController extends Controller
     {
 
         if (is_null($user) || empty($user)) {
-            
+
             if ($this->isAjax()) {
                 $this->dieMsg(true, "user", base_url('Login'));
             } else {
@@ -234,7 +283,7 @@ class BaseController extends Controller
                     ['url' => 'Noticias', 'base' => 'noticias', 'name' => 'Noticias', 'ico' => 'fas fa-rss'],
                     ['url' => 'Anuncios', 'base' => 'anuncios', 'name' => 'Anuncios', 'ico' => 'far fa-list-alt'],
                     ['url' => 'Directorio', 'base' => 'directorio', 'name' => 'Directorio', 'ico' => 'far fa-building'],
-                    ['url' => 'Portada/crear', 'base' => 'portada', 'name' => 'Publicar', 'ico' => 'far fa-plus-square'],
+                    ['url' => 'Portada/publicar', 'base' => 'portada', 'name' => 'Publicar', 'ico' => 'far fa-plus-square'],
                 ],
             ],
             [
@@ -271,6 +320,9 @@ class BaseController extends Controller
 
         $this->mc_scripts['js'] = $strjs;
         $this->mc_scripts['css'] = $strcss;
+
+        if($this->title!=$this->meta->title) $this->meta->title = $this->meta->title.' | '.$this->meta->site_name;
+        $this->mc_scripts['meta'] = $this->meta;
         echo view('templates/header', $this->mc_scripts);
         if ($menu) echo view('templates/menu', $this->datos);
     }

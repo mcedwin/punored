@@ -34,8 +34,52 @@ class Portada extends BaseController
             'js/encuesta/votar.js',
 		));
 
+		/** MAPA */
+		$mapamodel = new EntradaModel(4);
+		$data = ['from' => 'Mapa/index/'];
+		$this->addCss(array(
+			'lib/leaflet/leaflet.css'
+		));
+		$this->addJs(array(
+			'lib/leaflet/leaflet.js',
+			'js/mapa/mostrar.js',
+		));
+		$filter = $this->request->getGet('filtro') ?? 'recientes';
+        $categ_id = $this->request->getGet('categoria') ?? null;
+        $filters = ['filtro' => $filter, 'categoria' => $categ_id];
+        $data['filtros'] = $filters;
+
+		$query = $this->db->query("SELECT * FROM entrada WHERE entr_tipo_id = 4");
+		$results = $query->getResult();
+
+		$locPins=[];
+
+		foreach($results as $value){
+			$locPins[]=[
+				"id" => $value->entr_id,
+				"lat" => $value->entr_map_lat, 
+				"lng" => $value->entr_map_lng,
+				"titulo" => $value->entr_titulo,
+				"resumen"=>$value->entr_resumen,
+				"foto" => $value->entr_foto = base_url("uploads/mapa/" . $value->entr_foto),
+				"pmas" => $value->entr_pmas,
+				"pmenos" => $value->entr_pmenos,
+			];
+		}
+		
+		//var_dump(json_encode($locPins));
+		$data['categorias'] = $mapamodel->getCategorias();
+		$data['pathpts'] = base_url("mapa/setpunto");
+		$data['pathsee'] = base_url("mapa/ver");
+		// $data = ['data' = [
+		// 	"pathpts" => base_url("mapa/setpunto"),
+
+		// ]] 
+		$data['locPins']= json_encode($locPins);
+		/** FIN MAPA */
+
 		$this->showHeader();
-		$this->showContent('index', $datos);
+		$this->showContent('index', $datos+$data);
 		$this->showFooter();
 	}
 
@@ -58,12 +102,13 @@ class Portada extends BaseController
 
 	public function acerca()
 	{
+		$this->meta->title = "Acerca del Portal";
 		$this->showHeader();
 		$this->showContent('acerca');
 		$this->showFooter();
 	}
 	
-	public function crear()
+	public function publicar()
 	{
 		$this->showHeader();
 		$this->showContent('crear');

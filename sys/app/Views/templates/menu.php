@@ -1,9 +1,9 @@
-<nav class="navbar top-bar navbar-expand-lg navbar-light border-bottom fixed-top shadow-sm py-1" style="background-color: #e3f2fd;">
+<nav class="navbar top-bar navbar-expand-lg navbar-light border-bottom fixed-top shadow-sm py-1 bg-light" style="background-color: #e3f2fd;">
     <div class="container">
         <a href="#" class="onmenu btn btn-primary btn-sm d-block d-sm-none"><i class="fa-solid fa-bars"></i></a>
         <div class="modal-menu border ps-2 d-block d-sm-none">
         </div>
-        <a class="navbar-brand" href="<?php echo base_url(); ?>">PunoRed</span></a>
+        <a class="navbar-brand py-0" style="line-height:38px" href="<?php echo base_url(); ?>"><img src="<?php echo base_url('sys/assets/img/logo.svg'); ?>" height="18" class="mb-1"> </a>
         <?php if (empty(session()->get('id'))) : ?>
             <?php else :  ?>
                 <div class="dropdown d-block d-sm-none">
@@ -37,7 +37,7 @@
             </ul>
 
             <form id="searchForm" action="<?php echo base_url('buscar/') ?>" class="d-block w-100 mx-4" method="GET">
-                <div class="input-group">
+                <div class="input-group input-group-sm">
                     <input class="form-control border-end-0 border" type="search" id="q" name="q" placeholder="Buscar" value="">
                     <button class="btn btn-outline-secondary border bg-light text-secondary" type="submit">
                         <i class="fa fa-search"></i>

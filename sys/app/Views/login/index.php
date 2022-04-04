@@ -9,20 +9,20 @@
 
                     <form action="<?php echo base_url('login/ingresar') ?>" class="needs-validation mr-2" id="frm-login" method="post" novalidate>
 
-                        <div class="form-group">
+                        <div class="form-group mb-2">
                             <label for="">Email</label>
                             <input type="text" class="form-control" maxlength="40" name="email" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-2">
                             <label for="">Contraseña</label>
                             <input type="password" class="form-control" name="password" required>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group mb-2">
                             <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-sign-in-alt"></i> Ingresar al sistema</button>
                         </div>
                         <div class="text-right">
-                            <a href="<?php echo base_url("Login/recuperar"); ?>" class="recuperar">Olvidé mi contraseña.</a>
+                            <a href="<?php echo base_url("Miembros/recuperar"); ?>" class="recuperar">Olvidé mi contraseña.</a>
                         </div>
                         <div class="text-center mb-3">
                             <hr>
@@ -33,7 +33,7 @@
                             <hr>
                         </div>
                         <div class="text-center">
-                            <a href="<?php echo base_url("login/registrar") ?>" class=""><i class="fas fa-user-edit"></i> Registrarse</a>
+                            <a href="<?php echo base_url("Miembros/registrar") ?>" class=""><i class="fas fa-user-edit"></i> Registrarse</a>
                         </div>
                     </form>
 

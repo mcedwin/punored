@@ -13,6 +13,7 @@ class Anuncios extends BaseController
 	}
 	public function index($page = 1)
 	{
+		$this->meta->title = "Anuncios";
 		$data = ['from' => 'Anuncios/index/'];
 
 		$filter = $this->request->getGet('filtro') ?? 'recientes';
@@ -63,6 +64,10 @@ class Anuncios extends BaseController
         $data = [
             'reg' => (object)((array)$entr + (array)$user)
         ];
+
+		$this->meta->title = $entr->entr_titulo;
+        $this->meta->image = get_image('noticias',$entr->entr_foto,'normal');
+
 		$this->showHeader();
 		$this->ShowContent('ver', $data);
 		$this->showFooter();
@@ -70,6 +75,7 @@ class Anuncios extends BaseController
 
 	public function crear()
 	{
+		$this->meta->title = "Crear anuncio";
 		if($permiso = $this->diePermiso($this->user->id)) return $permiso;
 		helper("formulario");
 		$this->addJs(array(
@@ -86,6 +92,7 @@ class Anuncios extends BaseController
 		$this->showFooter();
 	}
 	public function misanuncios($page = 1){
+		$this->meta->title = "Mis Anuncios";
 		$data = ['from' => 'Anuncios/misanuncios'];
         $filters = [
             'user' => $this->user->id,
@@ -113,6 +120,7 @@ class Anuncios extends BaseController
 		
 	public function editar($id)
 	{
+		$this->meta->title = "Editar anuncio";
 		if($permiso = $this->diePermiso($this->user->id)) return $permiso;
 		helper("formulario");
 		$this->addJs(array(

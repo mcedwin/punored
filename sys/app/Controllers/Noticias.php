@@ -10,10 +10,12 @@ class Noticias extends BaseController
     var $model;
     public function __construct()
     {
+        helper('formulario');
         $this->model = new EntradaModel(1);
     }
     public function index(?int $page = 1)
     {
+        $this->meta->title = "Noticias";
         $data = ['from' => 'Noticias/index/'];
 
         //filtros
@@ -65,6 +67,9 @@ class Noticias extends BaseController
         $data = [
             'reg' => (object)((array)$entr + (array)$user),
         ];
+
+        $this->meta->title = $entr->entr_titulo;
+        $this->meta->image = get_image('noticias',$entr->entr_foto,'normal');
         $this->showHeader();
         $this->ShowContent('ver', $data);
         $this->showFooter();
@@ -72,6 +77,7 @@ class Noticias extends BaseController
 
     public function crear()
     {
+        $this->meta->title = "Crear noticia";
         if($permiso = $this->diePermiso($this->user->id)) return $permiso;
         helper("formulario");
         //$this->permitir_acceso();
@@ -93,6 +99,7 @@ class Noticias extends BaseController
 
     public function editar($id)
     {
+        $this->meta->title = "Editar noticia";
         if($permiso = $this->diePermiso($this->user->id)) return $permiso;
         helper("formulario");
         $this->addJs(array(
@@ -126,12 +133,12 @@ class Noticias extends BaseController
             $this->db->table('entrada')->insert($data);
             $id = $this->db->insertID();
 
-            $path = 'img_' . $id . '.small.jpg';
+            $path = 'img_' . $id . '.normal.jpg';
             if ($this->guardar_imagen('uploads/noticias', $path)) {
                 $this->db->table('entrada')->update(array('entr_foto' => $path), "entr_id='{$id}'"); // AND entr_usua_id={$this->user->id}
             }
         } else {
-            $path = 'img_' . $id . '.small.jpg';
+            $path = 'img_' . $id . '.normal.jpg';
             if ($this->guardar_imagen('uploads/noticias', $path)) {
                 $data = $data + array('entr_foto' => $path);
             }
@@ -184,6 +191,7 @@ class Noticias extends BaseController
 
     public function misnoticias($page = 1)
     {
+        $this->meta->title = "Mis Noticias";
         $data = ['from' => 'Noticias/misnoticias'];
 
         $filters = [

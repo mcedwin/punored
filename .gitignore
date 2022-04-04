@@ -3,4 +3,5 @@ sys/writable
 sys/test
 sys/system
 boot
+gitcom.php
 uploads/

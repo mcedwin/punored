@@ -17,6 +17,12 @@
     max-width: 1200px;
   }
 }
+.input-group-sm>.form-control,
+.input-group-sm>.form-select,
+.input-group-sm>.input-group-text,
+.input-group-sm>.btn {
+  font-size: 0.975rem;
+}
 .btn-toggle-nav a {
   display: block;
   padding: 0.1875rem 0.5rem 0.1875rem 1.45rem;

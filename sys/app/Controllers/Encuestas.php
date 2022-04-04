@@ -19,6 +19,7 @@ class Encuestas extends BaseController
     
     public function index($rowno = 0)
 	{
+        $this->meta->title = "Encuestas";
         $data['encuesta'] = $row = $this->model->builder->select()->limit(1)->where('encu_actual', true)->get()->getRow();
         $data['detalle'] = $this->model->getEncuDetalle($row->encu_id);
         $data['activas'] = $this->model->builder->select()->limit(3,1)->where('encu_actual', true)->get()->getResult();
@@ -34,6 +35,7 @@ class Encuestas extends BaseController
 	}
 
 	public function misencuestas($page = 1) {
+        $this->meta->title = "Mis encuestas";
         $data = ['from' => 'Encuestas/misencuestas'];
 
         $filters = [
@@ -57,6 +59,7 @@ class Encuestas extends BaseController
 	}
 
 	public function crear(){
+        $this->meta->title = "Crear encuesta";
         if($permiso = $this->diePermiso($this->user->id)) return $permiso;
         helper("formulario");
         $this->addJs(array(
@@ -78,6 +81,7 @@ class Encuestas extends BaseController
 
     public function editar($id)
     {
+        $this->meta->title = "Editar encuesta";
         if($permiso = $this->diePermiso($this->user->id)) return $permiso;
         helper("formulario");
         $this->addJs(array(
@@ -153,12 +157,16 @@ class Encuestas extends BaseController
 
     public function ver($id)
     {
-        $data['encuesta'] = $this->model->getEncuesta($id);
+        $reg = $data['encuesta'] = $this->model->getEncuesta($id);
         $data['detalle'] = $this->model->getEncuDetalle($id);
+
 
         $this->addJs(array(
             'js/encuesta/votar.js'
         ));
+
+        $this->meta->title = $reg->encu_titulo;
+        $this->meta->image = get_image('encuestas',$reg->encu_foto,'normal');
 
         $this->showHeader();
         $this->showContent('ver', $data);
