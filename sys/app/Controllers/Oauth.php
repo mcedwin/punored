@@ -110,8 +110,9 @@ class Oauth extends BaseController
 
 	function goo()
 	{
-		$gClient = new \Google_Client();
 		die("code0");
+		$gClient = new \Google_Client();
+		
 		$gClient->setApplicationName('Titulo');
 		$gClient->setClientId(GP_CLIENT_ID);
 		$gClient->setClientSecret(GP_CLIENT_SECRET);
