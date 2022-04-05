@@ -111,11 +111,12 @@ class Oauth extends BaseController
 	function goo()
 	{
 		$gClient = new \Google_Client();
+		die("code0");
 		$gClient->setApplicationName('Titulo');
 		$gClient->setClientId(GP_CLIENT_ID);
 		$gClient->setClientSecret(GP_CLIENT_SECRET);
 		$gClient->setRedirectUri(base_url(GP_REDIRECT_URL));
-		die("code0");
+		
 		$google_oauthV2 = new \Google_Oauth2Service($gClient);
 
 		$session = session(); 
