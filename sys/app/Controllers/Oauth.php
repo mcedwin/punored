@@ -110,7 +110,7 @@ class Oauth extends BaseController
 
 	function goo()
 	{
-		die("code0");
+		
 		$gClient = new \Google_Client();
 		
 		$gClient->setApplicationName('Titulo');
@@ -122,7 +122,7 @@ class Oauth extends BaseController
 
 		$session = session(); 
 		if ($this->request->getGet('code')) {
-			die("code1");
+			
 			$gClient->authenticate();
 			$session->set('token', $gClient->getAccessToken());
 			return redirect()->to(base_url(GP_REDIRECT_URL));
@@ -130,16 +130,16 @@ class Oauth extends BaseController
 
 		$token = $session->get('token');
 		if (!empty($token)) {
-			die("code2");
+			
 			$gClient->setAccessToken($token);
 		}
 
 		if ($gClient->getAccessToken()) {
-			die("code3");
+			
 			$userProfile = $google_oauthV2->userinfo->get();
 			return $this->iniciar($userProfile['email'], $userProfile['picture'], $userProfile['given_name'], $userProfile['family_name']);
 		} else {
-			die("code4");
+			
 			$data['authUrl'] = $gClient->createAuthUrl();
 			//die($gClient->createAuthUrl());
 			//return redirect()->to($gClient->createAuthUrl());
