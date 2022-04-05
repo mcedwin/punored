@@ -133,6 +133,7 @@ class Oauth extends BaseController
 			$userProfile = $google_oauthV2->userinfo->get();
 			return $this->iniciar($userProfile['email'], $userProfile['picture'], $userProfile['given_name'], $userProfile['family_name']);
 		} else {
+			$data['authUrl'] = $gClient->createAuthUrl();
 			//die($gClient->createAuthUrl());
 			//return redirect()->to($gClient->createAuthUrl());
 		}
