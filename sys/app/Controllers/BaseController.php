@@ -36,9 +36,6 @@ class BaseController extends Controller
      * @var array
      */
     protected $helpers = [];
-
-    public $method;
-    public $controller;
     public $csss = [];
     public $jss = [];
     public $frontVersion = 1;
@@ -47,6 +44,7 @@ class BaseController extends Controller
     public $esizes;
     public $meta;
     public $title;
+    public $db;
     protected $datos = [];
 
     /**
@@ -54,11 +52,7 @@ class BaseController extends Controller
      */
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        $this->db = \Config\Database::connect();
-
-        $router = service('router');
-        $this->controller  = preg_replace("#.App.Controllers.#", '', $router->controllerName());
-        $this->method = $router->methodName();
+        $this->db = db_connect();
         $session = session();
         $this->user = (object)[
             'id' => $session->get('id'),
@@ -70,7 +64,6 @@ class BaseController extends Controller
             $row->usua_foto = base_url('uploads/usuario') . (empty($row->usua_foto) ? '/sinlogo.png' : '/' . $row->usua_foto);
             $this->user->photo = $row->usua_foto;
         }
-
         $this->datos['user'] = $this->user;
 
         
@@ -269,12 +262,9 @@ class BaseController extends Controller
 
         $this->datos['menu_top'] = [];
 
-        //if ($this->user->id) {
         $this->datos['menu_top'] = [
             ['url' => 'Portada/acerca', 'base' => 'acerca', 'name' => 'Acerca'],
         ];
-        // }
-
 
         $this->datos['menu_left'] = [
             [
@@ -330,7 +320,9 @@ class BaseController extends Controller
 
     public function showContent($path, $response = [])
     {
-        echo view(strtolower($this->controller) . '/' . $path, array_merge($this->datos, $response));
+        $router = service('router');
+        $controller  = preg_replace("#.App.Controllers.#", '', $router->controllerName());
+        echo view(strtolower($controller) . '/' . $path, array_merge($this->datos, $response));
     }
     public function showFooter()
     {

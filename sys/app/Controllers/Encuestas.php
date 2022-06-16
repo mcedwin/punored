@@ -17,7 +17,20 @@ class Encuestas extends BaseController
         $this->usuaModel = new UsuarioModel();
     }
     
-    public function index($rowno = 0)
+    public function index()
+	{
+        $this->meta->title = "Encuestas";
+        
+		$this->addJs(array(
+			'js/encuesta/votar.js'
+		));
+		$this->showHeader();
+		$this->ShowContent('2022');
+		$this->showFooter();
+	}
+
+
+    public function index1($rowno = 0)
 	{
         $this->meta->title = "Encuestas";
         $data['encuesta'] = $row = $this->model->builder->select()->limit(1)->where('encu_actual', true)->get()->getRow();
