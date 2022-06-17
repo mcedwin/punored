@@ -1,3 +1,5 @@
+<h3 class="border-bottom mb-4"><?php echo $encuesta->encu_titulo ?></h3>
+
 <div class="row justify-content-md-center">
     <div class="col-md-8">
         <div class="row justify-content-md-center">

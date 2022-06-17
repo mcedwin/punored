@@ -21,7 +21,7 @@
                                             <a href="<?php echo base_url('Encuestas/editar/' . $row->encu_id) ?>" id="editar" class="text-center">editar</a>
                                             <a href="<?php echo base_url('Encuestas/eliminar/' . $row->encu_id) ?>" id="eliminar" class="text-center">eliminar</a>
                                             <?php if (!$row->encu_finalizado) : ?>
-                                            <a href="<?php echo base_url('Encuestas/finalizar/' . $row->encu_id) ?>" id="finalizar" class="text-center">finalizar</a>
+                                                <a href="<?php echo base_url('Encuestas/finalizar/' . $row->encu_id) ?>" id="finalizar" class="text-center">finalizar</a>
                                             <?php endif ?>
                                         </div>
                                         <div class="w-100 ms-3">
@@ -32,10 +32,10 @@
                                                     </a>
                                                 </div>
                                                 <div class="col-md-9">
-                                                    <a class="text-dark" href="<?php echo base_url('Encuestas/ver/' . $row->encu_id) ?>">
-                                                        <h3 class="fs-5"><?php echo $row->encu_titulo ?></h3>
-                                                        <p><?php echo $row->encu_descripcion ?></p>
-                                                    </a>
+                                                    <h3 class="fs-5"><a class="text-dark" href="<?php echo base_url('Encuestas/ver/' . $row->encu_id) ?>">
+                                                            <?php echo $row->encu_titulo ?></h3></a>
+                                                    <p><?php echo $row->encu_descripcion ?></p>
+
                                                     <p>
                                                         <?php //echo $row->encu_puntos 
                                                         ?>
@@ -47,7 +47,7 @@
                                         </div>
                                     </div>
                                     <?php if ($row->encu_finalizado) : ?>
-                                    <div class="position-absolute end-0 bottom-0 text-danger border-top mx-2">Encuesta finalizada</div>
+                                        <div class="position-absolute end-0 bottom-0 text-danger border-top mx-2">Encuesta finalizada</div>
                                     <?php endif ?>
                                 </div>
                             </div>

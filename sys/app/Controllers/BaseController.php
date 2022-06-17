@@ -172,6 +172,43 @@ class BaseController extends Controller
         return true;
     }
 
+    public function guardar_imagen_e($file,$index, $folder, $name)
+    {
+       // die(print_r($_FILES[$file]['name']));
+        if (empty($_FILES[$file]['name'][$index])) {
+            return false;
+        }
+
+        $filen =  $file."[$index]";
+
+       /* $validationRule = [
+            'archivo' => [$index=>[
+                'label' => 'Image File',
+                'rules' => "uploaded[archivo.0]"
+                    . "|is_image[$filen]"
+                    //. "|mime_in[$filen,image/jpg,image/jpeg,image/gif,image/png,image/webp]"
+                    . "|max_size[$filen,1000]"
+                    //. "|max_dims[$filen,2024,2768]",
+            ]],
+        ];*/
+       /*if (!$this->validate($validationRule)) {
+            $data = $this->validator->getErrors();
+            //echo($_FILES[$file]['name'][$index]."--");
+            $this->dieMsg(false, implode('\n', $data+[$_FILES[$file]['name'][$index]]));
+        }*/
+
+        $img = $this->request->getFile($file.'.'.$index);
+       
+
+        if (!$img->hasMoved()) {
+            $this->resize_image(APPPATH.'../../' . $folder, WRITEPATH . 'uploads/' . $img->store(), $name);
+        } else {
+            $this->dieMsg(false, 'Archivo movido');
+        }
+
+        return true;
+    }
+
     function get_image($folder, $fname, $size)
     {
         return base_url('uploads/' . $folder . '/' . str_replace('normal', $size, $fname));

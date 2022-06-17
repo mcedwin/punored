@@ -34,29 +34,34 @@
                                 <div class="form-group mb-2 col-md-12">
                                     <label for="">Alternativas <strong class="text-danger">*</strong></label>
                                     <div id="Alternativas">
-                                    <?php if (!isset($detalle)) : ?>
-                                        <div id="altern" class="input-group mb-2">
-                                            <span class="input-group-text">1</span>
-                                            <input type="text" class="form-control" maxlength="150" id="alternativa1" name="alternativa1" value="" required="" autocomplete="off">
-                                            <button id="delAlt" type="button" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
-                                        </div>
-                                    <?php else : ?>
-                                        <?php foreach ($detalle as $i => $row) : ?>
-                                        <div id="altern" class="input-group mb-2">
-                                            <span class="input-group-text"><?php echo $i + 1 ?></span>
-                                            <input type="text" class="form-control" maxlength="150" id="alternativa<?php echo $i + 1 ?>" name="alternativa<?php echo $i + 1 ?>" value="<?php ;echo $row->deta_alternativa ?>" required="" autocomplete="off">
-                                            <button id="delAlt" type="button" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
-                                        </div>
-                                        <?php endforeach ?>
-                                    <?php endif ?>
+                                        <?php if (!isset($detalle)) : ?>
+                                            <div class="item-alternativa">
+                                                <input class="form-control" type="file" id="formFile" name="archivo[]">
+                                                <div id="altern" class="input-group mb-2">
+                                                    <input type="hidden" name="conid[]" value="" required="" autocomplete="off">
+                                                    <input type="text" class="form-control" maxlength="150" name="alternativa[]" value="" required="" autocomplete="off">
+                                                    <button id="delAlt" type="button" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
+                                                </div>
+                                            </div>
+                                        <?php else : ?>
+                                            <?php foreach ($detalle as $i => $row) : ?>
+                                                <div class="item-alternativa">
+                                                    <input class="form-control" type="file" id="formFile" name="archivo[]">
+                                                    <div id="altern" class="input-group mb-2">
+                                                        <input type="hidden" name="conid[]" value="<?php echo $row->deta_id ?>" required="" autocomplete="off">
+                                                        <input type="text" class="form-control" maxlength="150" name="alternativa[]" value="<?php echo $row->deta_alternativa ?>" required="" autocomplete="off">
+                                                        <button id="delAlt" type="button" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach ?>
+                                        <?php endif ?>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12 d-flex justify-content-center">
                                     <div class="row">
-                                        <button id="agregarAlt" type="button" class="btn btn-sm btn-outline-success">Agregar opcion<i class="fa fa-plus"></i></button>
+                                        <button id="agregarAlt" type="button" class="btn btn-sm btn-outline-success">Agregar opcion <i class="fa fa-plus"></i></button>
                                     </div>
                                 </div>
                             </div>

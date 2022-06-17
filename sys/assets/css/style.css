@@ -125,10 +125,6 @@ label .rowi span {
   font-size: 16px;
   font-weight: 500;
 }
-label .rowi .percent {
-  font-size: 12px;
-  line-height: 16px;
-}
 label .progress {
   height: 7px;
   width: 100%;

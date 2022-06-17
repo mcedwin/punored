@@ -332,6 +332,12 @@ jQuery.getScriptA = function(resources, callback) {
             return false;
         }
         var fd = new FormData(this[0]);
+        for (var p of fd) {
+            let name = p[0];
+            let value = p[1];
+        
+            console.log(name, value)
+        }
         $.gs_loader.show();
         $.ajax({
             url: $(this).attr('action'),

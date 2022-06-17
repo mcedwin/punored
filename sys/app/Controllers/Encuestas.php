@@ -17,7 +17,7 @@ class Encuestas extends BaseController
         $this->usuaModel = new UsuarioModel();
     }
     
-    public function index()
+    public function index1()
 	{
         $this->meta->title = "Encuestas";
         
@@ -30,7 +30,7 @@ class Encuestas extends BaseController
 	}
 
 
-    public function index1($rowno = 0)
+    public function index($rowno = 0)
 	{
         $this->meta->title = "Encuestas";
         $data['encuesta'] = $row = $this->model->builder->select()->limit(1)->where('encu_actual', true)->get()->getRow();
@@ -143,20 +143,42 @@ class Encuestas extends BaseController
         $quant = count($dataDeta);
         //detalles insert
         $dataDet['deta_encu_id'] = $id;
-        for ($i = 1; isset($_POST["alternativa$i"]); $i++) {
-            $dataDet['deta_alternativa'] = $this->request->getPost("alternativa$i");
-            if($i <= $quant){
-                $this->model->builDetail->where('deta_id', $dataDeta[$i - 1]->deta_id)->update(['deta_alternativa' => $dataDet['deta_alternativa']]);
+        $no = implode(",",array_filter($_POST["conid"]));
+        if(!empty($no)) $this->db->query("DELETE FROM encuesta_detalle WHERE deta_encu_id='{$id}' AND deta_id NOT IN ($no)");
+
+        foreach($_POST["alternativa"] as $i=>$alternativa) {
+            $dataDet['deta_alternativa'] = $alternativa;
+            
+           
+           
+           $iddet = 0;
+            if(!empty($_POST['conid'][$i])){
+                $iddet = $_POST['conid'][$i];
+                $this->model->builDetail->where('deta_id', $_POST['conid'][$i])->update(['deta_alternativa' => $dataDet['deta_alternativa']]);
             } else {
                 $dataDet['deta_puntos'] = 0;
                 if (empty($dataDet['deta_alternativa'])) continue;
                 $this->model->db->table('encuesta_detalle')->insert($dataDet);
+                $iddet = $this->db->insertID();
             }
+            $path = 'imagen_'.$id.'_'.$iddet.'.jpg';
+            if ($this->guardar_imagen_e("archivo",$i,'uploads/encuestas', $path)) {
+                
+                $adddata = ['deta_foto' => $path];
+                $this->model->builDetail->where('deta_id', $iddet)->update($adddata);
+            }
+           
         }
         
         $this->dieMsg(true, '', base_url('/Encuestas/misencuestas'));
     }
 
+
+    public function prueba(){
+        $arra = [];
+        $im = implode(",",array_filter($arra));
+        echo $im;
+    }
     public function eliminar($id)
     {
         $this->dieAjax();
@@ -174,6 +196,7 @@ class Encuestas extends BaseController
         $data['detalle'] = $this->model->getEncuDetalle($id);
 
 
+
         $this->addJs(array(
             'js/encuesta/votar.js'
         ));
@@ -182,7 +205,7 @@ class Encuestas extends BaseController
         $this->meta->image = get_image('encuestas',$reg->encu_foto,'normal');
 
         $this->showHeader();
-        $this->showContent('ver', $data);
+        $this->showContent('ver'.(empty($data['detalle'][0]->deta_foto)?'':'2'), $data);
         $this->showFooter();
     }
     

@@ -23,11 +23,12 @@ $("section#encuesta label[for^='opt-']").click(function() {
     $btnVotar.attr("href", urlVotar + "/" + $(this).data("id"));
 })
 
-$("button#votar").click(function() {
-    const $this = $(this);
+$("#votar").click(function() {
+    $this = $(this);
     if ($this.attr('href') == '') return false;
     $this.myprocess(function (data) {
         console.log(data);
         location.reload()
     })
+    return false;
 })
