@@ -40,6 +40,7 @@ class BaseController extends Controller
     public $jss = [];
     public $frontVersion = 1;
     public $user;
+    public $mc_scripts;
     public $usizes;
     public $esizes;
     public $meta;

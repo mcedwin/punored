@@ -1,8 +1,5 @@
-sys/.env
-sys/writable
-sys/test
-sys/system
-sys/app/config/Constants.php
-boot
 gitcom.php
-uploads/
+uploads/usuario/*
+uploads/recursos/*
+uploads/encuestas/*
+uploads/archivos/*
